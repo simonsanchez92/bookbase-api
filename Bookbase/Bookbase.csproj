@@ -25,4 +25,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Bookbase.Application\Bookbase.Application.csproj" />
+    <ProjectReference Include="..\Bookbase.Infrastructure\Bookbase.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
