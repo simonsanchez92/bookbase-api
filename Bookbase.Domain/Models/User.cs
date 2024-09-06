@@ -6,16 +6,16 @@ namespace Bookbase.Domain.Models
     public class User
     {
         [Column("user_id")]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [Column("username")]
-        public string Username { get; private set; }
+        public string Username { get; set; } = null;
 
         [Column("email")]
-        public string Email { get; private set; }
+        public string Email { get; set; } = null;
 
         [Column("password")]
-        public string PasswordHash { get; private set; }
+        public string Password { get; set; } = null;
 
         [Column("role_id")]
         public int RoleId { get; set; }
@@ -23,25 +23,25 @@ namespace Bookbase.Domain.Models
 
 
 
-        public User() { }
+        //public User() { }
 
-        public User(string username, string email)
-        {
-            Username = username;
-            Email = email;
-        }
+        //public User(string username, string email)
+        //{
+        //    Username = username;
+        //    Email = email;
+        //}
 
-        public User(int id, string username, string email, string passwordHash)
-        {
-            Id = id;
-            Username = username;
-            Email = email;
-            PasswordHash = passwordHash;
-        }
+        //public User(int id, string username, string email, string passwordHash)
+        //{
+        //    Id = id;
+        //    Username = username;
+        //    Email = email;
+        //    Password = passwordHash;
+        //}
 
         public void SetPasswordHash(string hashedPassword)
         {
-            PasswordHash = hashedPassword;
+            Password = hashedPassword;
         }
     }
 }

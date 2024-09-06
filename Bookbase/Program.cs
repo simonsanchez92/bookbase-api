@@ -1,4 +1,9 @@
+using Bookbase.Application.Interfaces;
+using Bookbase.Application.Mappings;
+using Bookbase.Application.Services;
+using Bookbase.Domain.Interfaces;
 using Bookbase.Infrastructure.Contexts;
+using Bookbase.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +16,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+//Infrastructure
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+
+//Application
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
+
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 var app = builder.Build();
 
