@@ -6,10 +6,13 @@ namespace Bookbase.Application.Interfaces
     public interface IUserService
     {
         public Task<UserResponseDto> GetOne(int userId);
+
         Task<IEnumerable<UserResponseDto>> GetAll();
         Task<UserResponseDto> Create(CreateUserDto userDto);
         
         Task<UserResponseDto> Update(int userId, UpdateUserDto userDto);
+
+        Task<bool> Delete(int userId);
 
     }
 }

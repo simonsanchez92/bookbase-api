@@ -21,27 +21,9 @@ namespace Bookbase.Domain.Models
         public int RoleId { get; set; }
         public Role role { get; set; }
 
+        [Column("deleted")]
+        public bool Deleted { get; set; } = false;
 
-
-        //public User() { }
-
-        //public User(string username, string email)
-        //{
-        //    Username = username;
-        //    Email = email;
-        //}
-
-        //public User(int id, string username, string email, string passwordHash)
-        //{
-        //    Id = id;
-        //    Username = username;
-        //    Email = email;
-        //    Password = passwordHash;
-        //}
-
-        public void SetPasswordHash(string hashedPassword)
-        {
-            Password = hashedPassword;
-        }
     }
 }
+    

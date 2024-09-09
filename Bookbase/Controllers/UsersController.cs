@@ -22,6 +22,8 @@ namespace Bookbase.Controllers
         {
             var res = await _userService.GetOne(userId);
 
+            if (res == null) return NotFound();
+
             return Ok(res);
         }
 
@@ -48,6 +50,14 @@ namespace Bookbase.Controllers
         {
             var user = await _userService.Update(userId, userDto);
             return Ok(user);
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> Delete(int userId)
+        {
+            var userDeleted = await _userService.Delete(userId);
+
+            return Ok(userDeleted);
         }
     }
 }

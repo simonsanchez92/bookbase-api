@@ -18,12 +18,13 @@ builder.Services.AddSwaggerGen();
 
 //Infrastructure
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 
 
 //Application
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAuthService,  AuthService>();
 builder.Services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
-
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
