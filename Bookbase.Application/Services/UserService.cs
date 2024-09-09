@@ -2,9 +2,11 @@
 using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Interfaces;
+using Bookbase.Application.Utilities;
 using Bookbase.Application.Validators;
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Bookbase.Application.Services
 {
@@ -12,22 +14,29 @@ namespace Bookbase.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordEncryptionService _passwordEncryptionService;
+        private readonly IUserCreateValidator _userCreateValidator;
         private readonly IMapper _mapper;
 
  
-        public UserService(IUserRepository userRepository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper)
+        public UserService(IUserRepository userRepository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper, IUserCreateValidator userCreateValidator)
         {
             _userRepository = userRepository;
             _passwordEncryptionService = passwordEncryptionService;
             _mapper = mapper;
+            _userCreateValidator = userCreateValidator;
         }
+
 
         public async Task<UserResponseDto> GetOne(int userId)
         {
-            var filtersById = new Dictionary<string, object> { { "id", userId } };
-            var user = await _userRepository.GetOne(filtersById);
-
+            var user = await _userRepository.GetOne(userId);
             return _mapper.Map<UserResponseDto>(user);
+        }
+
+
+        public async Task<User> GetOne(Expression<Func<User, bool>> predicate)
+        {
+            return await _userRepository.GetOne(predicate);
         }
 
 
@@ -39,14 +48,17 @@ namespace Bookbase.Application.Services
              
         }
 
-
-
-        public async Task<UserResponseDto> Create(CreateUserDto userDto)
+        public async Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto)
         {
-            var validationErrors = await ValidateUserCreateDto(userDto);
+            //var validationErrors = await ValidateUserCreateDto(userDto);
+            var validation = await _userCreateValidator.Validate(userDto);
 
-            if (validationErrors.Count != 0) return null;
 
+            if (!validation.Success)
+            {
+                return GenericResult<UserResponseDto>.FailureResult(validation.Messages);
+            }
+        
             var newUser = new User
             {
                 Username = userDto.Username,
@@ -58,9 +70,10 @@ namespace Bookbase.Application.Services
 
             var user = await _userRepository.Create(newUser);
 
+            var data = _mapper.Map<UserResponseDto>(user);
 
-            return _mapper.Map<UserResponseDto>(user);
-
+            return GenericResult<UserResponseDto>.SuccessResult(data);
+            
         }
 
         public async Task<UserResponseDto> Update(int userId, UpdateUserDto userDto)
@@ -80,42 +93,18 @@ namespace Bookbase.Application.Services
 
         public async Task<bool> Delete(int userId)
         {
-            return await _userRepository.Delete(userId);
+            var user = await _userRepository.GetOne(userId);
+
+            if(user == null)
+            {
+                return false;
+            }
+
+            user.Deleted = true;
+            await _userRepository.Update(userId, user);
+
+            return true;
         }
 
-
-        private async Task<List<string>> ValidateUserCreateDto(CreateUserDto userDto)
-        {
-
-            List<string> errMessages = new List<string>();
-            var validator = new CreateUserDtoValidator();
-            var validationResult = validator.Validate(userDto);
-
-
-            if (!validationResult.IsValid)
-            {
-                foreach (var error in validationResult.Errors)
-                {
-                    errMessages.Add(error.ErrorMessage);
-                }
-            }
-
-            //Check if username exists
-            if (await _userRepository.GetOne(new Dictionary<string, object> { { "username", userDto.Username } }) != null)
-            {
-                string msg = $"Username '{userDto.Username}' is already taken.";
-                errMessages.Add(msg);
-            }
-
-            //Check if email exists
-            if (await _userRepository.GetOne(new Dictionary<string, object> { { "email", userDto.Email } }) != null)
-            {
-                string msg = $"Email '{userDto.Email}' is already taken.";
-                errMessages.Add(msg);
-
-            }
-
-            return errMessages;
-        }
     }
 }

@@ -41,7 +41,11 @@ namespace Bookbase.Controllers
         public async Task<IActionResult> Create([FromBody] CreateUserDto userDto)
         {
             var user = await _userService.Create(userDto);
-            return Ok(user);
+
+            if (user.Success) return Ok(user);
+
+            return Conflict(user.Messages);
+
         }
 
 

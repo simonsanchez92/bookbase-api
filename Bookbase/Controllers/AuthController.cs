@@ -17,7 +17,7 @@ namespace Bookbase.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginDto)
         {
             var res = await _authService.Login(loginDto);
 

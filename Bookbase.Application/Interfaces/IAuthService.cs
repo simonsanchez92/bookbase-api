@@ -6,7 +6,7 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IAuthService
     {
-        public Task<LoginResponseDto> Login(LoginDto userDto);
+        public Task<LoginResponseDto> Login(LoginRequestDto userDto);
 
     }
 }
