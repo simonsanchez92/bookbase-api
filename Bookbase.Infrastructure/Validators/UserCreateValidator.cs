@@ -1,11 +1,11 @@
-﻿using Bookbase.Application.Dtos.Requests;
+﻿using Bookbase.Domain.Models;
 using FluentValidation;
 
-namespace Bookbase.Application.Validators
+namespace Bookbase.Infrastructure.Validators
 {
-    public class CreateUserDtoValidator: AbstractValidator<CreateUserDto>
+    public class UserCreateValidator: AbstractValidator<User>
     {
-        public CreateUserDtoValidator()
+        public UserCreateValidator()
         {
             RuleFor(u => u.Username)
                .NotEmpty().WithMessage("Username is required")

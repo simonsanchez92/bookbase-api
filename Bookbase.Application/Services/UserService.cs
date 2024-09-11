@@ -2,9 +2,8 @@
 using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Interfaces;
-using Bookbase.Application.Utilities;
-using Bookbase.Application.Validators;
 using Bookbase.Domain.Interfaces;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Models;
 using System.Linq.Expressions;
 
@@ -14,16 +13,16 @@ namespace Bookbase.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordEncryptionService _passwordEncryptionService;
-        private readonly IUserCreateValidator _userCreateValidator;
+        private readonly IUserCreateValidatorService _userCreateValidatorService;
         private readonly IMapper _mapper;
 
  
-        public UserService(IUserRepository userRepository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper, IUserCreateValidator userCreateValidator)
+        public UserService(IUserRepository userRepository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper, IUserCreateValidatorService userCreateValidator)
         {
             _userRepository = userRepository;
             _passwordEncryptionService = passwordEncryptionService;
             _mapper = mapper;
-            _userCreateValidator = userCreateValidator;
+            _userCreateValidatorService = userCreateValidator;
         }
 
 
@@ -51,22 +50,23 @@ namespace Bookbase.Application.Services
 
         public async Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto)
         {
-            var validation = await _userCreateValidator.Validate(userDto);
+            var newUser = new User
+            {
+                Username = userDto.Username,
+                Email = userDto.Email,
+                Password = userDto.Password, //PLain text
+                RoleId = userDto.RoleId
+            };
 
+            var validation = await _userCreateValidatorService.Validate(newUser);
 
             if (!validation.Success)
             {
                 return GenericResult<UserResponseDto>.FailureResult(validation.Messages);
             }
         
-            var newUser = new User
-            {
-                Username = userDto.Username,
-                Email = userDto.Email,
-                Password = _passwordEncryptionService.HashPassword(userDto.Password),
-                RoleId = userDto.RoleId,
-            };
-
+            //Hash and store password
+            newUser.Password = _passwordEncryptionService.HashPassword(userDto.Password);
 
             var user = await _userRepository.Create(newUser);
 

@@ -1,10 +1,7 @@
-using Bookbase.Application.Interfaces;
+using Bookbase.Application.Extensions;
 using Bookbase.Application.Mappings;
-using Bookbase.Application.Services;
-using Bookbase.Domain.Interfaces;
 using Bookbase.Infrastructure.Contexts;
-using Bookbase.Infrastructure.Repositories;
-using Bookbase.Infrastructure.Services;
+using Bookbase.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -33,7 +30,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme= "Bearer",
         BearerFormat = "JWT",
         In= ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+        Description = "Enter your token"
     });
 
     // Add the security requirement
@@ -54,55 +51,49 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
+//Infrastructure
+builder.Services.AddInfrastructureServices();
+
+//Application
+builder.Services.AddApplicationServices();
+
 //Configure DB Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-//Infrastructure
-builder.Services.AddTransient<IUserRepository, UserRepository>();
 
-
-//Application
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IAuthService,  AuthService>();
-
-builder.Services.AddTransient<IUserCreateValidator, UserCreateValidator>();
-
-builder.Services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
-builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
-
-
-
-// JWT Authentication
-builder.Services.AddAuthentication(options =>
+//Add Authorization and Authentication
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+})
+.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
+    var configValue = builder.Configuration.GetValue<string>("Jwt:Key");
+    var issuer = builder.Configuration.GetValue<string>("Jwt:Issuer");
+    var audience = builder.Configuration.GetValue<string>("Jwt:Audience");
+
+    var key = Encoding.ASCII.GetBytes(configValue);
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        ValidIssuer = issuer,
+        ValidAudience = audience,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
-
-
-//Authorization
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-});
-
-
-
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
 

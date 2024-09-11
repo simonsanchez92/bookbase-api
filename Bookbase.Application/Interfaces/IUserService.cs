@@ -1,6 +1,6 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
-using Bookbase.Application.Utilities;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Models;
 using System.Linq.Expressions;
 
