@@ -1,4 +1,4 @@
-﻿namespace Bookbase.Application.Interfaces
+﻿namespace Bookbase.Domain.Interfaces
 {
     public interface IPasswordEncryptionService
     {

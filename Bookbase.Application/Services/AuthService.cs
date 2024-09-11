@@ -1,6 +1,7 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Interfaces;
+using Bookbase.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace Bookbase.Application.Services

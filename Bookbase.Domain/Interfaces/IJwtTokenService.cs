@@ -1,6 +1,6 @@
 ﻿using Bookbase.Domain.Models;
 
-namespace Bookbase.Application.Interfaces
+namespace Bookbase.Domain.Interfaces
 {
     public interface IJwtTokenService
     {

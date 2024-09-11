@@ -27,10 +27,11 @@ namespace Bookbase.Application.Services
         }
 
 
-        public async Task<UserResponseDto> GetOne(int userId)
+        public async Task<UserResponseDto?> GetOne(int userId)
         {
             var user = await _userRepository.GetOne(userId);
-            return _mapper.Map<UserResponseDto>(user);
+
+            return user == null ? null : _mapper.Map<UserResponseDto>(user);
         }
 
 
@@ -50,7 +51,6 @@ namespace Bookbase.Application.Services
 
         public async Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto)
         {
-            //var validationErrors = await ValidateUserCreateDto(userDto);
             var validation = await _userCreateValidator.Validate(userDto);
 
 

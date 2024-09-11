@@ -1,6 +1,7 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Interfaces;
 using Bookbase.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -22,12 +23,13 @@ namespace Bookbase.Controllers
         {
             var res = await _userService.GetOne(userId);
 
-            if (res == null) return NotFound();
+            if (res == null) return NotFound($"User with Id {userId} not found");
 
             return Ok(res);
         }
-
-
+        
+        
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -40,11 +42,21 @@ namespace Bookbase.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserDto userDto)
         {
-            var user = await _userService.Create(userDto);
+            var userResponse = await _userService.Create(userDto);
 
-            if (user.Success) return Ok(user);
+            //Returns 201
+            // Assuming the userResponse contains the ID of the newly created user.
+            if (userResponse.Success)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetOne), // The action that retrieves the created resource
+                    routeValues: new { userId = userResponse.Data.Id }, // Route values to populate the URL for the location header
+                    value: userResponse.Data
+                );
+            }
 
-            return Conflict(user.Messages);
+            //Returns 409
+            return Conflict(userResponse.Messages);
 
         }
 
@@ -55,6 +67,7 @@ namespace Bookbase.Controllers
             var user = await _userService.Update(userId, userDto);
             return Ok(user);
         }
+
 
         [HttpDelete("{userId}")]
         public async Task<IActionResult> Delete(int userId)

@@ -8,7 +8,7 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IUserService
     {
-        public Task<UserResponseDto> GetOne(int userId);
+        public Task<UserResponseDto?> GetOne(int userId);
         public Task<User> GetOne(Expression<Func<User, bool>> predicate);
 
         Task<IEnumerable<UserResponseDto>> GetAll();

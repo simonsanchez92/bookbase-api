@@ -1,6 +1,6 @@
-﻿using Bookbase.Application.Interfaces;
+﻿using Bookbase.Domain.Interfaces;
 
-namespace Bookbase.Application.Services
+namespace Bookbase.Infrastructure.Services
 {
     public class PasswordEncryptionService : IPasswordEncryptionService
     {
