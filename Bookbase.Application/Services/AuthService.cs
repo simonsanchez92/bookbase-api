@@ -1,5 +1,6 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
+using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
 using Bookbase.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +31,10 @@ namespace Bookbase.Application.Services
             {
                 //Todo - Invalid credentials (403)
 
-                return null;
+                throw new BadRequestException("Invalid email")
+                {
+                    ErrorCode= "001"
+                };
             }
 
             //Check password
@@ -40,7 +44,10 @@ namespace Bookbase.Application.Services
             if (!isValid)
             {
                 //Todo - Invalid Password (403)
-
+                throw new BadRequestException("Invalid password")
+                {
+                    ErrorCode = "002"
+                };
             }
 
             //Generate token

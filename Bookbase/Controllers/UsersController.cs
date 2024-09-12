@@ -1,6 +1,5 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Interfaces;
-using Bookbase.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +21,6 @@ namespace Bookbase.Controllers
         public async Task<IActionResult> GetOne(int userId)
         {
             var res = await _userService.GetOne(userId);
-
-            if (res == null) return NotFound($"User with Id {userId} not found");
 
             return Ok(res);
         }
