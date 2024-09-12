@@ -36,6 +36,7 @@ namespace Bookbase.Infrastructure.Repositories
             if (user == null)
             {
                 //TODO: return err
+                return null;
             }
 
             return user;

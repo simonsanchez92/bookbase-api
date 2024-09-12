@@ -2,6 +2,7 @@ using Bookbase.Application.Extensions;
 using Bookbase.Application.Mappings;
 using Bookbase.Infrastructure.Contexts;
 using Bookbase.Infrastructure.Extensions;
+using Bookbase.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -105,6 +106,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

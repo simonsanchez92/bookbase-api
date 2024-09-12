@@ -6,6 +6,7 @@ using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Common;
 using Bookbase.Domain.Models;
 using System.Linq.Expressions;
+using Bookbase.Application.Exceptions;
 
 namespace Bookbase.Application.Services
 {
@@ -30,7 +31,15 @@ namespace Bookbase.Application.Services
         {
             var user = await _userRepository.GetOne(userId);
 
-            return user == null ? null : _mapper.Map<UserResponseDto>(user);
+            if(user == null)
+            {
+                throw new NotFoundException("User not found")
+                {
+                    ErrorCode= "003"
+                };
+            }
+            
+            return _mapper.Map<UserResponseDto>(user);
         }
 
 
@@ -42,10 +51,19 @@ namespace Bookbase.Application.Services
 
         public async Task<IEnumerable<UserResponseDto>> GetAll()
         {
+            
             var users = await _userRepository.GetAll();
+            
+            if (!users.Any())
+            {
+                throw new UnauthorizedException("Unauthorized")
+                {
+                    ErrorCode = "004"
+                };
+            }
 
             return _mapper.Map<IEnumerable<UserResponseDto>>(users);
-             
+
         }
 
         public async Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto)
