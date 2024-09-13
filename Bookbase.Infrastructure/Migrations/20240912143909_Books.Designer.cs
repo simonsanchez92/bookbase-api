@@ -3,6 +3,7 @@ using System;
 using Bookbase.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookbase.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912143909_Books")]
+    partial class Books
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Bookbase.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BookGenre", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GenresId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BooksId", "GenresId");
+
+                    b.HasIndex("GenresId");
+
+                    b.ToTable("BookGenre");
+                });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Book", b =>
                 {
@@ -64,23 +82,6 @@ namespace Bookbase.Infrastructure.Migrations
                     b.ToTable("books");
                 });
 
-            modelBuilder.Entity("Bookbase.Domain.Models.BookGenre", b =>
-                {
-                    b.Property<int>("BookId")
-                        .HasColumnType("integer")
-                        .HasColumnName("book_id");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("integer")
-                        .HasColumnName("genre_id");
-
-                    b.HasKey("BookId", "GenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("book_genre");
-                });
-
             modelBuilder.Entity("Bookbase.Domain.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -98,63 +99,6 @@ namespace Bookbase.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("genres");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "fantasy"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Science Fiction"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Mystery"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Horror"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Fiction"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Romance"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Short Story"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Biography"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "self-help"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "History"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Technology"
-                        });
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>
@@ -229,47 +173,48 @@ namespace Bookbase.Infrastructure.Migrations
 
             modelBuilder.Entity("Bookbase.Domain.Models.UserBook", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("user_id");
+                        .HasColumnName("user_book_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BookId")
                         .HasColumnType("integer")
                         .HasColumnName("book_id");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_book_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("status");
 
-                    b.HasKey("UserId", "BookId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("user_book");
                 });
 
-            modelBuilder.Entity("Bookbase.Domain.Models.BookGenre", b =>
+            modelBuilder.Entity("BookGenre", b =>
                 {
-                    b.HasOne("Bookbase.Domain.Models.Book", "Book")
-                        .WithMany("BookGenres")
-                        .HasForeignKey("BookId")
+                    b.HasOne("Bookbase.Domain.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Bookbase.Domain.Models.Genre", "Genre")
-                        .WithMany("BookGenres")
-                        .HasForeignKey("GenreId")
+                    b.HasOne("Bookbase.Domain.Models.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.User", b =>
@@ -285,33 +230,26 @@ namespace Bookbase.Infrastructure.Migrations
 
             modelBuilder.Entity("Bookbase.Domain.Models.UserBook", b =>
                 {
-                    b.HasOne("Bookbase.Domain.Models.Book", "Book")
+                    b.HasOne("Bookbase.Domain.Models.Book", "book")
                         .WithMany("UserBooks")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Bookbase.Domain.Models.User", "User")
+                    b.HasOne("Bookbase.Domain.Models.User", "user")
                         .WithMany("UserBooks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Book");
+                    b.Navigation("book");
 
-                    b.Navigation("User");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Book", b =>
                 {
-                    b.Navigation("BookGenres");
-
                     b.Navigation("UserBooks");
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Genre", b =>
-                {
-                    b.Navigation("BookGenres");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>
