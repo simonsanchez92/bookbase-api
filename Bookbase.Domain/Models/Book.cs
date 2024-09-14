@@ -14,7 +14,7 @@ namespace Bookbase.Domain.Models
         public string Author { get; set; }
 
         [Column("publish_date")]
-        public DateTime PublishDate { get; set; }
+        public int PublishDate { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
@@ -24,6 +24,9 @@ namespace Bookbase.Domain.Models
 
         [Column("pages")]
         public int PageCount { get; set; }
+
+        [Column("deleted")]
+        public bool Deleted { get; set; } = false;
 
         // Navigation properties
         public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>(); // Many-to-Many 
