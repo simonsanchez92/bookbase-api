@@ -18,20 +18,15 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<Book> Create(Book book, List<int> genreIds)
         {
+
+            // Retrieve the genres that match the genreIds
+            var genres = await _context.Genres.Where(g => genreIds.Contains(g.Id)).ToListAsync();
+
+            // Assign the genres to the book entity
+            book.BookGenres = genres.Select(g => new BookGenre { GenreId = g.Id, Book = book }).ToList();
+
+
             _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-
-            foreach (var id in genreIds)
-            {
-                var bookGenre = new BookGenre
-                {
-                    BookId = book.Id,
-                    GenreId = id
-                };
-
-                _context.BookGenres.Add(bookGenre);
-            }
-
             await _context.SaveChangesAsync();
 
             return book;

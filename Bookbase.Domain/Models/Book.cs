@@ -14,16 +14,16 @@ namespace Bookbase.Domain.Models
         public string Author { get; set; }
 
         [Column("publish_date")]
-        public int PublishDate { get; set; }
+        public int? PublishDate { get; set; }
 
         [Column("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column("cover_url")]
-        public string CoverUrl { get; set; }
+        public string? CoverUrl { get; set; }
 
         [Column("pages")]
-        public int PageCount { get; set; }
+        public int? PageCount { get; set; }
 
         [Column("deleted")]
         public bool Deleted { get; set; } = false;

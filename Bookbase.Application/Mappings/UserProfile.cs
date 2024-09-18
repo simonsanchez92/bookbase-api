@@ -15,8 +15,8 @@ namespace Bookbase.Application.Mappings
             CreateMap<Book, BookResponseDto>()
                     .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BookGenres.Select(bg => bg.Genre).ToList()));
 
-            CreateMap<CreateBookDto, Book>()
-                .ForMember(dest => dest.BookGenres, opt => opt.Ignore());
+            CreateMap<CreateBookDto, Book>();
+            //.ForMember(dest => dest.BookGenres, opt => opt.Ignore());
 
             CreateMap<Genre, GenreResponseDto>();
 
