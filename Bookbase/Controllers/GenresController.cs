@@ -1,4 +1,5 @@
-﻿using Bookbase.Application.Interfaces;
+﻿using Bookbase.Application.Dtos.Requests;
+using Bookbase.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -14,6 +15,13 @@ namespace Bookbase.Controllers
             _genreService = genreService;
         }
 
+        [HttpGet("{genreId}")]
+        public async Task<IActionResult> GetOne(int genreId)
+        {
+            var genre = await _genreService.GetOne(genreId);
+
+            return Ok(genre);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -22,5 +30,19 @@ namespace Bookbase.Controllers
 
             return Ok(res);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateGenreDto genreDto)
+        {
+            var genre = await _genreService.Create(genreDto);
+
+            return CreatedAtAction(
+                     actionName: nameof(GetOne),
+                     routeValues: new { genreId = genre.Id },
+                     value: genre
+                 );
+
+        }
+
     }
 }

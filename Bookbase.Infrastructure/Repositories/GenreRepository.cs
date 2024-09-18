@@ -1,6 +1,8 @@
 ﻿using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -13,9 +15,12 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<Genre> Create(Genre genre)
+        public async Task<Genre> Create(Genre genre)
         {
-            throw new NotImplementedException();
+            _context.Genres.Add(genre);
+            await _context.SaveChangesAsync();
+
+            return genre;
         }
 
         public async Task<IEnumerable<Genre>> GetAll()
@@ -23,9 +28,18 @@ namespace Bookbase.Infrastructure.Repositories
             return _context.Genres.ToList();
         }
 
-        public Task<Genre?> GetOne(int genreId)
+        public async Task<Genre?> GetOne(int genreId)
         {
-            throw new NotImplementedException();
+            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+
+            return genre;
+        }
+
+        public async Task<Genre?> GetOne(Expression<Func<Genre, bool>> predicate)
+        {
+            var genre = await _context.Genres.FirstOrDefaultAsync(predicate);
+
+            return genre;
         }
 
         public Task<Genre> Update(Genre genre)

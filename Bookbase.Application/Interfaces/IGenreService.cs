@@ -1,15 +1,16 @@
-﻿using Bookbase.Application.Dtos.Responses;
+﻿using Bookbase.Application.Dtos.Requests;
+using Bookbase.Application.Dtos.Responses;
+using Bookbase.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Bookbase.Application.Interfaces
 {
     public interface IGenreService
     {
-        //public Task<UserResponseDto?> GetOne(int userId);
-        //public Task<User> GetOne(Expression<Func<User, bool>> predicate);
-
+        public Task<GenreResponseDto?> GetOne(int genreId);
+        public Task<Genre> GetOne(Expression<Func<Genre, bool>> predicate);
         Task<IEnumerable<GenreResponseDto>> GetAll();
-
-        //Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto);
+        Task<GenreResponseDto> Create(CreateGenreDto userDto);
 
         //Task<UserResponseDto> Update(int userId, UpdateUserDto userDto);
 
