@@ -39,7 +39,10 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<IEnumerable<Book>> GetAll()
         {
-            return await _context.Books.Where(b => !b.Deleted).ToListAsync();
+            return await _context.Books
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Where(b => !b.Deleted).ToListAsync();
         }
 
         public Task<IEnumerable<Book?>> GetMany()
