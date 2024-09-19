@@ -4,7 +4,7 @@ namespace Bookbase.Domain.Interfaces
 {
     public interface IUserBookRepository
     {
-        public Task<UserBook> Add(int bookId, int userId);
+        public Task<UserBook> Add(int userId, int bookId);
         //public Task<IEnumerable<UserBook>> GetAll();
         //public Task<IEnumerable<Book?>> GetMany();
         //public Task<Book?> GetOne(int bookId);

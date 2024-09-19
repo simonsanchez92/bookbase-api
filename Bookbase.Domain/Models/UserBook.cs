@@ -5,10 +5,6 @@ namespace Bookbase.Domain.Models
     [Table("user_book")]
     public class UserBook
     {
-
-        [Column("user_book_id")]
-        public int Id { get; set; }
-
         [Column("user_id")]
         public int UserId { get; set; }
         public User User { get; set; }

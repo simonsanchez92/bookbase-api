@@ -14,7 +14,7 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<UserBook> Add(int bookId, int userId)
+        public async Task<UserBook> Add(int userId, int bookId)
         {
             var userBook = new UserBook
             {
@@ -24,8 +24,10 @@ namespace Bookbase.Infrastructure.Repositories
             };
 
             _context.UserBooks.Add(userBook);
-
             await _context.SaveChangesAsync();
+
+            await _context.Entry(userBook).Reference(ub => ub.User).LoadAsync();
+            await _context.Entry(userBook).Reference(ub => ub.Book).LoadAsync();
 
             return userBook;
 
