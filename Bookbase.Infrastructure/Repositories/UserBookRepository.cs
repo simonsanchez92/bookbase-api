@@ -1,6 +1,7 @@
 ﻿using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -32,5 +33,28 @@ namespace Bookbase.Infrastructure.Repositories
             return userBook;
 
         }
+
+        public async Task<UserBook?> GetOne(int userId, int bookId)
+        {
+            var userBook = await _context.UserBooks.FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
+
+            return userBook;
+        }
+
+        public async Task<UserBook> Update(UserBook userBook)
+        {
+            _context.UserBooks.Update(userBook);
+            await _context.SaveChangesAsync();
+            return userBook;
+        }
+
+        public async Task<bool> Delete(UserBook userBook)
+        {
+            _context.UserBooks.Remove(userBook);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

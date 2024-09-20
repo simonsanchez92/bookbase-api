@@ -47,7 +47,10 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<Book?> GetOne(int bookId)
         {
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+            var book = await _context.Books.Include(b => b.BookGenres)
+                                .ThenInclude(bg => bg.Genre)
+                                .FirstOrDefaultAsync(b => b.Id == bookId);
+
             if (book == null)
             {
                 //    //TODO: retrieve err 
