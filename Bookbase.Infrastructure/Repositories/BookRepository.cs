@@ -64,11 +64,32 @@ namespace Bookbase.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+
         public async Task<Book> Update(Book book)
         {
             _context.Books.Update(book);
             await _context.SaveChangesAsync();
             return book;
         }
+
+
+        public async Task<IEnumerable<Book>> Search(string? title, string? author)
+        {
+
+            var query = _context.Books.AsQueryable();
+
+            if (!String.IsNullOrEmpty(title))
+            {
+                query = query.Where(b => b.Title.Contains(title));
+            }
+
+            if (!String.IsNullOrEmpty(author))
+            {
+                query = query.Where(b => b.Author.Contains(author));
+            }
+
+            return await query.ToListAsync();
+        }
+
     }
 }

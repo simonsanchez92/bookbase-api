@@ -12,5 +12,7 @@ namespace Bookbase.Domain.Interfaces
         public Task<Book> Create(Book book, List<int> genreIds);
         public Task<Book> Update(Book book);
 
+        public Task<IEnumerable<Book>> Search(string? title, string? author);
+
     }
 }

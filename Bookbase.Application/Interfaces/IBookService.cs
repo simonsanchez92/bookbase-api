@@ -17,5 +17,9 @@ namespace Bookbase.Application.Interfaces
 
         Task<bool> Delete(int bookId);
 
+
+        Task<IEnumerable<BookResponseDto>> Search(string? title, string? author);
+
+
     }
 }

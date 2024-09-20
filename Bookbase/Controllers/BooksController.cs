@@ -60,5 +60,13 @@ namespace Bookbase.Controllers
             var user = await _bookService.Update(bookId, bookDto);
             return Ok(user);
         }
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search([FromQuery] string? title, [FromQuery] string? author)
+        {
+            var res = await _bookService.Search(title, author);
+
+            return Ok(res);
+        }
     }
 }

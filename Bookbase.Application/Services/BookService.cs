@@ -84,5 +84,14 @@ namespace Bookbase.Application.Services
 
             return _mapper.Map<BookResponseDto>(updatedBook);
         }
+
+        public async Task<IEnumerable<BookResponseDto>> Search(string? title, string? author)
+        {
+
+            var books = await _bookRepository.Search(title, author);
+
+
+            return _mapper.Map<IEnumerable<BookResponseDto>>(books);
+        }
     }
 }
