@@ -1,7 +1,6 @@
 ﻿using Bookbase.Domain.Interfaces;
 using Bookbase.Infrastructure.Repositories;
 using Bookbase.Infrastructure.Services;
-using Bookbase.Infrastructure.Validators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bookbase.Infrastructure.Extensions
@@ -11,9 +10,14 @@ namespace Bookbase.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IGenreRepository, GenreRepository>();
+
+            services.AddTransient<IUserBookRepository, UserBookRepository>();
+
             services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
-            
+
             services.AddTransient<IUserCreateValidatorService, UserCreateValidatorService>();
 
 

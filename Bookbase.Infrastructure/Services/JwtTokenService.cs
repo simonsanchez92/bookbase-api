@@ -1,6 +1,6 @@
-﻿using Bookbase.Infrastructure.Enums;
-using Bookbase.Domain.Interfaces;
+﻿using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
+using Bookbase.Infrastructure.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,7 +30,7 @@ namespace Bookbase.Infrastructure.Services
             var claims = new[]
             {
                 //Identifies the principal (User) that is the subject of the JWT
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Username), //Sub (subject)
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), //Sub (subject)
 
                 //User Email
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),

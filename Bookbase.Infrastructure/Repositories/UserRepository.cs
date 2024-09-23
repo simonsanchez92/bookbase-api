@@ -10,7 +10,7 @@ namespace Bookbase.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        
+
         public UserRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -22,8 +22,8 @@ namespace Bookbase.Infrastructure.Repositories
 
             if (user == null)
             {
-            //    //TODO: retrieve err 
-            //    throw new KeyNotFoundException($"User with id {userId} not found");
+                //    //TODO: retrieve err 
+                //    throw new KeyNotFoundException($"User with id {userId} not found");
             }
 
             return user;
@@ -55,23 +55,12 @@ namespace Bookbase.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User> Update(int userId, User user)
+        public async Task<User> Update(User user)
         {
-            
-            var currentUser = await GetOne(userId);
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return user;
 
-            if (currentUser != null) { 
-                currentUser.Username = user.Username;
-                currentUser.Password = user.Password;
-                currentUser.RoleId = user.RoleId;
-
-                _context.Users.Update(currentUser);
-                await _context.SaveChangesAsync();
-                return currentUser;
-            }
-
-            //Return err if not found
-            return null;
         }
 
 
