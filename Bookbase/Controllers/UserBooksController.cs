@@ -25,6 +25,14 @@ namespace Bookbase.Controllers
             return Ok(userBook);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetList()
+        {
+            var userId = UserHelper.GetUserId(User);
+            var userBooks = await _userBookService.GetList(userId);
+
+            return Ok(userBooks);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateUserBookDto userBookDto)

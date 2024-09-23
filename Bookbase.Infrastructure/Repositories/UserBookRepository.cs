@@ -38,6 +38,11 @@ namespace Bookbase.Infrastructure.Repositories
         {
             var userBook = await _context.UserBooks.FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
 
+            //var res = new Book
+            //{
+            //    Id = userBook.BookId
+            //};
+
             return userBook;
         }
 
@@ -56,5 +61,21 @@ namespace Bookbase.Infrastructure.Repositories
             return true;
         }
 
+        public async Task<IEnumerable<UserBook>> GetAll(int userId)
+        {
+            var userBooks = await _context.UserBooks.Where(ub => ub.UserId == userId).ToListAsync();
+
+            return userBooks;
+        }
+
+        public async Task<IEnumerable<UserBook>> GetList(int userId)
+        {
+            var userBooks = await _context.UserBooks
+                .Where(ub => ub.UserId == userId)
+                .Include(ub => ub.Book)
+                .ToListAsync();
+
+            return userBooks;
+        }
     }
 }

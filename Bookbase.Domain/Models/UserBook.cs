@@ -15,5 +15,13 @@ namespace Bookbase.Domain.Models
 
         [Column("status")]
         public string Status { get; set; }  // E.g., "Want to Read", "Reading", "Read"
+
+        //public string Review { get; set; }
+
+        //public DateTime DateRead { get; set; }
+        //public DateTime DateAdded { get; set; }
+
+        //public float Rating { get; set; }
+
     }
 }

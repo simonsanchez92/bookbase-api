@@ -7,9 +7,11 @@ namespace Bookbase.Application.Interfaces
     {
         public Task<UserBookResponseDto> Add(int userId, int bookId);
 
+        //public Task<UserWithBooksResponseDto> GetAll(int userId);
+        public Task<UserBookListResponseDto> GetList(int userId);
         public Task<UserBookResponseDto?> GetOne(int userId, int bookId);
 
-        public Task<UserBookResponseDto> Update(int userId, int BookId, UpdateUserBookDto userBookDto);
+        public Task<UserBookListResponseDto> Update(int userId, int BookId, UpdateUserBookDto userBookDto);
 
         public Task<bool> Delete(int userId, int bookId);
 

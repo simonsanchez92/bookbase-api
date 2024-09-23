@@ -9,9 +9,11 @@ namespace Bookbase.Domain.Interfaces
 
         public Task<UserBook> Update(UserBook userBook);
 
-        //public Task<IEnumerable<UserBook>> GetAll();
+        public Task<IEnumerable<UserBook>> GetAll(int userId);
         //public Task<IEnumerable<Book?>> GetMany();
         //public Task<Book> GetOne(Expression<Func<Book, bool>> predicate);
+
+        public Task<IEnumerable<UserBook>> GetList(int userId);
 
         public Task<bool> Delete(UserBook userBook);
 

@@ -3,6 +3,7 @@ using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Interfaces;
 
 namespace Bookbase.Application.Services
@@ -48,7 +49,7 @@ namespace Bookbase.Application.Services
             return _mapper.Map<UserBookResponseDto>(userBook);
         }
 
-        public async Task<UserBookResponseDto> Update(int userId, int bookId, UpdateUserBookDto userBookDto)
+        public async Task<UserBookListResponseDto> Update(int userId, int bookId, UpdateUserBookDto userBookDto)
         {
             var currentUB = await _userBookRepository.GetOne(userId, bookId);
 
@@ -65,7 +66,7 @@ namespace Bookbase.Application.Services
 
             var updatedUserBook = await _userBookRepository.Update(currentUB);
 
-            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
+            return _mapper.Map<UserBookListResponseDto>(updatedUserBook);
         }
 
 
@@ -85,6 +86,48 @@ namespace Bookbase.Application.Services
             await _userBookRepository.Delete(userBook);
 
             return true;
+        }
+
+        //public async Task<UserWithBooksResponseDto> GetAll(int userId)
+        //{
+        //    var ubooks = await _userBookRepository.GetAll(userId);
+
+        //    var books = ubooks.Select(ub => new BookResponse
+        //    {
+        //        BookId = ub.BookId,
+        //        Status = ub.Status,
+        //    });
+
+        //    var userBooks = new UserWithBooksResponseDto
+        //    {
+        //        UserId = userId,
+        //        Books = books
+        //    };
+
+        //    return userBooks;
+        //    //return _mapper.Map<IEnumerable<UserWithBooksResponseDto>>(userBooks);
+        //}
+
+        public async Task<UserBookListResponseDto> GetList(int userId)
+        {
+            //Retrieves joined tables UserBook and Book
+            var userBooks = await _userBookRepository.GetList(userId);
+
+            var books = userBooks.Select(ub => new BookResponse
+            {
+                BookId = ub.Book.Id,
+                CoverUrl = ub.Book.CoverUrl,
+                Title = ub.Book.Title,
+                Author = ub.Book.Author,
+                Status = ub.Status
+            }).ToList();
+
+            var userBooksDto = new UserBookListResponseDto
+            {
+                Books = books
+            };
+
+            return userBooksDto;
         }
     }
 }
