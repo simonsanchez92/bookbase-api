@@ -14,14 +14,16 @@ namespace Bookbase.Domain.Models
         public Book Book { get; set; }
 
         [Column("status")]
-        public string Status { get; set; }  // E.g., "Want to Read", "Reading", "Read"
+        public string Status { get; set; }
 
         //public string Review { get; set; }
 
         //public DateTime DateRead { get; set; }
-        //public DateTime DateAdded { get; set; }
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        //public float Rating { get; set; }
+        [Column("rating")]
+        public float Rating { get; set; }
 
     }
 }

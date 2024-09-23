@@ -24,7 +24,10 @@ namespace Bookbase.Application.Mappings
             CreateMap<CreateUserBookDto, UserBook>();
 
             CreateMap<UserBook, UserBookResponseDto>();
+
             CreateMap<UserBook, UserBookListResponseDto>();
+
+            CreateMap<UserBook, ShelfBookResponseDto>();
             //        .ForMember(dest => dest.Book, opt => opt.MapFrom(src => src.Book))
             //        .ForPath(dest => dest.Book.Genres, opt => opt.Ignore());
             //}

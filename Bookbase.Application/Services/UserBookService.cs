@@ -3,7 +3,6 @@ using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
-using Bookbase.Domain.Common;
 using Bookbase.Domain.Interfaces;
 
 namespace Bookbase.Application.Services
@@ -19,7 +18,7 @@ namespace Bookbase.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<UserBookResponseDto> Add(int userId, int bookId)
+        public async Task<ShelfBookResponseDto> Add(int userId, int bookId)
         {
             var userBook = await _userBookRepository.Add(userId, bookId);
 
@@ -31,7 +30,7 @@ namespace Bookbase.Application.Services
                     ErrorCode = "005"
                 };
             }
-            return _mapper.Map<UserBookResponseDto>(userBook);
+            return _mapper.Map<ShelfBookResponseDto>(userBook);
         }
 
         public async Task<UserBookResponseDto?> GetOne(int userId, int bookId)
@@ -108,26 +107,27 @@ namespace Bookbase.Application.Services
         //    //return _mapper.Map<IEnumerable<UserWithBooksResponseDto>>(userBooks);
         //}
 
-        public async Task<UserBookListResponseDto> GetList(int userId)
+        public async Task<IEnumerable<UserBookResponseDto>> GetList(int userId)
         {
             //Retrieves joined tables UserBook and Book
             var userBooks = await _userBookRepository.GetList(userId);
 
-            var books = userBooks.Select(ub => new BookResponse
+            var books = userBooks.Select(ub => new UserBookResponseDto
             {
-                BookId = ub.Book.Id,
-                CoverUrl = ub.Book.CoverUrl,
+                Id = ub.Book.Id,
                 Title = ub.Book.Title,
                 Author = ub.Book.Author,
-                Status = ub.Status
+                PublishDate = (int)ub.Book.PublishDate,
+                Description = ub.Book.Description,
+                CoverUrl = ub.Book.CoverUrl,
+                PageCount = (int)ub.Book.PageCount,
+                //Genres = ub.Book.BookGenres,
+                Status = ub.Status,
+                Rating = ub.Rating,
+                CreatedAt = ub.CreatedAt
             }).ToList();
 
-            var userBooksDto = new UserBookListResponseDto
-            {
-                Books = books
-            };
-
-            return userBooksDto;
+            return books;
         }
     }
 }

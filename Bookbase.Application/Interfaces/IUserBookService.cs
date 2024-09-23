@@ -5,10 +5,10 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IUserBookService
     {
-        public Task<UserBookResponseDto> Add(int userId, int bookId);
+        public Task<ShelfBookResponseDto> Add(int userId, int bookId);
 
         //public Task<UserWithBooksResponseDto> GetAll(int userId);
-        public Task<UserBookListResponseDto> GetList(int userId);
+        public Task<IEnumerable<UserBookResponseDto>> GetList(int userId);
         public Task<UserBookResponseDto?> GetOne(int userId, int bookId);
 
         public Task<UserBookListResponseDto> Update(int userId, int BookId, UpdateUserBookDto userBookDto);

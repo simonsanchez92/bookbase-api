@@ -48,7 +48,7 @@ namespace Bookbase.Controllers
             {
                 return CreatedAtAction(
                     actionName: nameof(GetOne),
-                    routeValues: new { userId = userBookResponse.User.Id, bookId = userBookResponse.BookId },
+                    routeValues: new { userId = userBookResponse.UserId, bookId = userBookResponse.BookId },
                     value: userBookResponse
                 );
             }

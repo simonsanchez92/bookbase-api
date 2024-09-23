@@ -1,9 +1,10 @@
 ﻿namespace Bookbase.Application.Dtos.Responses
 {
-    public class UserBookResponseDto
+    public class UserBookResponseDto : BookResponseDto
     {
-        public UserResponseDto User { get; set; }
-        public int BookId { get; set; }
+        //public UserResponseDto User { get; set; }
         public string Status { get; set; }
+        public float Rating { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
