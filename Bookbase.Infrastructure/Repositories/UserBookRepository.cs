@@ -15,7 +15,7 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<UserBook> Add(int userId, int bookId)
+        public async Task<UserBook?> Add(int userId, int bookId)
         {
             var userBook = new UserBook
             {
@@ -30,21 +30,22 @@ namespace Bookbase.Infrastructure.Repositories
             await _context.Entry(userBook).Reference(ub => ub.User).LoadAsync();
             await _context.Entry(userBook).Reference(ub => ub.Book).LoadAsync();
 
-            return userBook;
+            //return userBook;
+
+            return await GetOne(userId, bookId);
 
         }
 
         public async Task<UserBook?> GetOne(int userId, int bookId)
         {
-            var userBook = await _context.UserBooks.FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
+            // Retrieve object including related entities
 
-            return userBook;
-        }
+            var userBook = await _context.UserBooks
+                .Include(ub => ub.Book)
+                    .ThenInclude(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                    .FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
 
-        public async Task<UserBook> Update(UserBook userBook)
-        {
-            _context.UserBooks.Update(userBook);
-            await _context.SaveChangesAsync();
             return userBook;
         }
 
@@ -73,6 +74,22 @@ namespace Bookbase.Infrastructure.Repositories
                 .ToListAsync();
 
             return userBooks;
+        }
+
+        public async Task<UserBook?> Shelve(UserBook userBook)
+        {
+            _context.UserBooks.Add(userBook);
+            await _context.SaveChangesAsync();
+
+            return await GetOne(userBook.UserId, userBook.BookId);
+        }
+
+        public async Task<UserBook?> Update(UserBook userBook)
+        {
+            _context.UserBooks.Update(userBook);
+            await _context.SaveChangesAsync();
+
+            return userBook;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
+using Bookbase.Application.Enums;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
 using Bookbase.Domain.Interfaces;
+using Bookbase.Domain.Models;
 
 namespace Bookbase.Application.Services
 {
@@ -31,7 +33,14 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            var userBook = await _userBookRepository.Add(userId, bookId);
+            var userBook = new UserBook
+            {
+                UserId = userId,
+                BookId = bookId,
+                Status = ReadingStatus.WantToRead.ToString()
+            };
+
+            await _userBookRepository.Shelve(userBook);
 
 
             return _mapper.Map<ShelfBookResponseDto>(userBook);
@@ -52,8 +61,6 @@ namespace Bookbase.Application.Services
             return _mapper.Map<UserBookResponseDto>(userBook);
         }
 
-
-
         public async Task<bool> Delete(int userId, int bookId)
         {
             var userBook = await _userBookRepository.GetOne(userId, bookId);
@@ -66,97 +73,63 @@ namespace Bookbase.Application.Services
                 };
 
             }
-
             await _userBookRepository.Delete(userBook);
 
             return true;
         }
 
-        //public async Task<UserWithBooksResponseDto> GetAll(int userId)
-        //{
-        //    var ubooks = await _userBookRepository.GetAll(userId);
-
-        //    var books = ubooks.Select(ub => new BookResponse
-        //    {
-        //        BookId = ub.BookId,
-        //        Status = ub.Status,
-        //    });
-
-        //    var userBooks = new UserWithBooksResponseDto
-        //    {
-        //        UserId = userId,
-        //        Books = books
-        //    };
-
-        //    return userBooks;
-        //    //return _mapper.Map<IEnumerable<UserWithBooksResponseDto>>(userBooks);
-        //}
 
         public async Task<IEnumerable<UserBookResponseDto>> GetList(int userId)
         {
             //Retrieves joined tables UserBook and Book
             var userBooks = await _userBookRepository.GetList(userId);
 
-            var books = userBooks.Select(ub => new UserBookResponseDto
-            {
-                Id = ub.Book.Id,
-                Title = ub.Book.Title,
-                Author = ub.Book.Author,
-                PublishYear = (int)ub.Book.PublishYear,
-                Description = ub.Book.Description,
-                CoverUrl = ub.Book.CoverUrl,
-                PageCount = (int)ub.Book.PageCount,
-                Status = ub.Status,
-                Rating = ub.Rating,
-                CreatedAt = ub.CreatedAt,
-                Genres = ub.Book.BookGenres.Select(bg => new GenreResponseDto
-                {
-                    Id = bg.Genre.Id,
-                    Name = bg.Genre.Name
-                }).ToList(),
-            }).ToList();
+            return _mapper.Map<IEnumerable<UserBookResponseDto>>(userBooks);
+        }
 
-            return books;
+        public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateFields)
+        {
+            var userBook = await _userBookRepository.GetOne(userId, bookId);
+
+            if (userBook == null)
+            {
+                userBook = new UserBook
+                {
+                    UserId = userId,
+                    BookId = bookId,
+                    Status = ReadingStatus.WantToRead.ToString()
+                };
+
+                await _userBookRepository.Shelve(userBook);
+            }
+
+            //Apply the specific updates from the delegate
+            updateFields(userBook);
+
+            //Update the existing userBook entity in the repository
+            await _userBookRepository.Update(userBook);
+
+            return _mapper.Map<UserBookResponseDto>(userBook);
+        }
+
+
+        public async Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto)
+        {
+            return await UpsertUserBook(userId, bookId, userBook =>
+            {
+                userBook.Status = updateReadingStatusDto.Status.ToString();
+                userBook.UpdatedAt = DateTime.UtcNow;
+            });
         }
 
         public async Task<UserBookResponseDto> Rate(int userId, int bookId, RateBookDto rateBookDto)
         {
-            var currentUB = await _userBookRepository.GetOne(userId, bookId);
-
-            if (currentUB == null)
+            return await UpsertUserBook(userId, bookId, userBook =>
             {
-                throw new BadRequestException($"No book found with id {bookId}")
-                {
-                    ErrorCode = "005"
-                };
-
-            }
-
-            currentUB.Rating = rateBookDto.Rating;
-
-            var updatedUserBook = await _userBookRepository.Update(currentUB);
-
-            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
-        }
-
-        public async Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto)
-        {
-            var currentUB = await _userBookRepository.GetOne(userId, bookId);
-
-            if (currentUB == null)
-            {
-                throw new BadRequestException($"No book found with id {bookId}")
-                {
-                    ErrorCode = "005"
-                };
-
-            }
-
-            currentUB.Status = updateReadingStatusDto.Status.ToString();
-
-            var updatedUserBook = await _userBookRepository.Update(currentUB);
-
-            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
+                userBook.Rating = rateBookDto.Rating;
+                userBook.Status = ReadingStatus.Read.ToString();
+                userBook.UpdatedAt = DateTime.UtcNow;
+            });
         }
     }
 }

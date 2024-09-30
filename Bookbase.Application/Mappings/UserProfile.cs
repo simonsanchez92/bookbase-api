@@ -25,14 +25,18 @@ namespace Bookbase.Application.Mappings
 
 
             CreateMap<UserBook, UserBookResponseDto>()
-                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Book.BookGenres.Select(bg => new GenreResponseDto
-                {
-                    Id = bg.Genre.Id,
-                    Name = bg.Genre.Name,
-                }).ToList()));
-
-
-            CreateMap<UserBook, UserBookListResponseDto>();
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Book.Id))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Book.Title))
+            .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Book.Author))
+            .ForMember(dest => dest.PublishYear, opt => opt.MapFrom(src => src.Book.PublishYear))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Book.Description))
+            .ForMember(dest => dest.CoverUrl, opt => opt.MapFrom(src => src.Book.CoverUrl))
+            .ForMember(dest => dest.PageCount, opt => opt.MapFrom(src => src.Book.PageCount))
+            .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Book.BookGenres.Select(bg => new GenreResponseDto
+            {
+                Id = bg.Genre.Id,
+                Name = bg.Genre.Name,
+            }).ToList()));
 
             CreateMap<UserBook, ShelfBookResponseDto>();
             //        .ForMember(dest => dest.Book, opt => opt.MapFrom(src => src.Book))

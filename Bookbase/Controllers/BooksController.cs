@@ -17,7 +17,7 @@ namespace Bookbase.Controllers
 
 
 
-        [HttpGet("{bookId}")]
+        [HttpGet("show/{bookId}")]
         public async Task<IActionResult> GetOne(int bookId)
         {
             var res = await _bookService.GetOne(bookId);

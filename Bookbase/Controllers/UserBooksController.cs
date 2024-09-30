@@ -17,9 +17,11 @@ namespace Bookbase.Controllers
         }
 
 
-        [HttpGet("{userId}/{bookId}")]
-        public async Task<IActionResult> GetOne(int userId, int bookId)
+        [HttpGet("show/{bookId}")]
+        public async Task<IActionResult> GetOne(int bookId)
         {
+            var userId = UserHelper.GetUserId(User);
+
             var userBook = await _userBookService.GetOne(userId, bookId);
 
             return Ok(userBook);
