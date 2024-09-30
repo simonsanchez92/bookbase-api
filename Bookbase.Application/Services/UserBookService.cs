@@ -121,10 +121,14 @@ namespace Bookbase.Application.Services
                 Description = ub.Book.Description,
                 CoverUrl = ub.Book.CoverUrl,
                 PageCount = (int)ub.Book.PageCount,
-                //Genres = ub.Book.BookGenres,
                 Status = ub.Status,
                 Rating = ub.Rating,
-                CreatedAt = ub.CreatedAt
+                CreatedAt = ub.CreatedAt,
+                Genres = ub.Book.BookGenres.Select(bg => new GenreResponseDto
+                {
+                    Id = bg.Genre.Id,
+                    Name = bg.Genre.Name
+                }).ToList(),
             }).ToList();
 
             return books;

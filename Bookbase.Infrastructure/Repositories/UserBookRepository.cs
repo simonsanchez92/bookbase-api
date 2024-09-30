@@ -73,6 +73,8 @@ namespace Bookbase.Infrastructure.Repositories
             var userBooks = await _context.UserBooks
                 .Where(ub => ub.UserId == userId)
                 .Include(ub => ub.Book)
+                .ThenInclude(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
                 .ToListAsync();
 
             return userBooks;
