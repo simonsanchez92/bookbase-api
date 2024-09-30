@@ -24,9 +24,11 @@ namespace Bookbase.Domain.Models
         [Column("deleted")]
         public bool Deleted { get; set; } = false;
 
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         //Navigation property
         public ICollection<UserBook> UserBooks { get; set; } //Many to many with book
 
     }
 }
-    

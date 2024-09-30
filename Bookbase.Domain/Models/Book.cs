@@ -13,8 +13,8 @@ namespace Bookbase.Domain.Models
         [Column("author")]
         public string Author { get; set; }
 
-        [Column("publish_date")]
-        public int? PublishDate { get; set; }
+        [Column("publish_year")]
+        public int? PublishYear { get; set; }
 
         [Column("description")]
         public string? Description { get; set; }
@@ -24,6 +24,9 @@ namespace Bookbase.Domain.Models
 
         [Column("pages")]
         public int? PageCount { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("deleted")]
         public bool Deleted { get; set; } = false;

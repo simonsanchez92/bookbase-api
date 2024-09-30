@@ -38,11 +38,6 @@ namespace Bookbase.Infrastructure.Repositories
         {
             var userBook = await _context.UserBooks.FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
 
-            //var res = new Book
-            //{
-            //    Id = userBook.BookId
-            //};
-
             return userBook;
         }
 

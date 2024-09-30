@@ -20,16 +20,20 @@ namespace Bookbase.Application.Services
 
         public async Task<ShelfBookResponseDto> Add(int userId, int bookId)
         {
-            var userBook = await _userBookRepository.Add(userId, bookId);
+            var isShelved = await _userBookRepository.GetOne(userId, bookId);
 
-            if (userBook == null)
+            if (isShelved != null)
             {
 
-                throw new BadRequestException()
+                throw new BadRequestException("Book is already shelved")
                 {
-                    ErrorCode = "005"
+                    ErrorCode = "006"
                 };
             }
+
+            var userBook = await _userBookRepository.Add(userId, bookId);
+
+
             return _mapper.Map<ShelfBookResponseDto>(userBook);
         }
 
@@ -117,7 +121,7 @@ namespace Bookbase.Application.Services
                 Id = ub.Book.Id,
                 Title = ub.Book.Title,
                 Author = ub.Book.Author,
-                PublishDate = (int)ub.Book.PublishDate,
+                PublishYear = (int)ub.Book.PublishYear,
                 Description = ub.Book.Description,
                 CoverUrl = ub.Book.CoverUrl,
                 PageCount = (int)ub.Book.PageCount,

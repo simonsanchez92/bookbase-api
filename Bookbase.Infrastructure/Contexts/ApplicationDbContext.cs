@@ -1,10 +1,14 @@
-﻿using Bookbase.Domain.Models;
+﻿using Bookbase.Domain.Interfaces;
+using Bookbase.Domain.Models;
+using Bookbase.Infrastructure.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
+        private readonly IPasswordEncryptionService _passwordEncryptionService;
+
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
 
@@ -16,9 +20,9 @@ namespace Bookbase.Infrastructure.Contexts
 
 
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPasswordEncryptionService passwordEncryptionService) : base(options)
         {
-
+            _passwordEncryptionService = passwordEncryptionService;
         }
 
 
@@ -31,6 +35,12 @@ namespace Bookbase.Infrastructure.Contexts
                 new Role { Id = 1, Name = "admin" },
                 new Role { Id = 2, Name = "user" }
             );
+
+            modelBuilder.Entity<User>().HasData(
+   new User { Id = 1, Username = "admin", Email = "admin@admin.com", Password = _passwordEncryptionService.HashPassword("123"), RoleId = (int)UserRole.Admin },
+   new User { Id = 2, Username = "user", Email = "user@user.com", Password = _passwordEncryptionService.HashPassword("123"), RoleId = (int)UserRole.User }
+);
+
 
             modelBuilder.Entity<Genre>().HasData(
              new Genre { Id = 1, Name = "fantasy" },
@@ -48,26 +58,26 @@ namespace Bookbase.Infrastructure.Contexts
 
 
             modelBuilder.Entity<Book>().HasData(
-     new Book { Id = 1, Title = "The Hobbit", Author = "J.R.R. Tolkien", PublishDate = 1937, Description = "A fantasy novel about a hobbit's adventure.", CoverUrl = "https://example.com/hobbit.jpg", PageCount = 310 },
-     new Book { Id = 2, Title = "Dune", Author = "Frank Herbert", PublishDate = 1965, Description = "A science fiction novel set on a desert planet.", CoverUrl = "https://example.com/dune.jpg", PageCount = 412 },
-     new Book { Id = 3, Title = "The Hound of the Baskervilles", Author = "Arthur Conan Doyle", PublishDate = 1902, Description = "A mystery novel featuring Sherlock Holmes.", CoverUrl = "https://example.com/hound.jpg", PageCount = 256 },
-     new Book { Id = 4, Title = "Dracula", Author = "Bram Stoker", PublishDate = 1897, Description = "A horror novel about Count Dracula.", CoverUrl = "https://example.com/dracula.jpg", PageCount = 418 },
-     new Book { Id = 5, Title = "Pride and Prejudice", Author = "Jane Austen", PublishDate = 1813, Description = "A classic romance novel about Elizabeth Bennet.", CoverUrl = "https://example.com/pride.jpg", PageCount = 279 },
-     new Book { Id = 6, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublishDate = 1925, Description = "A fiction novel about the American dream.", CoverUrl = "https://example.com/gatsby.jpg", PageCount = 180 },
-     new Book { Id = 7, Title = "1984", Author = "George Orwell", PublishDate = 1949, Description = "A dystopian novel about totalitarianism.", CoverUrl = "https://example.com/1984.jpg", PageCount = 328 },
-     new Book { Id = 8, Title = "The Road", Author = "Cormac McCarthy", PublishDate = 2006, Description = "A novel about a father and son surviving in a post-apocalyptic world.", CoverUrl = "https://example.com/road.jpg", PageCount = 241 },
-     new Book { Id = 9, Title = "Steve Jobs", Author = "Walter Isaacson", PublishDate = 2011, Description = "A biography of the co-founder of Apple.", CoverUrl = "https://example.com/jobs.jpg", PageCount = 656 },
-     new Book { Id = 10, Title = "Sapiens", Author = "Yuval Noah Harari", PublishDate = 2011, Description = "A history of humankind.", CoverUrl = "https://example.com/sapiens.jpg", PageCount = 443 },
-     new Book { Id = 11, Title = "How to Win Friends and Influence People", Author = "Dale Carnegie", PublishDate = 1936, Description = "A classic self-help book on communication.", CoverUrl = "https://example.com/win.jpg", PageCount = 288 },
-     new Book { Id = 12, Title = "The Lean Startup", Author = "Eric Ries", PublishDate = 2011, Description = "A guide to startups and innovation.", CoverUrl = "https://example.com/lean.jpg", PageCount = 336 },
-     new Book { Id = 13, Title = "The Alchemist", Author = "Paulo Coelho", PublishDate = 1988, Description = "A novel about following dreams.", CoverUrl = "https://example.com/alchemist.jpg", PageCount = 208 },
-     new Book { Id = 14, Title = "The Shining", Author = "Stephen King", PublishDate = 1977, Description = "A horror novel about a haunted hotel.", CoverUrl = "https://example.com/shining.jpg", PageCount = 447 },
-     new Book { Id = 15, Title = "Gone Girl", Author = "Gillian Flynn", PublishDate = 2012, Description = "A thriller about a woman's disappearance.", CoverUrl = "https://example.com/gonegirl.jpg", PageCount = 432 },
-     new Book { Id = 16, Title = "A Brief History of Time", Author = "Stephen Hawking", PublishDate = 1988, Description = "A book on cosmology and black holes.", CoverUrl = "https://example.com/briefhistory.jpg", PageCount = 256 },
-     new Book { Id = 17, Title = "To Kill a Mockingbird", Author = "Harper Lee", PublishDate = 1960, Description = "A novel about racial injustice in the South.", CoverUrl = "https://example.com/mockingbird.jpg", PageCount = 281 },
-     new Book { Id = 18, Title = "The Catcher in the Rye", Author = "J.D. Salinger", PublishDate = 1951, Description = "A novel about adolescent angst.", CoverUrl = "https://example.com/catcher.jpg", PageCount = 234 },
-     new Book { Id = 19, Title = "The Art of War", Author = "Sun Tzu", PublishDate = -500, Description = "An ancient Chinese text on military strategy.", CoverUrl = "https://example.com/artofwar.jpg", PageCount = 68 },
-     new Book { Id = 20, Title = "The Martian", Author = "Andy Weir", PublishDate = 2011, Description = "A science fiction novel about survival on Mars.", CoverUrl = "https://example.com/martian.jpg", PageCount = 369 }
+     new Book { Id = 1, Title = "The Hobbit", Author = "J.R.R. Tolkien", PublishYear = 1937, Description = "A fantasy novel about a hobbit's adventure.", CoverUrl = "https://example.com/hobbit.jpg", PageCount = 310 },
+     new Book { Id = 2, Title = "Dune", Author = "Frank Herbert", PublishYear = 1965, Description = "A science fiction novel set on a desert planet.", CoverUrl = "https://example.com/dune.jpg", PageCount = 412 },
+     new Book { Id = 3, Title = "The Hound of the Baskervilles", Author = "Arthur Conan Doyle", PublishYear = 1902, Description = "A mystery novel featuring Sherlock Holmes.", CoverUrl = "https://example.com/hound.jpg", PageCount = 256 },
+     new Book { Id = 4, Title = "Dracula", Author = "Bram Stoker", PublishYear = 1897, Description = "A horror novel about Count Dracula.", CoverUrl = "https://example.com/dracula.jpg", PageCount = 418 },
+     new Book { Id = 5, Title = "Pride and Prejudice", Author = "Jane Austen", PublishYear = 1813, Description = "A classic romance novel about Elizabeth Bennet.", CoverUrl = "https://example.com/pride.jpg", PageCount = 279 },
+     new Book { Id = 6, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublishYear = 1925, Description = "A fiction novel about the American dream.", CoverUrl = "https://example.com/gatsby.jpg", PageCount = 180 },
+     new Book { Id = 7, Title = "1984", Author = "George Orwell", PublishYear = 1949, Description = "A dystopian novel about totalitarianism.", CoverUrl = "https://example.com/1984.jpg", PageCount = 328 },
+     new Book { Id = 8, Title = "The Road", Author = "Cormac McCarthy", PublishYear = 2006, Description = "A novel about a father and son surviving in a post-apocalyptic world.", CoverUrl = "https://example.com/road.jpg", PageCount = 241 },
+     new Book { Id = 9, Title = "Steve Jobs", Author = "Walter Isaacson", PublishYear = 2011, Description = "A biography of the co-founder of Apple.", CoverUrl = "https://example.com/jobs.jpg", PageCount = 656 },
+     new Book { Id = 10, Title = "Sapiens", Author = "Yuval Noah Harari", PublishYear = 2011, Description = "A history of humankind.", CoverUrl = "https://example.com/sapiens.jpg", PageCount = 443 },
+     new Book { Id = 11, Title = "How to Win Friends and Influence People", Author = "Dale Carnegie", PublishYear = 1936, Description = "A classic self-help book on communication.", CoverUrl = "https://example.com/win.jpg", PageCount = 288 },
+     new Book { Id = 12, Title = "The Lean Startup", Author = "Eric Ries", PublishYear = 2011, Description = "A guide to startups and innovation.", CoverUrl = "https://example.com/lean.jpg", PageCount = 336 },
+     new Book { Id = 13, Title = "The Alchemist", Author = "Paulo Coelho", PublishYear = 1988, Description = "A novel about following dreams.", CoverUrl = "https://example.com/alchemist.jpg", PageCount = 208 },
+     new Book { Id = 14, Title = "The Shining", Author = "Stephen King", PublishYear = 1977, Description = "A horror novel about a haunted hotel.", CoverUrl = "https://example.com/shining.jpg", PageCount = 447 },
+     new Book { Id = 15, Title = "Gone Girl", Author = "Gillian Flynn", PublishYear = 2012, Description = "A thriller about a woman's disappearance.", CoverUrl = "https://example.com/gonegirl.jpg", PageCount = 432 },
+     new Book { Id = 16, Title = "A Brief History of Time", Author = "Stephen Hawking", PublishYear = 1988, Description = "A book on cosmology and black holes.", CoverUrl = "https://example.com/briefhistory.jpg", PageCount = 256 },
+     new Book { Id = 17, Title = "To Kill a Mockingbird", Author = "Harper Lee", PublishYear = 1960, Description = "A novel about racial injustice in the South.", CoverUrl = "https://example.com/mockingbird.jpg", PageCount = 281 },
+     new Book { Id = 18, Title = "The Catcher in the Rye", Author = "J.D. Salinger", PublishYear = 1951, Description = "A novel about adolescent angst.", CoverUrl = "https://example.com/catcher.jpg", PageCount = 234 },
+     new Book { Id = 19, Title = "The Art of War", Author = "Sun Tzu", PublishYear = -500, Description = "An ancient Chinese text on military strategy.", CoverUrl = "https://example.com/artofwar.jpg", PageCount = 68 },
+     new Book { Id = 20, Title = "The Martian", Author = "Andy Weir", PublishYear = 2011, Description = "A science fiction novel about survival on Mars.", CoverUrl = "https://example.com/martian.jpg", PageCount = 369 }
      // Add more books as needed
  );
 
