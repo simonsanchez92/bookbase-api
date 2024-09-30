@@ -52,25 +52,6 @@ namespace Bookbase.Application.Services
             return _mapper.Map<UserBookResponseDto>(userBook);
         }
 
-        public async Task<UserBookListResponseDto> Update(int userId, int bookId, UpdateUserBookDto userBookDto)
-        {
-            var currentUB = await _userBookRepository.GetOne(userId, bookId);
-
-            if (currentUB == null)
-            {
-                throw new BadRequestException($"No book found with id {bookId}")
-                {
-                    ErrorCode = "005"
-                };
-
-            }
-
-            currentUB.Status = userBookDto.Status.ToString();
-
-            var updatedUserBook = await _userBookRepository.Update(currentUB);
-
-            return _mapper.Map<UserBookListResponseDto>(updatedUserBook);
-        }
 
 
         public async Task<bool> Delete(int userId, int bookId)
@@ -136,6 +117,46 @@ namespace Bookbase.Application.Services
             }).ToList();
 
             return books;
+        }
+
+        public async Task<UserBookResponseDto> Rate(int userId, int bookId, RateBookDto rateBookDto)
+        {
+            var currentUB = await _userBookRepository.GetOne(userId, bookId);
+
+            if (currentUB == null)
+            {
+                throw new BadRequestException($"No book found with id {bookId}")
+                {
+                    ErrorCode = "005"
+                };
+
+            }
+
+            currentUB.Rating = rateBookDto.Rating;
+
+            var updatedUserBook = await _userBookRepository.Update(currentUB);
+
+            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
+        }
+
+        public async Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto)
+        {
+            var currentUB = await _userBookRepository.GetOne(userId, bookId);
+
+            if (currentUB == null)
+            {
+                throw new BadRequestException($"No book found with id {bookId}")
+                {
+                    ErrorCode = "005"
+                };
+
+            }
+
+            currentUB.Status = updateReadingStatusDto.Status.ToString();
+
+            var updatedUserBook = await _userBookRepository.Update(currentUB);
+
+            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
         }
     }
 }

@@ -59,12 +59,23 @@ namespace Bookbase.Controllers
         }
 
 
-        [HttpPut("{bookId}")]
-        public async Task<IActionResult> Update(int bookId, [FromBody] UpdateUserBookDto userBookDto)
+        [HttpPut("{bookId}/edit-status")]
+        public async Task<IActionResult> EditStatus(int bookId, [FromBody] UpdateReadingStatusDto updateReadingStatusDto)
         {
             var userId = UserHelper.GetUserId(User);
 
-            var userBook = await _userBookService.Update(userId, bookId, userBookDto);
+            var userBook = await _userBookService.UpdateReadingStatus(userId, bookId, updateReadingStatusDto);
+
+
+            return Ok(userBook);
+        }
+
+        [HttpPut("{bookId}/rate")]
+        public async Task<IActionResult> Rate(int bookId, [FromBody] RateBookDto rateBookDto)
+        {
+            var userId = UserHelper.GetUserId(User);
+
+            var userBook = await _userBookService.Rate(userId, bookId, rateBookDto);
 
 
             return Ok(userBook);

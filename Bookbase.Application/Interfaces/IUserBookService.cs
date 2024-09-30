@@ -11,7 +11,9 @@ namespace Bookbase.Application.Interfaces
         public Task<IEnumerable<UserBookResponseDto>> GetList(int userId);
         public Task<UserBookResponseDto?> GetOne(int userId, int bookId);
 
-        public Task<UserBookListResponseDto> Update(int userId, int BookId, UpdateUserBookDto userBookDto);
+        public Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto);
+
+        public Task<UserBookResponseDto> Rate(int userId, int bookId, RateBookDto rateBookDto);
 
         public Task<bool> Delete(int userId, int bookId);
 

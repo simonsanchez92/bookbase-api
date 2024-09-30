@@ -2,7 +2,7 @@
 
 namespace Bookbase.Application.Dtos.Requests
 {
-    public class UpdateUserBookDto
+    public class UpdateReadingStatusDto
     {
         public required ReadingStatus Status { get; set; }
     }
