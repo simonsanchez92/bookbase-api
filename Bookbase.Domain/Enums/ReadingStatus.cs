@@ -1,4 +1,4 @@
-﻿namespace Bookbase.Application.Enums
+﻿namespace Bookbase.Domain.Enums
 {
     public enum ReadingStatus
     {

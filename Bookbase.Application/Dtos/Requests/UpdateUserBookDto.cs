@@ -1,4 +1,4 @@
-﻿using Bookbase.Application.Enums;
+﻿using Bookbase.Domain.Enums;
 
 namespace Bookbase.Application.Dtos.Requests
 {

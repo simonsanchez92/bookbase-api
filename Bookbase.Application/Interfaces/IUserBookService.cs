@@ -10,7 +10,7 @@ namespace Bookbase.Application.Interfaces
         public Task<IEnumerable<UserBookResponseDto>> GetList(int userId);
         public Task<UserBookResponseDto?> GetOne(int userId, int bookId);
 
-        public Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateFields);
+        public Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField);
 
         public Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto);
 

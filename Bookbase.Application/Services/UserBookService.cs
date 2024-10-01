@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
-using Bookbase.Application.Enums;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using Bookbase.Domain.Enums;
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 
@@ -26,7 +26,6 @@ namespace Bookbase.Application.Services
 
             if (isShelved != null)
             {
-
                 throw new BadRequestException("Book is already shelved")
                 {
                     ErrorCode = "006"
@@ -37,7 +36,7 @@ namespace Bookbase.Application.Services
             {
                 UserId = userId,
                 BookId = bookId,
-                Status = ReadingStatus.WantToRead.ToString()
+                Status = ReadingStatus.WantToRead.ToString() //default initial status
             };
 
             await _userBookRepository.Shelve(userBook);
@@ -61,24 +60,6 @@ namespace Bookbase.Application.Services
             return _mapper.Map<UserBookResponseDto>(userBook);
         }
 
-        public async Task<bool> Delete(int userId, int bookId)
-        {
-            var userBook = await _userBookRepository.GetOne(userId, bookId);
-
-            if (userBook == null)
-            {
-                throw new BadRequestException($"Bad request")
-                {
-                    ErrorCode = "005"
-                };
-
-            }
-            await _userBookRepository.Delete(userBook);
-
-            return true;
-        }
-
-
         public async Task<IEnumerable<UserBookResponseDto>> GetList(int userId)
         {
             //Retrieves joined tables UserBook and Book
@@ -87,7 +68,7 @@ namespace Bookbase.Application.Services
             return _mapper.Map<IEnumerable<UserBookResponseDto>>(userBooks);
         }
 
-        public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateFields)
+        public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField)
         {
             var userBook = await _userBookRepository.GetOne(userId, bookId);
 
@@ -104,7 +85,7 @@ namespace Bookbase.Application.Services
             }
 
             //Apply the specific updates from the delegate
-            updateFields(userBook);
+            updateField(userBook);
 
             //Update the existing userBook entity in the repository
             await _userBookRepository.Update(userBook);
@@ -131,5 +112,24 @@ namespace Bookbase.Application.Services
                 userBook.UpdatedAt = DateTime.UtcNow;
             });
         }
+
+
+        public async Task<bool> Delete(int userId, int bookId)
+        {
+            var userBook = await _userBookRepository.GetOne(userId, bookId);
+
+            if (userBook == null)
+            {
+                throw new BadRequestException($"Bad request")
+                {
+                    ErrorCode = "005"
+                };
+
+            }
+            await _userBookRepository.Delete(userBook);
+
+            return true;
+        }
+
     }
 }
