@@ -1,6 +1,8 @@
-﻿using Bookbase.Domain.Interfaces;
+﻿using Bookbase.Domain.Common;
+using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Bookbase.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -14,6 +16,37 @@ namespace Bookbase.Infrastructure.Repositories
         public BookRepository(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<GenericListResponse<Book>> GetList(int page, int pageSize)
+        {
+            // Params
+            // TODO: cambiar
+            IQueryable<Book> query = _context.Books.Where(b => !b.Deleted);
+
+            // TODO: aplicaría filtros
+
+            //Pagination
+            int total = await query.CountAsync();
+
+            //
+            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
+            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+
+            //
+            int skip = (currentPage - 1) * currentLength;
+
+            query = query.Skip(skip).Take(currentLength);
+            var data = await query.ToListAsync();
+
+            return new GenericListResponse<Book>
+            {
+                Total = total,
+                Page = page,
+                Length = pageSize,
+                Data = data
+            };
+
         }
 
         public async Task<Book> Create(Book book, List<int> genreIds)

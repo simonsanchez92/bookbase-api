@@ -16,19 +16,26 @@ namespace Bookbase.Controllers
         }
 
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    var res = await _bookService.GetAll();
+
+        //    return Ok(res);
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var books = await _bookService.GetList(page, pageSize);
+
+            return Ok(books);
+        }
 
         [HttpGet("show/{bookId}")]
         public async Task<IActionResult> GetOne(int bookId)
         {
             var res = await _bookService.GetOne(bookId);
-
-            return Ok(res);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var res = await _bookService.GetAll();
 
             return Ok(res);
         }

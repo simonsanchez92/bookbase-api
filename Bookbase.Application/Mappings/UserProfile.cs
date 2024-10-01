@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Models;
 
 namespace Bookbase.Application.Mappings
@@ -16,13 +17,14 @@ namespace Bookbase.Application.Mappings
                     .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BookGenres.Select(bg => bg.Genre).ToList()));
 
             CreateMap<CreateBookDto, Book>();
-            //.ForMember(dest => dest.BookGenres, opt => opt.Ignore());
 
             CreateMap<Genre, GenreResponseDto>();
 
-
             CreateMap<CreateUserBookDto, UserBook>();
 
+            CreateMap<UserBook, ShelfBookResponseDto>();
+
+            CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
 
             CreateMap<UserBook, UserBookResponseDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Book.Id))
@@ -38,10 +40,8 @@ namespace Bookbase.Application.Mappings
                 Name = bg.Genre.Name,
             }).ToList()));
 
-            CreateMap<UserBook, ShelfBookResponseDto>();
-            //        .ForMember(dest => dest.Book, opt => opt.MapFrom(src => src.Book))
-            //        .ForPath(dest => dest.Book.Genres, opt => opt.Ignore());
-            //}
+
+
         }
     }
 }

@@ -7,7 +7,8 @@ namespace Bookbase.Application.Interfaces
     public interface IBookService
     {
         public Task<BookResponseDto?> GetOne(int bookId);
-        //public Task<User> GetOne(Expression<Func<User, bool>> predicate);
+
+        public Task<GenericListResponse<BookResponseDto>> GetList(int page, int pageSize);
 
         Task<IEnumerable<BookResponseDto>> GetAll();
 
