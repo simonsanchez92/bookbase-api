@@ -27,7 +27,7 @@ namespace Bookbase.Controllers
             return Ok(userBook);
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetList()
         {
             var userId = UserHelper.GetUserId(User);
