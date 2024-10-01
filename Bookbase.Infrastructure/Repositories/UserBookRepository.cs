@@ -1,6 +1,8 @@
-﻿using Bookbase.Domain.Interfaces;
+﻿using Bookbase.Domain.Common;
+using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Bookbase.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
@@ -27,16 +29,52 @@ namespace Bookbase.Infrastructure.Repositories
             return userBook;
         }
 
-        public async Task<IEnumerable<UserBook>> GetList(int userId)
-        {
-            var userBooks = await _context.UserBooks
-                .Where(ub => ub.UserId == userId)
-                .Include(ub => ub.Book)
-                .ThenInclude(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
-                .ToListAsync();
+        //public async Task<IEnumerable<UserBook>> GetList(int userId)
+        //{
+        //    var userBooks = await _context.UserBooks
+        //        .Where(ub => ub.UserId == userId)
+        //        .Include(ub => ub.Book)
+        //        .ThenInclude(b => b.BookGenres)
+        //        .ThenInclude(bg => bg.Genre)
+        //        .ToListAsync();
 
-            return userBooks;
+        //    return userBooks;
+        //}
+
+        public async Task<GenericListResponse<UserBook>> GetList(int userId, int page, int pageSize)
+        {
+            // Params
+            // TODO: cambiar
+            IQueryable<UserBook> query = _context.UserBooks
+                .Where(b => b.UserId == userId)
+                .Include(ub => ub.Book) //Include the related book
+                .ThenInclude(b => b.BookGenres) //Include BookGenres for each book
+                .ThenInclude(bg => bg.Genre); //Include genre for each BookGenre
+
+
+
+            // TODO: aplicaría filtros
+
+            //Pagination
+            int total = await query.CountAsync();
+
+            //
+            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
+            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+
+            //
+            int skip = (currentPage - 1) * currentLength;
+
+            query = query.Skip(skip).Take(currentLength);
+            var data = await query.ToListAsync();
+
+            return new GenericListResponse<UserBook>
+            {
+                Total = total,
+                Page = page,
+                Length = pageSize,
+                Data = data
+            };
         }
 
         public async Task<UserBook?> Shelve(UserBook userBook)
@@ -62,6 +100,7 @@ namespace Bookbase.Infrastructure.Repositories
 
             return true;
         }
+
 
     }
 }

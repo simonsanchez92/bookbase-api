@@ -41,6 +41,9 @@ namespace Bookbase.Application.Mappings
             }).ToList()));
 
 
+            CreateMap<GenericListResponse<UserBook>, GenericListResponse<UserBookResponseDto>>()
+                .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data));
+
 
         }
     }

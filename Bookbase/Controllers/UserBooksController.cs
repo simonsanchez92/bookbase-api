@@ -27,11 +27,20 @@ namespace Bookbase.Controllers
             return Ok(userBook);
         }
 
+        //[HttpGet("list")]
+        //public async Task<IActionResult> GetList()
+        //{
+        //    var userId = UserHelper.GetUserId(User);
+        //    var userBooks = await _userBookService.GetList(userId);
+
+        //    return Ok(userBooks);
+        //}
+
         [HttpGet("list")]
-        public async Task<IActionResult> GetList()
+        public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
         {
             var userId = UserHelper.GetUserId(User);
-            var userBooks = await _userBookService.GetList(userId);
+            var userBooks = await _userBookService.GetList(userId, page, pageSize);
 
             return Ok(userBooks);
         }

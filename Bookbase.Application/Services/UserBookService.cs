@@ -3,6 +3,7 @@ using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Enums;
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
@@ -60,13 +61,13 @@ namespace Bookbase.Application.Services
             return _mapper.Map<UserBookResponseDto>(userBook);
         }
 
-        public async Task<IEnumerable<UserBookResponseDto>> GetList(int userId)
-        {
-            //Retrieves joined tables UserBook and Book
-            var userBooks = await _userBookRepository.GetList(userId);
+        //public async Task<IEnumerable<UserBookResponseDto>> GetList(int userId)
+        //{
+        //    //Retrieves joined tables UserBook and Book
+        //    var userBooks = await _userBookRepository.GetList(userId);
 
-            return _mapper.Map<IEnumerable<UserBookResponseDto>>(userBooks);
-        }
+        //    return _mapper.Map<IEnumerable<UserBookResponseDto>>(userBooks);
+        //}
 
         public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField)
         {
@@ -131,5 +132,13 @@ namespace Bookbase.Application.Services
             return true;
         }
 
+        public async Task<GenericListResponse<UserBookResponseDto>> GetList(int userId, int page, int pageSize)
+        {
+            //Retrieves joined tables UserBook and Book
+            var userBooks = await _userBookRepository.GetList(userId, page, pageSize);
+
+            return _mapper.Map<GenericListResponse<UserBookResponseDto>>(userBooks);
+
+        }
     }
 }
