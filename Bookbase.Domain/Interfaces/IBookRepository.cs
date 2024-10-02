@@ -7,7 +7,7 @@ namespace Bookbase.Domain.Interfaces
     public interface IBookRepository
     {
         public Task<IEnumerable<Book>> GetAll();
-        public Task<GenericListResponse<Book>> GetList(int page, int pageSize);
+        public Task<GenericListResponse<Book>> GetList(int userId, int page, int pageSize);
         public Task<IEnumerable<Book?>> GetMany();
         public Task<Book?> GetOne(int bookId);
         public Task<Book> GetOne(Expression<Func<Book, bool>> predicate);

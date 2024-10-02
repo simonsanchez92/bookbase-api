@@ -18,11 +18,24 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<GenericListResponse<Book>> GetList(int page, int pageSize)
+        public async Task<GenericListResponse<Book>> GetList(int userId, int page, int pageSize)
         {
             // Params
             // TODO: cambiar
-            IQueryable<Book> query = _context.Books.Where(b => !b.Deleted);
+            IQueryable<Book> query = _context.Books
+            .Include(b => b.UserBooks.Where(ub => ub.UserId == userId))
+            .Where(b => !b.Deleted);
+            //.Where(b => b.UserBooks.Any(u => u.UserId == 2));
+
+            //var query = _context.Books
+            //    .Select(b => new
+            //    {
+            //        Book = b,
+            //        UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == 2)
+            //    })
+            //    .Where(b => !b.Book.Deleted);
+
+
 
             // TODO: aplicaría filtros
 

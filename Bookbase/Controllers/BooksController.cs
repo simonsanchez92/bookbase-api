@@ -1,5 +1,6 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Interfaces;
+using Bookbase.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -27,7 +28,8 @@ namespace Bookbase.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var books = await _bookService.GetList(page, pageSize);
+            var userId = UserHelper.GetUserId(User);
+            var books = await _bookService.GetList(userId, page, pageSize);
 
             return Ok(books);
         }
