@@ -1,6 +1,6 @@
 ﻿namespace Bookbase.Application.Dtos.Responses
 {
-    public class UserBookResponseDto : BookResponseDto
+    public class UserBookResponseDto
     {
         //public UserResponseDto User { get; set; }
         public required string Status { get; set; }

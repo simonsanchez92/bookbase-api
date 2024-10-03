@@ -14,7 +14,7 @@ namespace Bookbase.Domain.Models
         public Book Book { get; set; }
 
         [Column("status")]
-        public string Status { get; set; }
+        public string Status { get; set; }  //StatusId //Todo: crear tabla
 
         //public string Review { get; set; }
 

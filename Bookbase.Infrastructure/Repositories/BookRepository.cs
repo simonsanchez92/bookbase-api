@@ -18,22 +18,24 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<GenericListResponse<Book>> GetList(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<BookResponse>> GetList(int userId, int page, int pageSize)
         {
             // Params
             // TODO: cambiar
-            IQueryable<Book> query = _context.Books
-            .Include(b => b.UserBooks.Where(ub => ub.UserId == userId))
-            .Where(b => !b.Deleted);
-            //.Where(b => b.UserBooks.Any(u => u.UserId == 2));
+            //IQueryable<Book> query = _context.Books
+            //.Include(b => b.BookGenres)
+            //.Include(b => b.UserBooks.Where(ub => ub.UserId == userId))
+            //.Where(b => !b.Deleted);
 
-            //var query = _context.Books
-            //    .Select(b => new
-            //    {
-            //        Book = b,
-            //        UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == 2)
-            //    })
-            //    .Where(b => !b.Book.Deleted);
+
+
+            var query = _context.Books
+                .Select(b => new BookResponse
+                {
+                    Book = b,
+                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+                })
+                .Where(b => !b.Book.Deleted);
 
 
 
@@ -52,7 +54,7 @@ namespace Bookbase.Infrastructure.Repositories
             query = query.Skip(skip).Take(currentLength);
             var data = await query.ToListAsync();
 
-            return new GenericListResponse<Book>
+            return new GenericListResponse<BookResponse>
             {
                 Total = total,
                 Page = page,

@@ -9,6 +9,11 @@
         public string Description { get; set; }
         public string CoverUrl { get; set; }
         public int PageCount { get; set; }
+
+        //public required string Status { get; set; }
+        //public float Rating { get; set; }
+        //public DateTime CreatedAt { get; set; }
+        //public DateTime UpdatedAt { get; set; }
         public List<GenreResponseDto> Genres { get; set; }
     }
 }

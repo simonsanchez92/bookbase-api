@@ -1,6 +1,6 @@
 ﻿namespace Bookbase.Domain.Common
 {
-    public class BookResponse
+    public class BookResponse2
     {
         public int BookId { get; set; }
         public string CoverUrl { get; set; }

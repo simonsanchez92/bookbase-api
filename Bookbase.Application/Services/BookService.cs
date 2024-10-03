@@ -22,7 +22,7 @@ namespace Bookbase.Application.Services
         }
 
 
-        public async Task<GenericListResponse<BookResponseDto>> GetList(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<BookListResponseDto>> GetList(int userId, int page, int pageSize)
         {
             var books = await _bookRepository.GetList(userId, page, pageSize);
 
@@ -32,7 +32,7 @@ namespace Bookbase.Application.Services
             //});
 
 
-            return _mapper.Map<GenericListResponse<BookResponseDto>>(books);
+            return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
         }
 
 
