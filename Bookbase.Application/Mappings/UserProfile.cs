@@ -36,7 +36,7 @@ namespace Bookbase.Application.Mappings
 
             CreateMap<Genre, GenreResponseDto>();
 
-            CreateMap<CreateUserBookDto, UserBook>();
+            CreateMap<ShelveBookDto, UserBook>();
 
             CreateMap<UserBook, ShelfBookResponseDto>();
 

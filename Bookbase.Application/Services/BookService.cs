@@ -4,6 +4,7 @@ using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
 using Bookbase.Domain.Common;
+using Bookbase.Domain.Enums;
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 
@@ -22,23 +23,18 @@ namespace Bookbase.Application.Services
         }
 
 
-        public async Task<GenericListResponse<BookListResponseDto>> GetList(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize)
         {
             var books = await _bookRepository.GetList(userId, page, pageSize);
-
-            //books.Data.Select(b => new
-            //{
-            //    Status = b.UserBooks.FirstOrDefault().Status,
-            //});
 
 
             return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
         }
 
 
-        public async Task<BookResponseDto?> GetOne(int bookId)
+        public async Task<BookListResponseDto?> GetOne(int? userId, int bookId)
         {
-            var book = await _bookRepository.GetOne(bookId);
+            var book = await _bookRepository.GetOne(userId, bookId);
 
             if (book == null)
             {
@@ -48,15 +44,7 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            return _mapper.Map<BookResponseDto>(book);
-        }
-
-
-        public async Task<IEnumerable<BookResponseDto>> GetAll()
-        {
-            var books = await _bookRepository.GetAll();
-
-            return _mapper.Map<IEnumerable<BookResponseDto>>(books);
+            return _mapper.Map<BookListResponseDto>(book);
         }
 
 
@@ -72,14 +60,9 @@ namespace Bookbase.Application.Services
             return GenericResult<BookResponseDto>.SuccessResult(data);
         }
 
-        public Task<bool> Delete(int bookId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<BookResponseDto> Update(int bookId, UpdateBookDto bookDto)
         {
-            var currentBook = await _bookRepository.GetOne(bookId);
+            var currentBook = await _bookRepository.GetOne(null, bookId);
 
             if (currentBook == null)
             {
@@ -90,24 +73,63 @@ namespace Bookbase.Application.Services
 
             }
 
-            currentBook.Description = bookDto.Description;
-            currentBook.CoverUrl = bookDto.CoverUrl;
+            currentBook.Book.Description = bookDto.Description;
+            currentBook.Book.CoverUrl = bookDto.CoverUrl;
 
-
-            var updatedBook = await _bookRepository.Update(currentBook);
+            var updatedBook = await _bookRepository.Update(currentBook.Book);
 
             return _mapper.Map<BookResponseDto>(updatedBook);
         }
 
-        public async Task<IEnumerable<BookResponseDto>> Search(string? title, string? author)
+        public async Task<ShelfBookResponseDto> ShelveBook(int? userId, int bookId)
         {
+            var isShelved = await _bookRepository.GetOne(userId, bookId);
 
-            var books = await _bookRepository.Search(title, author);
+
+            if (userId == null)
+            {
+                throw new BadRequestException("User must be logged in")
+                {
+                    ErrorCode = "008"
+                };
+            }
+
+            if (isShelved == null)
+            {
+                throw new BadRequestException($"Book with id {bookId} does not exist")
+                {
+                    ErrorCode = "006"
+                };
+            }
+
+            if (isShelved.UserBook != null)
+            {
+                throw new BadRequestException("Book is already shelved")
+                {
+                    ErrorCode = "007"
+                };
+            }
 
 
-            return _mapper.Map<IEnumerable<BookResponseDto>>(books);
+            var userBook = new UserBook
+            {
+                UserId = (int)userId,
+                BookId = bookId,
+                Status = ReadingStatus.WantToRead.ToString() //default initial status
+            };
+
+            await _bookRepository.Shelve(userBook);
+
+
+            return _mapper.Map<ShelfBookResponseDto>(userBook);
         }
 
+
+
+        public Task<bool> Delete(int bookId)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

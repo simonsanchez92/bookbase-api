@@ -1,6 +1,7 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Interfaces;
 using Bookbase.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -17,14 +18,16 @@ namespace Bookbase.Controllers
         }
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var res = await _bookService.GetAll();
+        [HttpGet("show/{bookId}")]
+        public async Task<IActionResult> GetOne(int bookId)
+        {
+            var userId = UserHelper.GetUserId(User);
 
-        //    return Ok(res);
-        //}
+            var res = await _bookService.GetOne(userId, bookId);
 
+            return Ok(res);
+
+        }
         [HttpGet]
         public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -34,14 +37,8 @@ namespace Bookbase.Controllers
             return Ok(books);
         }
 
-        [HttpGet("show/{bookId}")]
-        public async Task<IActionResult> GetOne(int bookId)
-        {
-            var res = await _bookService.GetOne(bookId);
 
-            return Ok(res);
-        }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateBookDto bookDto)
         {
@@ -59,10 +56,10 @@ namespace Bookbase.Controllers
             }
             //Returns 409
             return Conflict(bookResponse.Messages);
-
         }
 
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{bookId}")]
         public async Task<IActionResult> Update(int bookId, [FromBody] UpdateBookDto bookDto)
         {
@@ -70,12 +67,30 @@ namespace Bookbase.Controllers
             return Ok(user);
         }
 
-        [HttpGet("Search")]
-        public async Task<IActionResult> Search([FromQuery] string? title, [FromQuery] string? author)
-        {
-            var res = await _bookService.Search(title, author);
 
-            return Ok(res);
+
+        [HttpPost("shelve")]
+        public async Task<IActionResult> ShelveBook([FromBody] ShelveBookDto shelveBookDto)
+        {
+
+            var userId = UserHelper.GetUserId(User);
+
+
+            var shelveBookResponse = await _bookService.ShelveBook(userId, shelveBookDto.BookId);
+
+            //Returns 201
+            if (shelveBookResponse != null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetOne),
+                    routeValues: new { userId = shelveBookResponse.UserId, bookId = shelveBookResponse.BookId },
+                    value: shelveBookResponse
+                );
+            }
+
+            //Returns 409
+            return Conflict();
+
         }
     }
 }

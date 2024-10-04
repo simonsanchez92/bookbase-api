@@ -1,6 +1,6 @@
 ﻿namespace Bookbase.Application.Dtos.Requests
 {
-    public class CreateUserBookDto
+    public class ShelveBookDto
     {
         public int BookId { get; set; }
     }

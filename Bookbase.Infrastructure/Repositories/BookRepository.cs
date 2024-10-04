@@ -4,7 +4,6 @@ using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
 using Bookbase.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -18,26 +17,32 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<GenericListResponse<BookResponse>> GetList(int userId, int page, int pageSize)
+        public async Task<BookResponse?> GetOne(int? userId, int bookId)
+        {
+            var book = await _context.Books.Include(b => b.BookGenres)
+                                .ThenInclude(bg => bg.Genre)
+                                .Select(b => new BookResponse
+                                {
+                                    Book = b,
+                                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+                                })
+                                .FirstOrDefaultAsync(b => b.Book.Id == bookId && !b.Book.Deleted);
+
+            return book;
+        }
+        public async Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize)
         {
             // Params
             // TODO: cambiar
-            //IQueryable<Book> query = _context.Books
-            //.Include(b => b.BookGenres)
-            //.Include(b => b.UserBooks.Where(ub => ub.UserId == userId))
-            //.Where(b => !b.Deleted);
-
-
-
             var query = _context.Books
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
                 .Select(b => new BookResponse
                 {
                     Book = b,
                     UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
                 })
                 .Where(b => !b.Book.Deleted);
-
-
 
             // TODO: aplicaría filtros
 
@@ -80,39 +85,6 @@ namespace Bookbase.Infrastructure.Repositories
             return book;
         }
 
-        public async Task<IEnumerable<Book>> GetAll()
-        {
-            return await _context.Books
-                .Include(b => b.BookGenres)
-                    .ThenInclude(bg => bg.Genre)
-                .Where(b => !b.Deleted).ToListAsync();
-        }
-
-        public Task<IEnumerable<Book?>> GetMany()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Book?> GetOne(int bookId)
-        {
-            var book = await _context.Books.Include(b => b.BookGenres)
-                                .ThenInclude(bg => bg.Genre)
-                                .FirstOrDefaultAsync(b => b.Id == bookId);
-
-            if (book == null)
-            {
-                //    //TODO: retrieve err 
-                //    throw new KeyNotFoundException($"User with id {userId} not found");
-            }
-            return book;
-        }
-
-        public Task<Book> GetOne(Expression<Func<Book, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public async Task<Book> Update(Book book)
         {
             _context.Books.Update(book);
@@ -120,24 +92,12 @@ namespace Bookbase.Infrastructure.Repositories
             return book;
         }
 
-
-        public async Task<IEnumerable<Book>> Search(string? title, string? author)
+        public async Task<BookResponse?> Shelve(UserBook userBook)
         {
+            _context.UserBooks.Add(userBook);
+            await _context.SaveChangesAsync();
 
-            var query = _context.Books.AsQueryable();
-
-            if (!String.IsNullOrEmpty(title))
-            {
-                query = query.Where(b => b.Title.Contains(title));
-            }
-
-            if (!String.IsNullOrEmpty(author))
-            {
-                query = query.Where(b => b.Author.Contains(author));
-            }
-
-            return await query.ToListAsync();
+            return await GetOne(userBook.UserId, userBook.BookId);
         }
-
     }
 }

@@ -23,7 +23,7 @@ namespace Bookbase.Domain.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("rating")]
         public float Rating { get; set; }

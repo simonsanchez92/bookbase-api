@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace Bookbase.Infrastructure.Extensions
@@ -40,6 +41,7 @@ namespace Bookbase.Infrastructure.Extensions
                         ValidAudience = audience,
                         IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
+                    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
                 });
 
 

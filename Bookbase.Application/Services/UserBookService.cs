@@ -132,7 +132,7 @@ namespace Bookbase.Application.Services
             return true;
         }
 
-        public async Task<GenericListResponse<UserBookResponseDto>> GetList(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<UserBookResponseDto>> GetList(int? userId, int page, int pageSize)
         {
             //Retrieves joined tables UserBook and Book
             var userBooks = await _userBookRepository.GetList(userId, page, pageSize);

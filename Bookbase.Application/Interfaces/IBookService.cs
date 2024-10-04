@@ -6,21 +6,18 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IBookService
     {
-        public Task<BookResponseDto?> GetOne(int bookId);
+        public Task<BookListResponseDto?> GetOne(int? userId, int bookId);
 
-        public Task<GenericListResponse<BookListResponseDto>> GetList(int userId, int page, int pageSize);
-
-        Task<IEnumerable<BookResponseDto>> GetAll();
+        public Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize);
 
         Task<GenericResult<BookResponseDto>> Create(CreateBookDto bookDto);
 
         Task<BookResponseDto> Update(int bookId, UpdateBookDto userDto);
 
+
+        public Task<ShelfBookResponseDto> ShelveBook(int? userId, int bookId);
+
+
         Task<bool> Delete(int bookId);
-
-
-        Task<IEnumerable<BookResponseDto>> Search(string? title, string? author);
-
-
     }
 }

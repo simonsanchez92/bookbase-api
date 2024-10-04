@@ -41,7 +41,7 @@ namespace Bookbase.Infrastructure.Repositories
         //    return userBooks;
         //}
 
-        public async Task<GenericListResponse<UserBook>> GetList(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<UserBook>> GetList(int? userId, int page, int pageSize)
         {
             // Params
             // TODO: cambiar

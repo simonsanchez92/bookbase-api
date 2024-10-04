@@ -1,20 +1,16 @@
 ﻿using Bookbase.Domain.Common;
 using Bookbase.Domain.Models;
-using System.Linq.Expressions;
 
 namespace Bookbase.Domain.Interfaces
 {
     public interface IBookRepository
     {
-        public Task<IEnumerable<Book>> GetAll();
-        public Task<GenericListResponse<BookResponse>> GetList(int userId, int page, int pageSize);
-        public Task<IEnumerable<Book?>> GetMany();
-        public Task<Book?> GetOne(int bookId);
-        public Task<Book> GetOne(Expression<Func<Book, bool>> predicate);
+
+        public Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize);
+        public Task<BookResponse?> GetOne(int? userId, int bookId);
         public Task<Book> Create(Book book, List<int> genreIds);
         public Task<Book> Update(Book book);
-
-        public Task<IEnumerable<Book>> Search(string? title, string? author);
+        public Task<BookResponse?> Shelve(UserBook userBook);
 
     }
 }
