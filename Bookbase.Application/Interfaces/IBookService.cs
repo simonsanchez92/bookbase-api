@@ -19,7 +19,8 @@ namespace Bookbase.Application.Interfaces
 
         public Task<GenericListResponse<BookListResponseDto>> GetUserShelf(int userId, int page, int pageSize);
 
-        public Task<ShelfBookResponseDto> ShelveBook(int? userId, int bookId);
+        //public Task<ShelfBookResponseDto> ShelveBook(int? userId, int bookId);
+        public Task<BookListResponseDto> ShelveBook(int? userId, int bookId);
 
 
         public Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField);

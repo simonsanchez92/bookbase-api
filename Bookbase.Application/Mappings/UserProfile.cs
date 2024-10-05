@@ -38,8 +38,6 @@ namespace Bookbase.Application.Mappings
 
             CreateMap<ShelveBookDto, UserBook>();
 
-            CreateMap<UserBook, ShelfBookResponseDto>();
-
             CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
 
             CreateMap<GenericListResponse<UserBook>, GenericListResponse<UserBookResponseDto>>()

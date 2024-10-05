@@ -94,7 +94,7 @@ namespace Bookbase.Controllers
             {
                 return CreatedAtAction(
                     actionName: nameof(GetOne),
-                    routeValues: new { userId = shelveBookResponse.UserId, bookId = shelveBookResponse.BookId },
+                    routeValues: new { bookId = shelveBookResponse.Book.Id },
                     value: shelveBookResponse
                 );
             }

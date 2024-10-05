@@ -81,18 +81,11 @@ namespace Bookbase.Application.Services
             return _mapper.Map<BookResponseDto>(updatedBook);
         }
 
-        public async Task<ShelfBookResponseDto> ShelveBook(int? userId, int bookId)
+
+        public async Task<BookListResponseDto> ShelveBook(int? userId, int bookId)
         {
+
             var isShelved = await _bookRepository.GetOne(userId, bookId);
-
-
-            if (userId == null)
-            {
-                throw new BadRequestException("User must be logged in")
-                {
-                    ErrorCode = "008"
-                };
-            }
 
             if (isShelved == null)
             {
@@ -112,17 +105,16 @@ namespace Bookbase.Application.Services
 
             var userBook = new UserBook
             {
-                UserId = (int)userId,
+                UserId = (int)userId!,
                 BookId = bookId,
                 Status = ReadingStatus.WantToRead.ToString() //default initial status
             };
 
-            await _bookRepository.Shelve(userBook);
+            var shelvedBook = await _bookRepository.Shelve(userBook);
 
 
-            return _mapper.Map<ShelfBookResponseDto>(userBook);
+            return _mapper.Map<BookListResponseDto>(shelvedBook);
         }
-
 
         public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField)
         {
