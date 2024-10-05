@@ -15,6 +15,7 @@ namespace Bookbase.Infrastructure.Extensions
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
             })
             .AddAuthentication(options =>
         {

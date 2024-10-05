@@ -110,7 +110,6 @@ namespace Bookbase.Application.Services
                 };
             }
 
-
             var userBook = new UserBook
             {
                 UserId = (int)userId,
@@ -125,11 +124,100 @@ namespace Bookbase.Application.Services
         }
 
 
+        public async Task<UserBookResponseDto> UpsertUserBook(int userId, int bookId, Action<UserBook> updateField)
+        {
+            var bookResponse = await _bookRepository.GetOne(userId, bookId);
+
+            //Fix exception handling!
+            //
+            //
+            if (bookResponse == null)
+            {
+                throw new BadRequestException($"Book of id {bookId} does not exist")
+                {
+                    ErrorCode = "009"
+                };
+            }
+
+            if (bookResponse.UserBook == null)
+            {
+                bookResponse.UserBook = new UserBook
+                {
+                    UserId = userId,
+                    BookId = bookId,
+                    Status = ReadingStatus.WantToRead.ToString()
+                };
+
+                await _bookRepository.Shelve(bookResponse.UserBook);
+            }
+
+            //Apply the specific updates from the delegate
+            updateField(bookResponse.UserBook);
+
+            //Update the existing userBook entity in the repository
+            await _bookRepository.UpdateUserBook(bookResponse.UserBook);
+
+            return _mapper.Map<UserBookResponseDto>(bookResponse.UserBook);
+        }
+
+
+        public async Task<UserBookResponseDto> UpdateReadingStatus(int userId, int bookId, UpdateReadingStatusDto updateReadingStatusDto)
+        {
+
+            return await UpsertUserBook(userId, bookId, userBook =>
+            {
+                userBook.Status = updateReadingStatusDto.Status.ToString();
+                userBook.UpdatedAt = DateTime.UtcNow;
+            });
+        }
+
+        public async Task<UserBookResponseDto> RateBook(int userId, int bookId, RateBookDto rateBookDto)
+        {
+            return await UpsertUserBook(userId, bookId, userBook =>
+            {
+                userBook.Rating = rateBookDto.Rating;
+                userBook.Status = ReadingStatus.Read.ToString();
+                userBook.UpdatedAt = DateTime.UtcNow;
+            });
+        }
+
 
         public Task<bool> Delete(int bookId)
         {
             throw new NotImplementedException();
         }
 
+        public async Task<bool> RemoveFromShelf(int userId, int bookId)
+        {
+            var bookResponse = await _bookRepository.GetOne(userId, bookId);
+
+            if (bookResponse == null)
+            {
+                throw new BadRequestException($"Book of id {bookId} does not exist")
+                {
+                    ErrorCode = "008"
+                };
+            }
+
+            if (bookResponse.UserBook == null)
+            {
+                throw new BadRequestException($"Bad request")
+                {
+                    ErrorCode = "005"
+                };
+
+            }
+            await _bookRepository.RemoveFromShelf(bookResponse.UserBook);
+
+            return true;
+        }
+
+        public async Task<GenericListResponse<BookListResponseDto>> GetUserShelf(int userId, int page, int pageSize)
+        {
+            var books = await _bookRepository.GetUserShelf(userId, page, pageSize);
+
+
+            return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
+        }
     }
 }

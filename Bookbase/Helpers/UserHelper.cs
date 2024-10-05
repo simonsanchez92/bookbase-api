@@ -4,17 +4,25 @@ namespace Bookbase.Helpers
 {
     public class UserHelper
     {
-        public static int? GetUserId(ClaimsPrincipal user)
+        public static int GetRequiredUserId(ClaimsPrincipal user)
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (!string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
             {
-                return Int32.Parse(userId);
+                throw new UnauthorizedAccessException("Id is missing");
             }
 
-            return null;
-            //throw new UnauthorizedAccessException("Id is missing");
+            return Int32.Parse(userId);
+
+        }
+
+        public static int? GetOptionalUserId(ClaimsPrincipal user)
+        {
+            var userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return !string.IsNullOrEmpty(userId) ? Int32.Parse(userId) : null;
+
         }
     }
 }

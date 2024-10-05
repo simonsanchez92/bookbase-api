@@ -69,6 +69,45 @@ namespace Bookbase.Infrastructure.Repositories
 
         }
 
+
+        public async Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
+        {
+            // Params
+            // TODO: cambiar
+            var query = _context.Books
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .Where(b => b.UserBooks.Any(ub => ub.UserId == userId))
+                .Select(b => new BookResponse
+                {
+                    Book = b,
+                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+                })
+                .Where(b => !b.Book.Deleted);
+
+            // TODO: aplicaría filtros
+
+            //Pagination
+            int total = await query.CountAsync();
+
+            //
+            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
+            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+
+            //
+            int skip = (currentPage - 1) * currentLength;
+
+            query = query.Skip(skip).Take(currentLength);
+            var data = await query.ToListAsync();
+
+            return new GenericListResponse<BookResponse>
+            {
+                Total = total,
+                Page = page,
+                Length = pageSize,
+                Data = data
+            };
+        }
         public async Task<Book> Create(Book book, List<int> genreIds)
         {
 
@@ -99,5 +138,23 @@ namespace Bookbase.Infrastructure.Repositories
 
             return await GetOne(userBook.UserId, userBook.BookId);
         }
+
+        public async Task<UserBook> UpdateUserBook(UserBook userBook)
+        {
+            _context.UserBooks.Update(userBook);
+            await _context.SaveChangesAsync();
+
+            return userBook;
+        }
+
+        public async Task<bool> RemoveFromShelf(UserBook userBook)
+        {
+            _context.UserBooks.Remove(userBook);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
     }
 }
