@@ -147,9 +147,9 @@ namespace Bookbase.Application.Services
             updateField(bookResponse.UserBook);
 
             //Update the existing userBook entity in the repository
-            await _bookRepository.UpdateUserBook(bookResponse.UserBook);
+            var updatedUserBook = await _bookRepository.UpdateUserBook(bookResponse.UserBook);
 
-            return _mapper.Map<UserBookResponseDto>(bookResponse.UserBook);
+            return _mapper.Map<UserBookResponseDto>(updatedUserBook);
         }
 
 

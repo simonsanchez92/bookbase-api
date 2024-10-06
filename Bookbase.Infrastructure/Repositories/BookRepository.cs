@@ -147,10 +147,18 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<UserBook> UpdateUserBook(UserBook userBook)
         {
-            _context.UserBooks.Update(userBook);
+            _context.UserBooks.Update(userBook).Property(ub => ub.UpdatedAt).IsModified = true;
+
             await _context.SaveChangesAsync();
 
-            return userBook;
+            return await GetOneUserBook(userBook.UserId, userBook.BookId);
+        }
+
+        public async Task<UserBook> GetOneUserBook(int userId, int bookId)
+        {
+            return await _context.UserBooks
+                            .Include(ub => ub.ReadingStatus)
+                            .FirstAsync(ub => ub.UserId == userId && ub.BookId == bookId);
         }
 
         public async Task<bool> RemoveFromShelf(UserBook userBook)
