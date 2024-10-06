@@ -4,6 +4,6 @@ namespace Bookbase.Application.Dtos.Requests
 {
     public class UpdateReadingStatusDto
     {
-        public required ReadingStatus Status { get; set; }
+        public required ReadingStatusEnum Status { get; set; }
     }
 }

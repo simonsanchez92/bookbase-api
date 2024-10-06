@@ -1,6 +1,6 @@
 ﻿namespace Bookbase.Domain.Enums
 {
-    public enum ReadingStatus
+    public enum ReadingStatusEnum
     {
         WantToRead = 1,
         Reading = 2,

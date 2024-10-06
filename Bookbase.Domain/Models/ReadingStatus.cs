@@ -2,13 +2,14 @@
 
 namespace Bookbase.Domain.Models
 {
-    [Table("roles")]
-    public class Role
+    [Table("reading_statuses")]
+    public class ReadingStatus
     {
-        [Column("role_id")]
+        [Column("reding_status_id")]
         public int Id { get; set; }
         [Column("name")]
         public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
+
+        public ICollection<UserBook> UserBooks { get; set; }
     }
 }

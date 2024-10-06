@@ -19,14 +19,17 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<BookResponse?> GetOne(int? userId, int bookId)
         {
-            var book = await _context.Books.Include(b => b.BookGenres)
+            var book = await _context.Books
+                            .Include(b => b.BookGenres)
                                 .ThenInclude(bg => bg.Genre)
-                                .Select(b => new BookResponse
-                                {
-                                    Book = b,
-                                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
-                                })
-                                .FirstOrDefaultAsync(b => b.Book.Id == bookId && !b.Book.Deleted);
+                            .Include(b => b.UserBooks)
+                                .ThenInclude(ub => ub.ReadingStatus)
+                            .Select(b => new BookResponse
+                            {
+                                Book = b,
+                                UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+                            })
+                            .FirstOrDefaultAsync(b => b.Book.Id == bookId && !b.Book.Deleted);
 
             return book;
         }
@@ -36,7 +39,9 @@ namespace Bookbase.Infrastructure.Repositories
             // TODO: cambiar
             var query = _context.Books
                 .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(b => b.UserBooks)
+                    .ThenInclude(ub => ub.ReadingStatus)
                 .Select(b => new BookResponse
                 {
                     Book = b,
@@ -69,14 +74,15 @@ namespace Bookbase.Infrastructure.Repositories
 
         }
 
-
         public async Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
         {
             // Params
             // TODO: cambiar
             var query = _context.Books
                 .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(b => b.UserBooks)
+                    .ThenInclude(ub => ub.ReadingStatus)
                 .Where(b => b.UserBooks.Any(ub => ub.UserId == userId))
                 .Select(b => new BookResponse
                 {

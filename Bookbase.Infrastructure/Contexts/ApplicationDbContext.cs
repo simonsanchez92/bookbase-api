@@ -18,6 +18,8 @@ namespace Bookbase.Infrastructure.Contexts
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
 
+        public DbSet<ReadingStatus> ReadingStatuses { get; set; }
+
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPasswordEncryptionService passwordEncryptionService) : base(options)
@@ -55,6 +57,13 @@ namespace Bookbase.Infrastructure.Contexts
              new Genre { Id = 10, Name = "History" },
              new Genre { Id = 11, Name = "Technology" }
          );
+
+
+            modelBuilder.Entity<ReadingStatus>().HasData(
+          new ReadingStatus { Id = 1, Name = "Want to read" },
+          new ReadingStatus { Id = 2, Name = "Reading" },
+          new ReadingStatus { Id = 3, Name = "Read" }
+      );
 
 
             modelBuilder.Entity<Book>().HasData(

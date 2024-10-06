@@ -13,7 +13,6 @@ namespace Bookbase.Application.Mappings
         {
             CreateMap<User, UserResponseDto>();
 
-
             CreateMap<BookGenre, GenreResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Genre.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Genre.Name));
@@ -21,16 +20,12 @@ namespace Bookbase.Application.Mappings
             CreateMap<Book, BookResponseDto>()
                     .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BookGenres.Select(bg => bg.Genre).ToList()));
 
-            // Explicitly map from Book to UserBookResponseDto (inherits from BookResponseDto)
             CreateMap<Book, UserBookResponseDto>();
-            //.IncludeBase<Book, BookResponseDto>(); // Inherit properties from BookResponseDto
 
             CreateMap<BookResponse, BookListResponseDto>();
 
-
-            CreateMap<UserBook, UserBookResponseDto>();
-            //.IncludeMembers(src => src.Book) // Include properties from the related Book entity
-            //.ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Book.BookGenres)); // Map genres from BookGenres
+            CreateMap<UserBook, UserBookResponseDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReadingStatus.Name));
 
             CreateMap<CreateBookDto, Book>();
 

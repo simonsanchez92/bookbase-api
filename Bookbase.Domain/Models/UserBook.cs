@@ -13,9 +13,9 @@ namespace Bookbase.Domain.Models
         public int BookId { get; set; }
         public Book Book { get; set; }
 
-        [Column("status")]
-        public string Status { get; set; }  //StatusId //Todo: crear tabla
-
+        [Column("reading_status")]
+        public int ReadingStatusId { get; set; }  //StatusId //Todo: crear tabla
+        public ReadingStatus ReadingStatus { get; set; }
         //public string Review { get; set; }
 
         //public DateTime DateRead { get; set; }

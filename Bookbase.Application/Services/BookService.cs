@@ -107,7 +107,7 @@ namespace Bookbase.Application.Services
             {
                 UserId = (int)userId!,
                 BookId = bookId,
-                Status = ReadingStatus.WantToRead.ToString() //default initial status
+                ReadingStatusId = (int)ReadingStatusEnum.WantToRead //default initial status
             };
 
             var shelvedBook = await _bookRepository.Shelve(userBook);
@@ -137,7 +137,7 @@ namespace Bookbase.Application.Services
                 {
                     UserId = userId,
                     BookId = bookId,
-                    Status = ReadingStatus.WantToRead.ToString()
+                    ReadingStatusId = (int)ReadingStatusEnum.WantToRead
                 };
 
                 await _bookRepository.Shelve(bookResponse.UserBook);
@@ -158,7 +158,7 @@ namespace Bookbase.Application.Services
 
             return await UpsertUserBook(userId, bookId, userBook =>
             {
-                userBook.Status = updateReadingStatusDto.Status.ToString();
+                userBook.ReadingStatusId = (int)updateReadingStatusDto.Status;
                 userBook.UpdatedAt = DateTime.UtcNow;
             });
         }
@@ -168,7 +168,7 @@ namespace Bookbase.Application.Services
             return await UpsertUserBook(userId, bookId, userBook =>
             {
                 userBook.Rating = rateBookDto.Rating;
-                userBook.Status = ReadingStatus.Read.ToString();
+                userBook.ReadingStatusId = (int)ReadingStatusEnum.Read;
                 userBook.UpdatedAt = DateTime.UtcNow;
             });
         }
