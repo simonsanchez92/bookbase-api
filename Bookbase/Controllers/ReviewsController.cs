@@ -57,6 +57,15 @@ namespace Bookbase.Controllers
             return Ok(res);
         }
 
+        [HttpDelete("{reviewId}/delete")]
+        public async Task<IActionResult> DeleteReview(int reviewId)
+        {
+            var userId = UserHelper.GetRequiredUserId(User);
+
+            var res = await _reviewService.Delete(userId, reviewId);
+
+            return Ok(res);
+        }
         //[HttpGet]
         //public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
         //{

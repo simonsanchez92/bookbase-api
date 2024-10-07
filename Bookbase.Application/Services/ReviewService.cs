@@ -66,5 +66,29 @@ namespace Bookbase.Application.Services
 
             return _mapper.Map<ReviewResponseDto>(review);
         }
+
+        public async Task<bool> Delete(int userId, int reviewId)
+        {
+            var review = await _reviewRepository.GetOne(reviewId);
+
+            if (review == null)
+            {
+                throw new BadRequestException("Review does not exist")
+                {
+                    ErrorCode = "005"
+                };
+            }
+
+            if (review.UserId != userId)
+            {
+                throw new UnauthorizedException("Action not authorized for this user")
+                {
+                    ErrorCode = "010"
+                };
+            }
+
+            return await _reviewRepository.Delete(review);
+        }
+
     }
 }

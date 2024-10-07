@@ -11,6 +11,8 @@ namespace Bookbase.Application.Interfaces
 
         public Task<IEnumerable<ReviewResponseDto>> GetBookReviews(int bookId);
 
+        public Task<bool> Delete(int userId, int reviewId);
+
         //public Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize);
 
     }

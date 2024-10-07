@@ -42,6 +42,12 @@ namespace Bookbase.Infrastructure.Repositories
             return bookReviews;
         }
 
+        public async Task<bool> Delete(Review review)
+        {
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
 
+            return true;
+        }
     }
 }
