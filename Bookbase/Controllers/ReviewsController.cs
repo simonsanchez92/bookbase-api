@@ -44,11 +44,17 @@ namespace Bookbase.Controllers
         [HttpGet("show/{reviewId}")]
         public async Task<IActionResult> GetOne(int reviewId)
         {
-
             var res = await _reviewService.GetOne(reviewId);
 
             return Ok(res);
+        }
 
+        [HttpGet("{bookId}")]
+        public async Task<IActionResult> GetBookReviews(int bookId)
+        {
+            var res = await _reviewService.GetBookReviews(bookId);
+
+            return Ok(res);
         }
 
         //[HttpGet]

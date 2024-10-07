@@ -9,6 +9,8 @@ namespace Bookbase.Application.Interfaces
 
         public Task<ReviewResponseDto?> GetOne(int reviewId);
 
+        public Task<IEnumerable<ReviewResponseDto>> GetBookReviews(int bookId);
+
         //public Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize);
 
     }

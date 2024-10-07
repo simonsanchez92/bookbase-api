@@ -44,6 +44,14 @@ namespace Bookbase.Application.Services
             return _mapper.Map<ReviewResponseDto>(review);
         }
 
+        public async Task<IEnumerable<ReviewResponseDto>> GetBookReviews(int bookId)
+        {
+            var bookReviews = await _reviewRepository.GetBookReviews(bookId);
+
+
+            return _mapper.Map<IEnumerable<ReviewResponseDto>>(bookReviews);
+        }
+
         public async Task<ReviewResponseDto?> GetOne(int reviewId)
         {
             var review = await _reviewRepository.GetOne(reviewId);

@@ -21,6 +21,7 @@ namespace Bookbase.Infrastructure.Repositories
             return review;
         }
 
+
         public async Task<Review?> GetOne(int reviewId)
         {
             var review = await _context.Reviews
@@ -30,5 +31,17 @@ namespace Bookbase.Infrastructure.Repositories
 
             return review;
         }
+
+        public async Task<IEnumerable<Review>> GetBookReviews(int bookId)
+        {
+            var bookReviews = await _context.Reviews
+                .Include(r => r.Comments)
+                .Include(r => r.Likes)
+                .Where(r => r.BookId == bookId).ToListAsync();
+
+            return bookReviews;
+        }
+
+
     }
 }
