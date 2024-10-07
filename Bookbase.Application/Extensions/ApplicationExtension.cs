@@ -13,6 +13,7 @@ namespace Bookbase.Application.Extensions
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IReviewService, ReviewService>();
 
 
 

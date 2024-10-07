@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bookbase.Domain.Models
 {
@@ -9,14 +10,18 @@ namespace Bookbase.Domain.Models
         public int Id { get; set; }
 
         [Column("title")]
+        [Required]
         public string Title { get; set; }
+
         [Column("author")]
+        [Required]
         public string Author { get; set; }
 
         [Column("publish_year")]
         public int? PublishYear { get; set; }
 
         [Column("description")]
+        [Required]
         public string? Description { get; set; }
 
         [Column("cover_url")]
@@ -34,7 +39,7 @@ namespace Bookbase.Domain.Models
         // Navigation properties
         public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>(); // Many-to-Many 
         public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>(); // Many-to-Many 
-        //public ICollection<Review> Reviews { get; set; } // One-to-Many 
+        public ICollection<Review> Reviews { get; set; } = new List<Review>(); // One-to-Many 
 
 
     }

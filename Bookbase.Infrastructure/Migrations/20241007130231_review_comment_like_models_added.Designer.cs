@@ -3,6 +3,7 @@ using System;
 using Bookbase.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookbase.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241007130231_review_comment_like_models_added")]
+    partial class review_comment_like_models_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,6 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnName("deleted");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -76,7 +78,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 1,
                             Author = "J.R.R. Tolkien",
                             CoverUrl = "https://example.com/hobbit.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9278),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(4992),
                             Deleted = false,
                             Description = "A fantasy novel about a hobbit's adventure.",
                             PageCount = 310,
@@ -88,7 +90,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 2,
                             Author = "Frank Herbert",
                             CoverUrl = "https://example.com/dune.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9312),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5009),
                             Deleted = false,
                             Description = "A science fiction novel set on a desert planet.",
                             PageCount = 412,
@@ -100,7 +102,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 3,
                             Author = "Arthur Conan Doyle",
                             CoverUrl = "https://example.com/hound.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9316),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5012),
                             Deleted = false,
                             Description = "A mystery novel featuring Sherlock Holmes.",
                             PageCount = 256,
@@ -112,7 +114,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 4,
                             Author = "Bram Stoker",
                             CoverUrl = "https://example.com/dracula.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9331),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5020),
                             Deleted = false,
                             Description = "A horror novel about Count Dracula.",
                             PageCount = 418,
@@ -124,7 +126,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 5,
                             Author = "Jane Austen",
                             CoverUrl = "https://example.com/pride.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9334),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5023),
                             Deleted = false,
                             Description = "A classic romance novel about Elizabeth Bennet.",
                             PageCount = 279,
@@ -136,7 +138,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 6,
                             Author = "F. Scott Fitzgerald",
                             CoverUrl = "https://example.com/gatsby.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9337),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5026),
                             Deleted = false,
                             Description = "A fiction novel about the American dream.",
                             PageCount = 180,
@@ -148,7 +150,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 7,
                             Author = "George Orwell",
                             CoverUrl = "https://example.com/1984.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9341),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5028),
                             Deleted = false,
                             Description = "A dystopian novel about totalitarianism.",
                             PageCount = 328,
@@ -160,7 +162,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 8,
                             Author = "Cormac McCarthy",
                             CoverUrl = "https://example.com/road.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9344),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5030),
                             Deleted = false,
                             Description = "A novel about a father and son surviving in a post-apocalyptic world.",
                             PageCount = 241,
@@ -172,7 +174,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 9,
                             Author = "Walter Isaacson",
                             CoverUrl = "https://example.com/jobs.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9348),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5033),
                             Deleted = false,
                             Description = "A biography of the co-founder of Apple.",
                             PageCount = 656,
@@ -184,7 +186,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 10,
                             Author = "Yuval Noah Harari",
                             CoverUrl = "https://example.com/sapiens.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9351),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5035),
                             Deleted = false,
                             Description = "A history of humankind.",
                             PageCount = 443,
@@ -196,7 +198,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 11,
                             Author = "Dale Carnegie",
                             CoverUrl = "https://example.com/win.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9354),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5037),
                             Deleted = false,
                             Description = "A classic self-help book on communication.",
                             PageCount = 288,
@@ -208,7 +210,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 12,
                             Author = "Eric Ries",
                             CoverUrl = "https://example.com/lean.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9357),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5039),
                             Deleted = false,
                             Description = "A guide to startups and innovation.",
                             PageCount = 336,
@@ -220,7 +222,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 13,
                             Author = "Paulo Coelho",
                             CoverUrl = "https://example.com/alchemist.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9360),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5040),
                             Deleted = false,
                             Description = "A novel about following dreams.",
                             PageCount = 208,
@@ -232,7 +234,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 14,
                             Author = "Stephen King",
                             CoverUrl = "https://example.com/shining.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9363),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5043),
                             Deleted = false,
                             Description = "A horror novel about a haunted hotel.",
                             PageCount = 447,
@@ -244,7 +246,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 15,
                             Author = "Gillian Flynn",
                             CoverUrl = "https://example.com/gonegirl.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9366),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5044),
                             Deleted = false,
                             Description = "A thriller about a woman's disappearance.",
                             PageCount = 432,
@@ -256,7 +258,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 16,
                             Author = "Stephen Hawking",
                             CoverUrl = "https://example.com/briefhistory.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9368),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5047),
                             Deleted = false,
                             Description = "A book on cosmology and black holes.",
                             PageCount = 256,
@@ -268,7 +270,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 17,
                             Author = "Harper Lee",
                             CoverUrl = "https://example.com/mockingbird.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9371),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5049),
                             Deleted = false,
                             Description = "A novel about racial injustice in the South.",
                             PageCount = 281,
@@ -280,7 +282,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 18,
                             Author = "J.D. Salinger",
                             CoverUrl = "https://example.com/catcher.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9374),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5051),
                             Deleted = false,
                             Description = "A novel about adolescent angst.",
                             PageCount = 234,
@@ -292,7 +294,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 19,
                             Author = "Sun Tzu",
                             CoverUrl = "https://example.com/artofwar.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9377),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5053),
                             Deleted = false,
                             Description = "An ancient Chinese text on military strategy.",
                             PageCount = 68,
@@ -304,7 +306,7 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 20,
                             Author = "Andy Weir",
                             CoverUrl = "https://example.com/martian.jpg",
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 358, DateTimeKind.Utc).AddTicks(9380),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 30, 115, DateTimeKind.Utc).AddTicks(5056),
                             Deleted = false,
                             Description = "A science fiction novel about survival on Mars.",
                             PageCount = 369,
@@ -326,8 +328,6 @@ namespace Bookbase.Infrastructure.Migrations
                     b.HasKey("BookId", "GenreId");
 
                     b.HasIndex("GenreId");
-
-                    b.HasIndex("BookId", "GenreId");
 
                     b.ToTable("book_genre");
 
@@ -434,45 +434,6 @@ namespace Bookbase.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Bookbase.Domain.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("comment_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("integer")
-                        .HasColumnName("review_id");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReviewId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("comments");
-                });
-
             modelBuilder.Entity("Bookbase.Domain.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -549,32 +510,6 @@ namespace Bookbase.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Bookbase.Domain.Models.Like", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("like_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("integer")
-                        .HasColumnName("review_id");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReviewId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("likes");
-                });
-
             modelBuilder.Entity("Bookbase.Domain.Models.ReadingStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -609,45 +544,6 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 3,
                             Name = "Read"
                         });
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("review_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("integer")
-                        .HasColumnName("book_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("content")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("content");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("reviews");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>
@@ -727,20 +623,20 @@ namespace Bookbase.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 55, 880, DateTimeKind.Utc).AddTicks(6013),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 29, 737, DateTimeKind.Utc).AddTicks(8276),
                             Deleted = false,
                             Email = "admin@admin.com",
-                            Password = "$2a$11$shBMSmevqP1ZeKxR9cVH9OjnRH.ayIGo6F1xQIgx0wUug75QcyMw.",
+                            Password = "$2a$11$2TxOIm/B1zyhGZ4UpA7DuOTATe9IzUDuDK0QzX1/W3m3FmcqsOV02",
                             RoleId = 1,
                             Username = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 7, 14, 20, 56, 117, DateTimeKind.Utc).AddTicks(5769),
+                            CreatedAt = new DateTime(2024, 10, 7, 13, 2, 29, 925, DateTimeKind.Utc).AddTicks(9112),
                             Deleted = false,
                             Email = "user@user.com",
-                            Password = "$2a$11$KLymO1GAjbTrucxxyUAqOOyKMxrtcD4yzKsypNrBLb3030RFGv6si",
+                            Password = "$2a$11$GAoQjbuwk2iFY52nGo9lJebBPFtMEDwIcpD0F0QAv4gcwaYVkAF2y",
                             RoleId = 2,
                             Username = "user"
                         });
@@ -778,8 +674,6 @@ namespace Bookbase.Infrastructure.Migrations
 
                     b.HasIndex("ReadingStatusId");
 
-                    b.HasIndex("UserId", "BookId");
-
                     b.ToTable("user_book");
                 });
 
@@ -800,63 +694,6 @@ namespace Bookbase.Infrastructure.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Genre");
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Comment", b =>
-                {
-                    b.HasOne("Bookbase.Domain.Models.Review", "Review")
-                        .WithMany("Comments")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bookbase.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Review");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Like", b =>
-                {
-                    b.HasOne("Bookbase.Domain.Models.Review", "Review")
-                        .WithMany("Likes")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bookbase.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Review");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
-                {
-                    b.HasOne("Bookbase.Domain.Models.Book", "Book")
-                        .WithMany("Reviews")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bookbase.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.User", b =>
@@ -901,8 +738,6 @@ namespace Bookbase.Infrastructure.Migrations
                 {
                     b.Navigation("BookGenres");
 
-                    b.Navigation("Reviews");
-
                     b.Navigation("UserBooks");
                 });
 
@@ -914,13 +749,6 @@ namespace Bookbase.Infrastructure.Migrations
             modelBuilder.Entity("Bookbase.Domain.Models.ReadingStatus", b =>
                 {
                     b.Navigation("UserBooks");
-                });
-
-            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>

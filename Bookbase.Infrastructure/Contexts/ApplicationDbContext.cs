@@ -12,13 +12,15 @@ namespace Bookbase.Infrastructure.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
 
-
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
-
         public DbSet<ReadingStatus> ReadingStatuses { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
 
 
@@ -32,7 +34,73 @@ namespace Bookbase.Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed data can be configured here.
+
+            //Configure the relationships
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.User)
+                .WithMany(b => b.UserBooks)
+                .HasForeignKey(ub => ub.UserId);
+
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.Book)
+                .WithMany(b => b.UserBooks)
+                .HasForeignKey(ub => ub.BookId);
+
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.ReadingStatus)
+                .WithMany(rs => rs.UserBooks)
+                .HasForeignKey(ub => ub.ReadingStatusId);
+
+            modelBuilder.Entity<BookGenre>()
+                .HasOne(bg => bg.Book)
+                .WithMany(b => b.BookGenres)
+                .HasForeignKey(bg => bg.BookId);
+
+            modelBuilder.Entity<BookGenre>()
+                .HasOne(bg => bg.Genre)
+                .WithMany(b => b.BookGenres)
+                .HasForeignKey(bg => bg.GenreId);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Review)
+                .WithMany(r => r.Comments)
+                .HasForeignKey(c => c.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.Review)
+                .WithMany(r => r.Likes)
+                .HasForeignKey(l => l.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure the composite key for UserBook table
+            modelBuilder.Entity<UserBook>()
+              .HasKey(ub => new { ub.UserId, ub.BookId });
+
+            // Composite index for UserBook to optimize queries on UserId and BookId
+            modelBuilder.Entity<UserBook>()
+                .HasIndex(ub => new { ub.UserId, ub.BookId });
+
+
+            // Configure the composite key for the BookGenre join table
+            modelBuilder.Entity<BookGenre>()
+                .HasKey(bg => new { bg.BookId, bg.GenreId });
+
+            modelBuilder.Entity<BookGenre>()
+             .HasIndex(bg => new { bg.BookId, bg.GenreId });
+
+
+
+
+            //Globally filter out Deleted entities by adding a query filter
+
+            //This will ensure that by default, queries will exclude books marked as deleted unless explicitly included.
+            //modelBuilder.Entity<Book>().HasQueryFilter(b => !b.Deleted);
+
+
+
+            // Seed data can be configured here:
+
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "admin" },
                 new Role { Id = 2, Name = "user" }
@@ -113,37 +181,8 @@ namespace Bookbase.Infrastructure.Contexts
                 new BookGenre { BookId = 19, GenreId = 10 }, // The Art of War - History
                 new BookGenre { BookId = 20, GenreId = 2 }  // The Martian - Science Fiction
             );
-            // Configure the composite key for the join table
-            modelBuilder.Entity<UserBook>()
-              .HasKey(ub => new { ub.UserId, ub.BookId });
-
-            //Configure the relationship
-            modelBuilder.Entity<UserBook>()
-                .HasOne(ub => ub.User)
-                .WithMany(b => b.UserBooks)
-                .HasForeignKey(ub => ub.UserId);
-
-            modelBuilder.Entity<UserBook>()
-                .HasOne(ub => ub.Book)
-                .WithMany(b => b.UserBooks)
-                .HasForeignKey(ub => ub.BookId);
 
 
-
-            // Configure the composite key for the BookGenre join table
-            modelBuilder.Entity<BookGenre>()
-                .HasKey(bg => new { bg.BookId, bg.GenreId });
-
-            //Configure the relationship
-            modelBuilder.Entity<BookGenre>()
-                .HasOne(bg => bg.Book)
-                .WithMany(b => b.BookGenres)
-                .HasForeignKey(bg => bg.BookId);
-
-            modelBuilder.Entity<BookGenre>()
-                .HasOne(bg => bg.Genre)
-                .WithMany(b => b.BookGenres)
-                .HasForeignKey(bg => bg.GenreId);
         }
     }
 }

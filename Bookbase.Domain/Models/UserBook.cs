@@ -16,9 +16,7 @@ namespace Bookbase.Domain.Models
         [Column("reading_status")]
         public int ReadingStatusId { get; set; }  //StatusId //Todo: crear tabla
         public ReadingStatus ReadingStatus { get; set; }
-        //public string Review { get; set; }
 
-        //public DateTime DateRead { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -26,7 +24,7 @@ namespace Bookbase.Domain.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("rating")]
-        public float Rating { get; set; }
+        public float Rating { get; set; } = 0.0f;
 
     }
 }

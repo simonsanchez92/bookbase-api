@@ -18,8 +18,16 @@ namespace Bookbase.Application.Mappings
             CreateMap<ReadingStatus, ReadingStatusResponseDto>();
             CreateMap<Genre, GenreResponseDto>();
             CreateMap<ShelveBookDto, UserBook>();
+            CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookListResponseDto>>();
+            CreateMap<Comment, CommentDto>();
+            CreateMap<Like, LikeDto>();
 
             CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
+
+            CreateMap<Review, ReviewResponseDto>()
+                    .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                    .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes));
+
 
             CreateMap<BookGenre, GenreResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Genre.Id))
@@ -35,7 +43,6 @@ namespace Bookbase.Application.Mappings
                     Name = src.ReadingStatus.Name,
                 }));
 
-            CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookListResponseDto>>();
 
             CreateMap<GenericListResponse<UserBook>, GenericListResponse<UserBookResponseDto>>()
                 .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data));

@@ -12,6 +12,7 @@ namespace Bookbase.Infrastructure.Extensions
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
+            services.AddTransient<IReviewRepository, ReviewRepository>();
 
             services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
