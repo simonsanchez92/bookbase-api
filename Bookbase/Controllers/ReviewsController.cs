@@ -66,13 +66,6 @@ namespace Bookbase.Controllers
 
             return Ok(res);
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
-        //{
-        //    var userId = UserHelper.GetOptionalUserId(User);
-        //    var books = await _bookService.GetList(userId, page, pageSize);
 
-        //    return Ok(books);
-        //}
     }
 }
