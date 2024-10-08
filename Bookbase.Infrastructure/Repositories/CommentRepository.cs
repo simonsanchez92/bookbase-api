@@ -37,6 +37,7 @@ namespace Bookbase.Infrastructure.Repositories
             // Params
             // TODO: cambiar
             var query = _context.Comments
+                .Include(c => c.User)
                 .Where(c => c.ReviewId == reviewId);
 
             // TODO: aplicaría filtros

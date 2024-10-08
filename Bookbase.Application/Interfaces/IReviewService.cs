@@ -5,7 +5,7 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IReviewService
     {
-        public Task<ReviewResponseDto> Create(CreateReviewDto reviewDto, int userId);
+        public Task<CreateReviewResponseDto> Create(CreateReviewDto reviewDto, int userId);
 
         public Task<ReviewResponseDto?> GetOne(int reviewId);
 

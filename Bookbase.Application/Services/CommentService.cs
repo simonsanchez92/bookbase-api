@@ -12,13 +12,13 @@ namespace Bookbase.Application.Services
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
-        private readonly IReviewRepository _reviewRepository;
+        private readonly IReviewService _reviewService;
         private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepository, IReviewRepository reviewRepository, IMapper mapper)
+        public CommentService(ICommentRepository commentRepository, IReviewRepository reviewRepository, IReviewService reviewService, IMapper mapper)
         {
             _commentRepository = commentRepository;
-            _reviewRepository = reviewRepository;
+            _reviewService = reviewService;
             _mapper = mapper;
         }
 
@@ -26,7 +26,7 @@ namespace Bookbase.Application.Services
         {
 
             //Check whether review exists
-            var review = await _reviewRepository.GetOne(reviewId);
+            var review = await _reviewService.GetOne(reviewId);
 
             if (review == null)
             {
@@ -60,8 +60,6 @@ namespace Bookbase.Application.Services
         public async Task<GenericListResponse<CommentResponseDto>> GetList(int reviewId, int page, int pageSize)
         {
             var comments = await _commentRepository.GetList(reviewId, page, pageSize);
-
-
 
 
             return _mapper.Map<GenericListResponse<CommentResponseDto>>(comments);

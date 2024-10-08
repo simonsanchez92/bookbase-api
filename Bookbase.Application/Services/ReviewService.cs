@@ -19,18 +19,18 @@ namespace Bookbase.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ReviewResponseDto> Create(CreateReviewDto reviewDto, int userId)
+        public async Task<CreateReviewResponseDto> Create(CreateReviewDto reviewDto, int userId)
         {
-            //var genreExists = await _reviewRepository.GetOne(r => r.Id == genreDto.Name);
+            var existingReview = await _reviewRepository.GetOne(r => r.UserId == userId && r.BookId == reviewDto.BookId);
 
-            //if (genreExists != null)
-            //{
+            if (existingReview != null)
+            {
 
-            //    throw new BadRequestException($"Genre with name '{genreDto.Name}' already exists")
-            //    {
-            //        ErrorCode = "006"
-            //    };
-            //}
+                throw new BadRequestException($"User already has reviewed this book")
+                {
+                    ErrorCode = "011"
+                };
+            }
 
             Review newReview = new Review
             {
@@ -41,7 +41,7 @@ namespace Bookbase.Application.Services
 
             var review = await _reviewRepository.Create(newReview);
 
-            return _mapper.Map<ReviewResponseDto>(review);
+            return _mapper.Map<CreateReviewResponseDto>(review);
         }
 
         public async Task<IEnumerable<ReviewResponseDto>> GetBookReviews(int bookId)

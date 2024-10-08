@@ -2,6 +2,7 @@
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -25,6 +26,7 @@ namespace Bookbase.Infrastructure.Repositories
         public async Task<Review?> GetOne(int reviewId)
         {
             var review = await _context.Reviews
+                .Include(r => r.User)
                 .Include(r => r.Comments)
                 .Include(r => r.Likes)
                 .FirstOrDefaultAsync(r => r.Id == reviewId);
@@ -32,9 +34,15 @@ namespace Bookbase.Infrastructure.Repositories
             return review;
         }
 
+        public async Task<Review?> GetOne(Expression<Func<Review, bool>> predicate)
+        {
+            return await _context.Reviews.FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<IEnumerable<Review>> GetBookReviews(int bookId)
         {
             var bookReviews = await _context.Reviews
+                .Include(r => r.User)
                 .Include(r => r.Comments)
                 .Include(r => r.Likes)
                 .Where(r => r.BookId == bookId).ToListAsync();
@@ -49,5 +57,7 @@ namespace Bookbase.Infrastructure.Repositories
 
             return true;
         }
+
+
     }
 }

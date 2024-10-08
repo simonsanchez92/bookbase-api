@@ -90,6 +90,9 @@ namespace Bookbase.Infrastructure.Contexts
              .HasIndex(bg => new { bg.BookId, bg.GenreId });
 
 
+            modelBuilder.Entity<Review>()
+                .HasIndex(r => new { r.UserId, r.BookId })
+                .IsUnique();
 
 
             //Globally filter out Deleted entities by adding a query filter

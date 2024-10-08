@@ -21,12 +21,13 @@ namespace Bookbase.Application.Mappings
             CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookListResponseDto>>();
             CreateMap<Comment, CommentDto>(); //What is this?
             CreateMap<Like, LikeDto>();
-            CreateMap<Like, LikeDto>();
 
             CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
             CreateMap<GenericListResponse<Comment>, GenericListResponse<CommentResponseDto>>();
 
-            CreateMap<Review, ReviewResponseDto>();
+            CreateMap<Review, CreateReviewResponseDto>();
+            CreateMap<Review, ReviewResponseDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
 
             CreateMap<Comment, CommentResponseDto>()
                     .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
