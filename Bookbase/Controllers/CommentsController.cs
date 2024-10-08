@@ -1,4 +1,6 @@
-﻿using Bookbase.Application.Interfaces;
+﻿using Bookbase.Application.Dtos.Requests;
+using Bookbase.Application.Interfaces;
+using Bookbase.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -15,26 +17,26 @@ namespace Bookbase.Controllers
         }
 
 
+        [HttpPost("{reviewId}")]
+        public async Task<IActionResult> Create(int reviewId, [FromBody] CreateCommentDto commentDto)
+        {
+            var userId = UserHelper.GetRequiredUserId(User);
 
+            var commentResponse = await _commentService.Create(reviewId, userId, commentDto);
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create([FromBody] CreateCommentDto commentDto)
-        //{
-        //    var commentResponse = await _commentService.Create(commentDto);
-
-        //    //Returns 201
-        //    // Assuming the userResponse contains the ID of the newly created user.
-        //    if (commentResponse != null)
-        //    {
-        //        return CreatedAtAction(
-        //            actionName: nameof(GetOne), // The action that retrieves the created resource
-        //            routeValues: new { bookId = bookResponse.Data.Id }, // Route values to populate the URL for the location header
-        //            value: bookResponse.Data
-        //        );
-        //    }
-        //    //Returns 409
-        //    return Conflict(bookResponse.Messages);
-        //}
+            //Returns 201
+            // Assuming the userResponse contains the ID of the newly created user.
+            if (commentResponse != null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetOne), // The action that retrieves the created resource
+                    routeValues: new { commentId = commentResponse.Id }, // Route values to populate the URL for the location header
+                    value: commentResponse
+                );
+            }
+            //Returns 409
+            return Conflict();
+        }
 
 
         [HttpGet("{commentId}")]

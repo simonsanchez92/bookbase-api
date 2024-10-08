@@ -14,10 +14,12 @@ namespace Bookbase.Infrastructure.Repositories
             _context = context;
         }
 
-
-        public async Task<Comment> Create(Comment book)
+        public async Task<Comment> Create(Comment comment)
         {
-            throw new NotImplementedException();
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return comment;
         }
 
         public async Task<Comment?> GetOne(int commentId)
