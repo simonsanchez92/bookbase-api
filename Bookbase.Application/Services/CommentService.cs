@@ -3,6 +3,7 @@ using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using Bookbase.Domain.Common;
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 
@@ -54,5 +55,17 @@ namespace Bookbase.Application.Services
 
             return _mapper.Map<CommentResponseDto>(comment);
         }
+
+
+        public async Task<GenericListResponse<CommentResponseDto>> GetList(int reviewId, int page, int pageSize)
+        {
+            var comments = await _commentRepository.GetList(reviewId, page, pageSize);
+
+
+
+
+            return _mapper.Map<GenericListResponse<CommentResponseDto>>(comments);
+        }
+
     }
 }

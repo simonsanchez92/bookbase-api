@@ -48,5 +48,14 @@ namespace Bookbase.Controllers
 
         }
 
+
+        [HttpGet("{reviewId}/list")]
+        public async Task<IActionResult> GetList(int reviewId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var comments = await _commentService.GetList(reviewId, page, pageSize);
+
+            return Ok(comments);
+        }
+
     }
 }

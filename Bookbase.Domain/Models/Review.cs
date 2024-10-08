@@ -30,6 +30,7 @@ namespace Bookbase.Domain.Models
         public Book Book { get; set; } //Nav property
 
 
+        public int CommentsCount => Comments?.Count ?? 0; // Calculate comments count dynamically
         public int LikesCount => Likes?.Count ?? 0; // Calculate likes count dynamically
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Like> Likes { get; set; } = new List<Like>();

@@ -20,16 +20,16 @@ namespace Bookbase.Application.Mappings
             CreateMap<ShelveBookDto, UserBook>();
             CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookListResponseDto>>();
             CreateMap<Comment, CommentDto>(); //What is this?
-            CreateMap<Comment, CommentResponseDto>();
             CreateMap<Like, LikeDto>();
             CreateMap<Like, LikeDto>();
 
             CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
+            CreateMap<GenericListResponse<Comment>, GenericListResponse<CommentResponseDto>>();
 
-            CreateMap<Review, ReviewResponseDto>()
-                    .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
-                    .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes));
+            CreateMap<Review, ReviewResponseDto>();
 
+            CreateMap<Comment, CommentResponseDto>()
+                    .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
 
             CreateMap<BookGenre, GenreResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Genre.Id))
