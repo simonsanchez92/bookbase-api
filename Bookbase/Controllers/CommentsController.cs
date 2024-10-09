@@ -30,7 +30,7 @@ namespace Bookbase.Controllers
             {
                 return CreatedAtAction(
                     actionName: nameof(GetOne), // The action that retrieves the created resource
-                    routeValues: new { commentId = commentResponse.Id }, // Route values to populate the URL for the location header
+                    routeValues: new { reviewId, commentId = commentResponse.Id }, // Route values to populate the URL for the location header
                     value: commentResponse
                 );
             }
@@ -39,10 +39,11 @@ namespace Bookbase.Controllers
         }
 
 
-        [HttpGet("{commentId}")]
-        public async Task<IActionResult> GetOne(int commentId)
+
+        [HttpGet("/api/reviews/{reviewId}/comments/{commentId}")]
+        public async Task<IActionResult> GetOne(int reviewId, int commentId)
         {
-            var res = await _commentService.GetOne(commentId);
+            var res = await _commentService.GetOne(reviewId, commentId);
 
             return Ok(res);
 

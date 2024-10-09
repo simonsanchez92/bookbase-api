@@ -103,7 +103,16 @@ namespace Bookbase.Infrastructure.Contexts
 
 
             // Seed data can be configured here:
+            SeedData(modelBuilder);
 
+
+
+
+
+        }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "admin" },
                 new Role { Id = 2, Name = "user" }
@@ -112,7 +121,7 @@ namespace Bookbase.Infrastructure.Contexts
             modelBuilder.Entity<User>().HasData(
    new User { Id = 1, Username = "admin", Email = "admin@admin.com", Password = _passwordEncryptionService.HashPassword("123"), RoleId = (int)UserRole.Admin },
    new User { Id = 2, Username = "user", Email = "user@user.com", Password = _passwordEncryptionService.HashPassword("123"), RoleId = (int)UserRole.User }
-);
+            );
 
 
             modelBuilder.Entity<Genre>().HasData(
@@ -127,14 +136,14 @@ namespace Bookbase.Infrastructure.Contexts
              new Genre { Id = 9, Name = "self-help" },
              new Genre { Id = 10, Name = "History" },
              new Genre { Id = 11, Name = "Technology" }
-         );
+            );
 
 
             modelBuilder.Entity<ReadingStatus>().HasData(
           new ReadingStatus { Id = 1, Name = "Want to read" },
           new ReadingStatus { Id = 2, Name = "Reading" },
           new ReadingStatus { Id = 3, Name = "Read" }
-      );
+            );
 
 
             modelBuilder.Entity<Book>().HasData(
@@ -184,8 +193,6 @@ namespace Bookbase.Infrastructure.Contexts
                 new BookGenre { BookId = 19, GenreId = 10 }, // The Art of War - History
                 new BookGenre { BookId = 20, GenreId = 2 }  // The Martian - Science Fiction
             );
-
-
         }
     }
 }

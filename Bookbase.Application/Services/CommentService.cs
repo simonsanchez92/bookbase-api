@@ -48,9 +48,9 @@ namespace Bookbase.Application.Services
             return _mapper.Map<CommentResponseDto>(createdComment);
         }
 
-        public async Task<CommentResponseDto?> GetOne(int commentId)
+        public async Task<CommentResponseDto?> GetOne(int reviewId, int commentId)
         {
-            var comment = await _commentRepository.GetOne(commentId);
+            var comment = await _commentRepository.GetOne(reviewId, commentId);
 
 
             return _mapper.Map<CommentResponseDto>(comment);

@@ -21,13 +21,17 @@ namespace Bookbase.Infrastructure.Repositories
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
+            var createdComment = await _context.Comments
+            .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
             return comment;
         }
-        public async Task<Comment?> GetOne(int commentId)
+        public async Task<Comment?> GetOne(int reviewId, int commentId)
         {
             var comment = await _context.Comments
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == commentId);
+                .FirstOrDefaultAsync(c => c.ReviewId == reviewId && c.Id == commentId);
 
             return comment;
         }
