@@ -67,11 +67,22 @@ namespace Bookbase.Infrastructure.Contexts
                 .HasForeignKey(c => c.ReviewId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+            //Configure relationships
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId);
+
             modelBuilder.Entity<Like>()
                 .HasOne(l => l.Review)
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.ReviewId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Composite key for Like table
+            modelBuilder.Entity<Like>()
+              .HasKey(l => new { l.UserId, l.ReviewId });
 
             // Configure the composite key for UserBook table
             modelBuilder.Entity<UserBook>()
