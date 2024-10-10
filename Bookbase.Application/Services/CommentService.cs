@@ -65,5 +65,29 @@ namespace Bookbase.Application.Services
             return _mapper.Map<GenericListResponse<CommentResponseDto>>(comments);
         }
 
+        public async Task<bool> Delete(int reviewId, int commentId, int userId)
+        {
+            var comment = await _commentRepository.GetOne(reviewId, commentId);
+
+            if (comment == null)
+            {
+                throw new NotFoundException("Comment does not exist")
+                {
+                    ErrorCode = "004"
+                };
+            }
+            if (comment.UserId != userId)
+            {
+                throw new UnauthorizedException("Cannot delete another user's comment")
+                {
+                    ErrorCode = "008"
+                };
+            }
+
+            //Delete comment
+            await _commentRepository.Delete(comment);
+
+            return true;
+        }
     }
 }

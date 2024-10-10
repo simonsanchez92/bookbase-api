@@ -68,5 +68,12 @@ namespace Bookbase.Infrastructure.Repositories
             };
         }
 
+        public async Task<bool> Delete(Comment comment)
+        {
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
