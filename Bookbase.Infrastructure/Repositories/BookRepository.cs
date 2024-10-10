@@ -37,17 +37,17 @@ namespace Bookbase.Infrastructure.Repositories
         {
             // Params
             // TODO: cambiar
-            var query = _context.Books
-                .Include(b => b.BookGenres)
-                    .ThenInclude(bg => bg.Genre)
-                .Include(b => b.UserBooks)
-                    .ThenInclude(ub => ub.ReadingStatus)
-                .Select(b => new BookResponse
-                {
-                    Book = b,
-                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
-                })
-                .Where(b => !b.Book.Deleted);
+            //var query = _context.Books
+            //    .Include(b => b.BookGenres)
+            //        .ThenInclude(bg => bg.Genre)
+            //    .Include(b => b.UserBooks)
+            //        .ThenInclude(ub => ub.ReadingStatus)
+            //    .Select(b => new BookResponse
+            //    {
+            //        Book = b,
+            //        UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+            //    })
+            //    .Where(b => !b.Book.Deleted);
 
             // TODO: aplicaría filtros
 
