@@ -6,7 +6,7 @@ namespace Bookbase.Domain.Interfaces
     public interface IBookRepository
     {
 
-        public Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize);
+        public Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize, string? query);
 
         public Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize);
         public Task<BookResponse?> GetOne(int? userId, int bookId);

@@ -49,10 +49,10 @@ namespace Bookbase.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetList([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? query)
         {
             var userId = UserHelper.GetOptionalUserId(User);
-            var books = await _bookService.GetList(userId, page, pageSize);
+            var books = await _bookService.GetList(userId, page, pageSize, query);
 
             return Ok(books);
         }
