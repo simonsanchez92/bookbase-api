@@ -58,5 +58,16 @@ namespace Bookbase.Controllers
             return Ok(comments);
         }
 
+
+        [HttpDelete("/api/reviews/{reviewId}/comments/{commentId}/delete")]
+        public async Task<IActionResult> DeleteReview(int reviewId, int commentId)
+        {
+            var userId = UserHelper.GetRequiredUserId(User);
+
+            var res = await _commentService.Delete(reviewId, commentId, userId);
+
+            return NoContent();
+        }
+
     }
 }

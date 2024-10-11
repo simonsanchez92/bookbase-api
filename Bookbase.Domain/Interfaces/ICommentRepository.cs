@@ -10,6 +10,6 @@ namespace Bookbase.Domain.Interfaces
 
         public Task<GenericListResponse<Comment>> GetList(int reviewId, int page, int pageSize);
 
-        //public Task<bool> Delete(Comment comment);
+        public Task<bool> Delete(Comment comment);
     }
 }
