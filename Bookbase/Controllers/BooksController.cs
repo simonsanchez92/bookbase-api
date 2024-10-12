@@ -58,6 +58,16 @@ namespace Bookbase.Controllers
         }
 
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAl()
+        {
+            var books = await _bookService.GetAll();
+
+            return Ok(books);
+        }
+
+
+
 
         [Authorize(Policy = "AdminOnly")]
         [HttpPut("{bookId}")]

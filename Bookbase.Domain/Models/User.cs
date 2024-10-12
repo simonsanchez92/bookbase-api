@@ -3,7 +3,7 @@
 namespace Bookbase.Domain.Models
 {
     [Table("users")]
-    public class User
+    public class User : SoftDeletableModel
     {
         [Column("user_id")]
         public int Id { get; set; }
@@ -20,12 +20,6 @@ namespace Bookbase.Domain.Models
         [Column("role_id")]
         public int RoleId { get; set; }
         public Role role { get; set; }
-
-        [Column("deleted")]
-        public bool Deleted { get; set; } = false;
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         //Navigation property
         public ICollection<UserBook> UserBooks { get; set; } //Many to many with book

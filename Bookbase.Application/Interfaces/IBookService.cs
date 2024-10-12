@@ -34,5 +34,9 @@ namespace Bookbase.Application.Interfaces
         public Task<bool> RemoveFromShelf(int userId, int bookId);
 
         public Task<bool> Delete(int bookId);
+
+
+
+        public Task<IEnumerable<BookResponseDto>> GetAll();
     }
 }

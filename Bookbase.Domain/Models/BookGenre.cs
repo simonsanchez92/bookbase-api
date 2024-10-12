@@ -13,6 +13,5 @@ namespace Bookbase.Domain.Models
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
 
-        // Add any additional properties here if needed in the future
     }
 }

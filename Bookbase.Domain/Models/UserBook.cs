@@ -3,7 +3,7 @@
 namespace Bookbase.Domain.Models
 {
     [Table("user_book")]
-    public class UserBook
+    public class UserBook : TimestampedModel
     {
         [Column("user_id")]
         public int UserId { get; set; }
@@ -16,12 +16,6 @@ namespace Bookbase.Domain.Models
         [Column("reading_status")]
         public int ReadingStatusId { get; set; }  //StatusId //Todo: crear tabla
         public ReadingStatus ReadingStatus { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("rating")]
         public float Rating { get; set; } = 0.0f;

@@ -4,19 +4,13 @@ namespace Bookbase.Domain.Models
 {
     [Table("comments")]
 
-    public class Comment
+    public class Comment : TimestampedModel
     {
         [Column("comment_id")]
         public int Id { get; set; }
 
         [Column("content")]
         public required string Content { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("user_id")]
         public int UserId { get; set; }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookbase.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240919133657_deleted_id_field_from_userbook")]
-    partial class deleted_id_field_from_userbook
+    [Migration("20241011205718_updated_models")]
+    partial class updated_models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,11 +43,16 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("cover_url");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean")
                         .HasColumnName("deleted");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -55,14 +60,18 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("pages");
 
-                    b.Property<int?>("PublishDate")
+                    b.Property<int?>("PublishYear")
                         .HasColumnType("integer")
-                        .HasColumnName("publish_date");
+                        .HasColumnName("publish_year");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -74,220 +83,260 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 1,
                             Author = "J.R.R. Tolkien",
                             CoverUrl = "https://example.com/hobbit.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9511),
                             Deleted = false,
                             Description = "A fantasy novel about a hobbit's adventure.",
                             PageCount = 310,
-                            PublishDate = 1937,
-                            Title = "The Hobbit"
+                            PublishYear = 1937,
+                            Title = "The Hobbit",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9514)
                         },
                         new
                         {
                             Id = 2,
                             Author = "Frank Herbert",
                             CoverUrl = "https://example.com/dune.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9521),
                             Deleted = false,
                             Description = "A science fiction novel set on a desert planet.",
                             PageCount = 412,
-                            PublishDate = 1965,
-                            Title = "Dune"
+                            PublishYear = 1965,
+                            Title = "Dune",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9522)
                         },
                         new
                         {
                             Id = 3,
                             Author = "Arthur Conan Doyle",
                             CoverUrl = "https://example.com/hound.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9526),
                             Deleted = false,
                             Description = "A mystery novel featuring Sherlock Holmes.",
                             PageCount = 256,
-                            PublishDate = 1902,
-                            Title = "The Hound of the Baskervilles"
+                            PublishYear = 1902,
+                            Title = "The Hound of the Baskervilles",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9526)
                         },
                         new
                         {
                             Id = 4,
                             Author = "Bram Stoker",
                             CoverUrl = "https://example.com/dracula.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9529),
                             Deleted = false,
                             Description = "A horror novel about Count Dracula.",
                             PageCount = 418,
-                            PublishDate = 1897,
-                            Title = "Dracula"
+                            PublishYear = 1897,
+                            Title = "Dracula",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9530)
                         },
                         new
                         {
                             Id = 5,
                             Author = "Jane Austen",
                             CoverUrl = "https://example.com/pride.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9533),
                             Deleted = false,
                             Description = "A classic romance novel about Elizabeth Bennet.",
                             PageCount = 279,
-                            PublishDate = 1813,
-                            Title = "Pride and Prejudice"
+                            PublishYear = 1813,
+                            Title = "Pride and Prejudice",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9533)
                         },
                         new
                         {
                             Id = 6,
                             Author = "F. Scott Fitzgerald",
                             CoverUrl = "https://example.com/gatsby.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9537),
                             Deleted = false,
                             Description = "A fiction novel about the American dream.",
                             PageCount = 180,
-                            PublishDate = 1925,
-                            Title = "The Great Gatsby"
+                            PublishYear = 1925,
+                            Title = "The Great Gatsby",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9537)
                         },
                         new
                         {
                             Id = 7,
                             Author = "George Orwell",
                             CoverUrl = "https://example.com/1984.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9541),
                             Deleted = false,
                             Description = "A dystopian novel about totalitarianism.",
                             PageCount = 328,
-                            PublishDate = 1949,
-                            Title = "1984"
+                            PublishYear = 1949,
+                            Title = "1984",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9541)
                         },
                         new
                         {
                             Id = 8,
                             Author = "Cormac McCarthy",
                             CoverUrl = "https://example.com/road.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9544),
                             Deleted = false,
                             Description = "A novel about a father and son surviving in a post-apocalyptic world.",
                             PageCount = 241,
-                            PublishDate = 2006,
-                            Title = "The Road"
+                            PublishYear = 2006,
+                            Title = "The Road",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9545)
                         },
                         new
                         {
                             Id = 9,
                             Author = "Walter Isaacson",
                             CoverUrl = "https://example.com/jobs.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9548),
                             Deleted = false,
                             Description = "A biography of the co-founder of Apple.",
                             PageCount = 656,
-                            PublishDate = 2011,
-                            Title = "Steve Jobs"
+                            PublishYear = 2011,
+                            Title = "Steve Jobs",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9549)
                         },
                         new
                         {
                             Id = 10,
                             Author = "Yuval Noah Harari",
                             CoverUrl = "https://example.com/sapiens.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9552),
                             Deleted = false,
                             Description = "A history of humankind.",
                             PageCount = 443,
-                            PublishDate = 2011,
-                            Title = "Sapiens"
+                            PublishYear = 2011,
+                            Title = "Sapiens",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9552)
                         },
                         new
                         {
                             Id = 11,
                             Author = "Dale Carnegie",
                             CoverUrl = "https://example.com/win.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9555),
                             Deleted = false,
                             Description = "A classic self-help book on communication.",
                             PageCount = 288,
-                            PublishDate = 1936,
-                            Title = "How to Win Friends and Influence People"
+                            PublishYear = 1936,
+                            Title = "How to Win Friends and Influence People",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9555)
                         },
                         new
                         {
                             Id = 12,
                             Author = "Eric Ries",
                             CoverUrl = "https://example.com/lean.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9559),
                             Deleted = false,
                             Description = "A guide to startups and innovation.",
                             PageCount = 336,
-                            PublishDate = 2011,
-                            Title = "The Lean Startup"
+                            PublishYear = 2011,
+                            Title = "The Lean Startup",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9559)
                         },
                         new
                         {
                             Id = 13,
                             Author = "Paulo Coelho",
                             CoverUrl = "https://example.com/alchemist.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9573),
                             Deleted = false,
                             Description = "A novel about following dreams.",
                             PageCount = 208,
-                            PublishDate = 1988,
-                            Title = "The Alchemist"
+                            PublishYear = 1988,
+                            Title = "The Alchemist",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9574)
                         },
                         new
                         {
                             Id = 14,
                             Author = "Stephen King",
                             CoverUrl = "https://example.com/shining.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9577),
                             Deleted = false,
                             Description = "A horror novel about a haunted hotel.",
                             PageCount = 447,
-                            PublishDate = 1977,
-                            Title = "The Shining"
+                            PublishYear = 1977,
+                            Title = "The Shining",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9584)
                         },
                         new
                         {
                             Id = 15,
                             Author = "Gillian Flynn",
                             CoverUrl = "https://example.com/gonegirl.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9587),
                             Deleted = false,
                             Description = "A thriller about a woman's disappearance.",
                             PageCount = 432,
-                            PublishDate = 2012,
-                            Title = "Gone Girl"
+                            PublishYear = 2012,
+                            Title = "Gone Girl",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9588)
                         },
                         new
                         {
                             Id = 16,
                             Author = "Stephen Hawking",
                             CoverUrl = "https://example.com/briefhistory.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9591),
                             Deleted = false,
                             Description = "A book on cosmology and black holes.",
                             PageCount = 256,
-                            PublishDate = 1988,
-                            Title = "A Brief History of Time"
+                            PublishYear = 1988,
+                            Title = "A Brief History of Time",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9591)
                         },
                         new
                         {
                             Id = 17,
                             Author = "Harper Lee",
                             CoverUrl = "https://example.com/mockingbird.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9595),
                             Deleted = false,
                             Description = "A novel about racial injustice in the South.",
                             PageCount = 281,
-                            PublishDate = 1960,
-                            Title = "To Kill a Mockingbird"
+                            PublishYear = 1960,
+                            Title = "To Kill a Mockingbird",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9595)
                         },
                         new
                         {
                             Id = 18,
                             Author = "J.D. Salinger",
                             CoverUrl = "https://example.com/catcher.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9598),
                             Deleted = false,
                             Description = "A novel about adolescent angst.",
                             PageCount = 234,
-                            PublishDate = 1951,
-                            Title = "The Catcher in the Rye"
+                            PublishYear = 1951,
+                            Title = "The Catcher in the Rye",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9599)
                         },
                         new
                         {
                             Id = 19,
                             Author = "Sun Tzu",
                             CoverUrl = "https://example.com/artofwar.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9602),
                             Deleted = false,
                             Description = "An ancient Chinese text on military strategy.",
                             PageCount = 68,
-                            PublishDate = -500,
-                            Title = "The Art of War"
+                            PublishYear = -500,
+                            Title = "The Art of War",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9602)
                         },
                         new
                         {
                             Id = 20,
                             Author = "Andy Weir",
                             CoverUrl = "https://example.com/martian.jpg",
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9606),
                             Deleted = false,
                             Description = "A science fiction novel about survival on Mars.",
                             PageCount = 369,
-                            PublishDate = 2011,
-                            Title = "The Martian"
+                            PublishYear = 2011,
+                            Title = "The Martian",
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9606)
                         });
                 });
 
@@ -304,6 +353,8 @@ namespace Bookbase.Infrastructure.Migrations
                     b.HasKey("BookId", "GenreId");
 
                     b.HasIndex("GenreId");
+
+                    b.HasIndex("BookId", "GenreId");
 
                     b.ToTable("book_genre");
 
@@ -410,6 +461,45 @@ namespace Bookbase.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Bookbase.Domain.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("comment_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("integer")
+                        .HasColumnName("review_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("comments");
+                });
+
             modelBuilder.Entity("Bookbase.Domain.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -486,6 +576,99 @@ namespace Bookbase.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Bookbase.Domain.Models.Like", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("integer")
+                        .HasColumnName("review_id");
+
+                    b.HasKey("UserId", "ReviewId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("likes");
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.ReadingStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("reding_status_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("reading_statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Want to read"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Reading"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Read"
+                        });
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("review_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer")
+                        .HasColumnName("book_id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId", "BookId")
+                        .IsUnique();
+
+                    b.ToTable("reviews");
+                });
+
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -526,6 +709,10 @@ namespace Bookbase.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean")
                         .HasColumnName("deleted");
@@ -544,6 +731,10 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("role_id");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text")
@@ -554,6 +745,30 @@ namespace Bookbase.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 16, 918, DateTimeKind.Utc).AddTicks(9302),
+                            Deleted = false,
+                            Email = "admin@admin.com",
+                            Password = "$2a$11$erpv5QyotjwbvlZ2EMOZreJ2F0HtaQDjoAg3lzeSiVgjZjY2PVLei",
+                            RoleId = 1,
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 16, 918, DateTimeKind.Utc).AddTicks(9304),
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 111, DateTimeKind.Utc).AddTicks(9284),
+                            Deleted = false,
+                            Email = "user@user.com",
+                            Password = "$2a$11$e.gguylWnQ7PKHbSVQMUDOPP29evZYwk4H9U6YECMzRytVlRaJ8ji",
+                            RoleId = 2,
+                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 111, DateTimeKind.Utc).AddTicks(9288),
+                            Username = "user"
+                        });
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.UserBook", b =>
@@ -566,14 +781,32 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("book_id");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("status");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("Rating")
+                        .HasColumnType("real")
+                        .HasColumnName("rating");
+
+                    b.Property<int>("ReadingStatusId")
+                        .HasColumnType("integer")
+                        .HasColumnName("reading_status");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("ReadingStatusId");
+
+                    b.HasIndex("UserId", "BookId");
 
                     b.ToTable("user_book");
                 });
@@ -597,6 +830,63 @@ namespace Bookbase.Infrastructure.Migrations
                     b.Navigation("Genre");
                 });
 
+            modelBuilder.Entity("Bookbase.Domain.Models.Comment", b =>
+                {
+                    b.HasOne("Bookbase.Domain.Models.Review", "Review")
+                        .WithMany("Comments")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bookbase.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.Like", b =>
+                {
+                    b.HasOne("Bookbase.Domain.Models.Review", "Review")
+                        .WithMany("Likes")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bookbase.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
+                {
+                    b.HasOne("Bookbase.Domain.Models.Book", "Book")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bookbase.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Bookbase.Domain.Models.User", b =>
                 {
                     b.HasOne("Bookbase.Domain.Models.Role", "role")
@@ -616,6 +906,12 @@ namespace Bookbase.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Bookbase.Domain.Models.ReadingStatus", "ReadingStatus")
+                        .WithMany("UserBooks")
+                        .HasForeignKey("ReadingStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Bookbase.Domain.Models.User", "User")
                         .WithMany("UserBooks")
                         .HasForeignKey("UserId")
@@ -624,6 +920,8 @@ namespace Bookbase.Infrastructure.Migrations
 
                     b.Navigation("Book");
 
+                    b.Navigation("ReadingStatus");
+
                     b.Navigation("User");
                 });
 
@@ -631,12 +929,26 @@ namespace Bookbase.Infrastructure.Migrations
                 {
                     b.Navigation("BookGenres");
 
+                    b.Navigation("Reviews");
+
                     b.Navigation("UserBooks");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Genre", b =>
                 {
                     b.Navigation("BookGenres");
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.ReadingStatus", b =>
+                {
+                    b.Navigation("UserBooks");
+                });
+
+            modelBuilder.Entity("Bookbase.Domain.Models.Review", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Bookbase.Domain.Models.Role", b =>

@@ -3,7 +3,7 @@
 namespace Bookbase.Domain.Models
 {
     [Table("roles")]
-    public class Role
+    public class Role : BaseModel
     {
         [Column("role_id")]
         public int Id { get; set; }

@@ -51,10 +51,6 @@ namespace Bookbase.Application.Mappings
                 .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data));
 
 
-
-
-
-
         }
     }
 }
