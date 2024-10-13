@@ -37,6 +37,6 @@ namespace Bookbase.Application.Interfaces
 
 
 
-        public Task<IEnumerable<BookResponseDto>> GetAll();
+        public Task<IEnumerable<BookListResponseDto>> GetAll(int? userId);
     }
 }

@@ -2,6 +2,7 @@
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -14,24 +15,51 @@ namespace Bookbase.Infrastructure.Repositories
         {
         }
 
+
+        public async Task<IEnumerable<BookResponse>> GetAllWithIncludes(int? userId)
+        {
+            var books = await GetAll(query =>
+
+                query.Include(b => b.BookGenres)
+                      .ThenInclude(bg => bg.Genre)
+                      .Include(b => b.UserBooks)
+                      .ThenInclude(ub => ub.ReadingStatus)
+                      );
+
+            return books.Select(b => new BookResponse
+            {
+                Book = b,
+                UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+
+            }).ToList();
+        }
+
         public async Task<BookResponse?> GetOne(int? userId, int bookId)
         {
-            //var book = await _context.Books
-            //                .Include(b => b.BookGenres)
-            //                    .ThenInclude(bg => bg.Genre)
-            //                .Include(b => b.UserBooks)
-            //                    .ThenInclude(ub => ub.ReadingStatus)
-            //                .Select(b => new BookResponse
-            //                {
-            //                    Book = b,
-            //                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
-            //                })
-            //                .FirstOrDefaultAsync(b => b.Book.Id == bookId && !b.Book.Deleted);
+            var book = await GetOne(bookId,
+                query => query
+             .Include(b => b.BookGenres)
+            .ThenInclude(bg => bg.Genre)
+            .Include(b => b.UserBooks)
+            .ThenInclude(ub => ub.ReadingStatus)
+            );
 
-            //return book;
-            throw new NotImplementedException();
+
+            if (book != null)
+            {
+                var userBook = book.UserBooks.FirstOrDefault(ub => ub.UserId == userId);
+
+                return new BookResponse
+                {
+                    Book = book,
+                    UserBook = userBook
+                };
+            }
+
+            return null;
 
         }
+
         public async Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize, string? queryStr = null)
         {
             // Params
@@ -218,14 +246,14 @@ namespace Bookbase.Infrastructure.Repositories
         {
 
             // Retrieve the genres that match the genreIds
-            //var genres = await _context.Genres.Where(g => genreIds.Contains(g.Id)).ToListAsync();
+            var genres = await _context.Genres.Where(g => genreIds.Contains(g.Id)).ToListAsync();
 
             //// Assign the genres to the book entity
-            //book.BookGenres = genres.Select(g => new BookGenre { GenreId = g.Id, Book = book }).ToList();
+            book.BookGenres = genres.Select(g => new BookGenre { GenreId = g.Id, Book = book }).ToList();
 
 
-            //_context.Books.Add(book);
-            //await _context.SaveChangesAsync();
+            //Calling base repository 
+            await Create(book);
 
             return book;
         }
@@ -239,8 +267,8 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<BookResponse?> Shelve(UserBook userBook)
         {
-            //_context.UserBooks.Add(userBook);
-            //await _context.SaveChangesAsync();
+            _context.UserBooks.Add(userBook);
+            await _context.SaveChangesAsync();
 
             return await GetOne(userBook.UserId, userBook.BookId);
         }

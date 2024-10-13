@@ -8,7 +8,7 @@ namespace Bookbase.Infrastructure.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseModel
     {
-        private readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         public BaseRepository(ApplicationDbContext context)
@@ -24,36 +24,56 @@ namespace Bookbase.Infrastructure.Repositories
             return body;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll(IncludeDelegate<TEntity>? include = null)
         {
+            IQueryable<TEntity> query = _dbSet;
+
+
+            // Check if the entity implements ISoftDeletable
             if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TEntity)))
             {
-                return await GetAllSoftDeletableEntities();
+                query = query.Cast<ISoftDeletable>()
+                             .Where(e => !e.Deleted)
+                             .Cast<TEntity>();
             }
 
-            return await _dbSet.ToListAsync();
+            // Apply any Include functionality passed via the delegate
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return await query.ToListAsync();
         }
 
-        private async Task<IEnumerable<TEntity>> GetAllSoftDeletableEntities()
+        public async Task<TEntity?> GetOne(int id, IncludeDelegate<TEntity>? include = null)
         {
-            var result = await _dbSet
-            .Cast<ISoftDeletable>()
-            .Where(e => !e.Deleted)
-            .ToListAsync();
+            IQueryable<TEntity> query = _dbSet;
 
-            return result.Cast<TEntity>();
+
+            // Check if the entity implements ISoftDeletable
+            if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = query.Cast<ISoftDeletable>()
+                             .Where(e => !e.Deleted)
+                             .Cast<TEntity>();
+            }
+
+            // Apply any Include functionality passed via the delegate
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id == id);
         }
-
 
         public Task<GenericListResponse<TEntity>> GetList(int? userId, int page, int pageSize, string? query, IncludeDelegate<TEntity>? include = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TEntity?> GetOne(int id, IncludeDelegate<TEntity>? include = null)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public Task<TEntity> Update(TEntity body)
         {

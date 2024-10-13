@@ -212,12 +212,12 @@ namespace Bookbase.Application.Services
             return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
         }
 
-        public async Task<IEnumerable<BookResponseDto>> GetAll()
+        public async Task<IEnumerable<BookListResponseDto>> GetAll(int? userId)
         {
 
-            var results = await _bookRepository.GetAll();
+            var results = await _bookRepository.GetAllWithIncludes(userId);
 
-            return _mapper.Map<IEnumerable<BookResponseDto>>(results);
+            return _mapper.Map<IEnumerable<BookListResponseDto>>(results);
 
         }
     }

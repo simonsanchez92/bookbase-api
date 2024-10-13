@@ -61,7 +61,8 @@ namespace Bookbase.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAl()
         {
-            var books = await _bookService.GetAll();
+            var userId = UserHelper.GetOptionalUserId(User);
+            var books = await _bookService.GetAll(userId);
 
             return Ok(books);
         }
