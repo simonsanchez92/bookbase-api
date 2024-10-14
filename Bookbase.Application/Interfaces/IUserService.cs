@@ -14,7 +14,7 @@ namespace Bookbase.Application.Interfaces
         Task<IEnumerable<UserResponseDto>> GetAll();
 
         Task<GenericResult<UserResponseDto>> Create(CreateUserDto userDto);
-        
+
         Task<UserResponseDto> Update(int userId, UpdateUserDto userDto);
 
         Task<bool> Delete(int userId);

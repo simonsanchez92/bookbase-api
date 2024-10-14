@@ -6,13 +6,11 @@ using System.Linq.Expressions;
 
 namespace Bookbase.Infrastructure.Repositories
 {
-    public class GenreRepository : IGenreRepository
+    public class GenreRepository : BaseRepository<Genre>, IGenreRepository
     {
-        private readonly ApplicationDbContext _context;
 
-        public GenreRepository(ApplicationDbContext context)
+        public GenreRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<Genre> Create(Genre genre)
@@ -42,9 +40,5 @@ namespace Bookbase.Infrastructure.Repositories
             return genre;
         }
 
-        public Task<Genre> Update(Genre genre)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
