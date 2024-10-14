@@ -7,33 +7,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
 {
-    public class CommentRepository : ICommentRepository
+    public class CommentRepository : BaseRepository<Comment>, ICommentRepository
     {
-        private readonly ApplicationDbContext _context;
 
-        public CommentRepository(ApplicationDbContext context)
+        public CommentRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
+
         }
 
-        public async Task<Comment> Create(Comment comment)
+        public async Task<Comment> CreateComment(Comment comment)
         {
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
+            await base.Create(comment);
 
-            var createdComment = await _context.Comments
-            .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+            var createdComment = await base.GetOne(comment.Id, query => query.Include(c => c.User));
 
-            return comment;
+            return createdComment!;
         }
+
         public async Task<Comment?> GetOne(int reviewId, int commentId)
         {
-            var comment = await _context.Comments
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.ReviewId == reviewId && c.Id == commentId);
-
-            return comment;
+            return await base.GetOne(commentId, query =>
+            query.Include(c => c.User)
+            .Where(c => c.ReviewId == reviewId));
         }
 
         public async Task<GenericListResponse<Comment>> GetList(int reviewId, int page, int pageSize)

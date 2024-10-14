@@ -43,7 +43,7 @@ namespace Bookbase.Application.Services
                 Content = commentDto.Content
             };
 
-            var createdComment = await _commentRepository.Create(newComment);
+            var createdComment = await _commentRepository.CreateComment(newComment);
 
             return _mapper.Map<CommentResponseDto>(createdComment);
         }
