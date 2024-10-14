@@ -29,10 +29,6 @@ namespace Bookbase.Infrastructure.Repositories
 
 
             return await query.FirstOrDefaultAsync();
-
-            //return await _context.UserBooks
-            //                .Include(ub => ub.ReadingStatus)
-            //                .FirstAsync(ub => ub.UserId == userId && ub.BookId == bookId);
         }
         public async Task<BookResponse?> Shelve(UserBook userBook)
         {

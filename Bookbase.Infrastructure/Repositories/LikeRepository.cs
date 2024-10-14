@@ -6,23 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
 {
-    public class LikeRepository : ILikeRepository
+    public class LikeRepository : BaseRepository<Like>, ILikeRepository
     {
-        private readonly ApplicationDbContext _context;
 
-        public LikeRepository(ApplicationDbContext context)
+        public LikeRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
-
-        public async Task<Like> Create(Like like)
-        {
-            _context.Likes.Add(like);
-            await _context.SaveChangesAsync();
-
-            return like;
-        }
-
         public async Task<Like?> GetOne(int reviewId, int userId)
         {
             var like = await _context.Likes

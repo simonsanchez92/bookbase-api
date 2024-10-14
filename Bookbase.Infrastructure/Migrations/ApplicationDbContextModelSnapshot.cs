@@ -80,260 +80,260 @@ namespace Bookbase.Infrastructure.Migrations
                             Id = 1,
                             Author = "J.R.R. Tolkien",
                             CoverUrl = "https://example.com/hobbit.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9511),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7562),
                             Deleted = false,
                             Description = "A fantasy novel about a hobbit's adventure.",
                             PageCount = 310,
                             PublishYear = 1937,
                             Title = "The Hobbit",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9514)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7566)
                         },
                         new
                         {
                             Id = 2,
                             Author = "Frank Herbert",
                             CoverUrl = "https://example.com/dune.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9521),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7728),
                             Deleted = false,
                             Description = "A science fiction novel set on a desert planet.",
                             PageCount = 412,
                             PublishYear = 1965,
                             Title = "Dune",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9522)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7729)
                         },
                         new
                         {
                             Id = 3,
                             Author = "Arthur Conan Doyle",
                             CoverUrl = "https://example.com/hound.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9526),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7734),
                             Deleted = false,
                             Description = "A mystery novel featuring Sherlock Holmes.",
                             PageCount = 256,
                             PublishYear = 1902,
                             Title = "The Hound of the Baskervilles",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9526)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7734)
                         },
                         new
                         {
                             Id = 4,
                             Author = "Bram Stoker",
                             CoverUrl = "https://example.com/dracula.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9529),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7738),
                             Deleted = false,
                             Description = "A horror novel about Count Dracula.",
                             PageCount = 418,
                             PublishYear = 1897,
                             Title = "Dracula",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9530)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7739)
                         },
                         new
                         {
                             Id = 5,
                             Author = "Jane Austen",
                             CoverUrl = "https://example.com/pride.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9533),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7742),
                             Deleted = false,
                             Description = "A classic romance novel about Elizabeth Bennet.",
                             PageCount = 279,
                             PublishYear = 1813,
                             Title = "Pride and Prejudice",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9533)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7742)
                         },
                         new
                         {
                             Id = 6,
                             Author = "F. Scott Fitzgerald",
                             CoverUrl = "https://example.com/gatsby.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9537),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7746),
                             Deleted = false,
                             Description = "A fiction novel about the American dream.",
                             PageCount = 180,
                             PublishYear = 1925,
                             Title = "The Great Gatsby",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9537)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7746)
                         },
                         new
                         {
                             Id = 7,
                             Author = "George Orwell",
                             CoverUrl = "https://example.com/1984.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9541),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7749),
                             Deleted = false,
                             Description = "A dystopian novel about totalitarianism.",
                             PageCount = 328,
                             PublishYear = 1949,
                             Title = "1984",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9541)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7749)
                         },
                         new
                         {
                             Id = 8,
                             Author = "Cormac McCarthy",
                             CoverUrl = "https://example.com/road.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9544),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7753),
                             Deleted = false,
                             Description = "A novel about a father and son surviving in a post-apocalyptic world.",
                             PageCount = 241,
                             PublishYear = 2006,
                             Title = "The Road",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9545)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7753)
                         },
                         new
                         {
                             Id = 9,
                             Author = "Walter Isaacson",
                             CoverUrl = "https://example.com/jobs.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9548),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7756),
                             Deleted = false,
                             Description = "A biography of the co-founder of Apple.",
                             PageCount = 656,
                             PublishYear = 2011,
                             Title = "Steve Jobs",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9549)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7757)
                         },
                         new
                         {
                             Id = 10,
                             Author = "Yuval Noah Harari",
                             CoverUrl = "https://example.com/sapiens.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9552),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7760),
                             Deleted = false,
                             Description = "A history of humankind.",
                             PageCount = 443,
                             PublishYear = 2011,
                             Title = "Sapiens",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9552)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7760)
                         },
                         new
                         {
                             Id = 11,
                             Author = "Dale Carnegie",
                             CoverUrl = "https://example.com/win.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9555),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7764),
                             Deleted = false,
                             Description = "A classic self-help book on communication.",
                             PageCount = 288,
                             PublishYear = 1936,
                             Title = "How to Win Friends and Influence People",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9555)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7764)
                         },
                         new
                         {
                             Id = 12,
                             Author = "Eric Ries",
                             CoverUrl = "https://example.com/lean.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9559),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7768),
                             Deleted = false,
                             Description = "A guide to startups and innovation.",
                             PageCount = 336,
                             PublishYear = 2011,
                             Title = "The Lean Startup",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9559)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7769)
                         },
                         new
                         {
                             Id = 13,
                             Author = "Paulo Coelho",
                             CoverUrl = "https://example.com/alchemist.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9573),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7783),
                             Deleted = false,
                             Description = "A novel about following dreams.",
                             PageCount = 208,
                             PublishYear = 1988,
                             Title = "The Alchemist",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9574)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7783)
                         },
                         new
                         {
                             Id = 14,
                             Author = "Stephen King",
                             CoverUrl = "https://example.com/shining.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9577),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7786),
                             Deleted = false,
                             Description = "A horror novel about a haunted hotel.",
                             PageCount = 447,
                             PublishYear = 1977,
                             Title = "The Shining",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9584)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7793)
                         },
                         new
                         {
                             Id = 15,
                             Author = "Gillian Flynn",
                             CoverUrl = "https://example.com/gonegirl.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9587),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7796),
                             Deleted = false,
                             Description = "A thriller about a woman's disappearance.",
                             PageCount = 432,
                             PublishYear = 2012,
                             Title = "Gone Girl",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9588)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7796)
                         },
                         new
                         {
                             Id = 16,
                             Author = "Stephen Hawking",
                             CoverUrl = "https://example.com/briefhistory.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9591),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7800),
                             Deleted = false,
                             Description = "A book on cosmology and black holes.",
                             PageCount = 256,
                             PublishYear = 1988,
                             Title = "A Brief History of Time",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9591)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7801)
                         },
                         new
                         {
                             Id = 17,
                             Author = "Harper Lee",
                             CoverUrl = "https://example.com/mockingbird.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9595),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7804),
                             Deleted = false,
                             Description = "A novel about racial injustice in the South.",
                             PageCount = 281,
                             PublishYear = 1960,
                             Title = "To Kill a Mockingbird",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9595)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
                             Id = 18,
                             Author = "J.D. Salinger",
                             CoverUrl = "https://example.com/catcher.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9598),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7807),
                             Deleted = false,
                             Description = "A novel about adolescent angst.",
                             PageCount = 234,
                             PublishYear = 1951,
                             Title = "The Catcher in the Rye",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9599)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7808)
                         },
                         new
                         {
                             Id = 19,
                             Author = "Sun Tzu",
                             CoverUrl = "https://example.com/artofwar.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9602),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7811),
                             Deleted = false,
                             Description = "An ancient Chinese text on military strategy.",
                             PageCount = 68,
                             PublishYear = -500,
                             Title = "The Art of War",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9602)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7811)
                         },
                         new
                         {
                             Id = 20,
                             Author = "Andy Weir",
                             CoverUrl = "https://example.com/martian.jpg",
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9606),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7815),
                             Deleted = false,
                             Description = "A science fiction novel about survival on Mars.",
                             PageCount = 369,
                             PublishYear = 2011,
                             Title = "The Martian",
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 318, DateTimeKind.Utc).AddTicks(9606)
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 714, DateTimeKind.Utc).AddTicks(7815)
                         });
                 });
 
@@ -583,6 +583,9 @@ namespace Bookbase.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("review_id");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
                     b.HasKey("UserId", "ReviewId");
 
                     b.HasIndex("ReviewId");
@@ -747,23 +750,23 @@ namespace Bookbase.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 16, 918, DateTimeKind.Utc).AddTicks(9302),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 326, DateTimeKind.Utc).AddTicks(3603),
                             Deleted = false,
                             Email = "admin@admin.com",
-                            Password = "$2a$11$erpv5QyotjwbvlZ2EMOZreJ2F0HtaQDjoAg3lzeSiVgjZjY2PVLei",
+                            Password = "$2a$11$pP3PNKuoxmPaXv11ndBqGOHjYOkrZ4EIyoYj8VmlYfAIS0.K5O.xC",
                             RoleId = 1,
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 16, 918, DateTimeKind.Utc).AddTicks(9304),
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 326, DateTimeKind.Utc).AddTicks(3606),
                             Username = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 111, DateTimeKind.Utc).AddTicks(9284),
+                            CreatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 518, DateTimeKind.Utc).AddTicks(643),
                             Deleted = false,
                             Email = "user@user.com",
-                            Password = "$2a$11$e.gguylWnQ7PKHbSVQMUDOPP29evZYwk4H9U6YECMzRytVlRaJ8ji",
+                            Password = "$2a$11$PHe8iW79q7FIspdBwH6Sne08n2Jp.id9hJ/hwZThQLwMfpKCyC3Zy",
                             RoleId = 2,
-                            UpdatedAt = new DateTime(2024, 10, 11, 20, 57, 17, 111, DateTimeKind.Utc).AddTicks(9288),
+                            UpdatedAt = new DateTime(2024, 10, 14, 23, 16, 5, 518, DateTimeKind.Utc).AddTicks(647),
                             Username = "user"
                         });
                 });
