@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
 {
-    //public class BookRepository : IBookRepository
     public class BookRepository : BaseRepository<Book>, IBookRepository
     {
 
@@ -55,10 +54,24 @@ namespace Bookbase.Infrastructure.Repositories
                     UserBook = userBook
                 };
             }
-
             return null;
 
         }
+        public async Task<Book> Create(Book book, List<int> genreIds)
+        {
+
+            // Retrieve the genres that match the genreIds
+            var genres = await _context.Genres.Where(g => genreIds.Contains(g.Id)).ToListAsync();
+
+            //// Assign the genres to the book entity
+            book.BookGenres = genres.Select(g => new BookGenre { GenreId = g.Id, Book = book }).ToList();
+
+            //Calling base repository 
+            await Create(book);
+
+            return book;
+        }
+
 
         public async Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize, string? queryStr = null)
         {
@@ -239,63 +252,6 @@ namespace Bookbase.Infrastructure.Repositories
             //    Length = pageSize,
             //    Data = data
             //};
-        }
-
-
-        public async Task<Book> Create(Book book, List<int> genreIds)
-        {
-
-            // Retrieve the genres that match the genreIds
-            var genres = await _context.Genres.Where(g => genreIds.Contains(g.Id)).ToListAsync();
-
-            //// Assign the genres to the book entity
-            book.BookGenres = genres.Select(g => new BookGenre { GenreId = g.Id, Book = book }).ToList();
-
-
-            //Calling base repository 
-            await Create(book);
-
-            return book;
-        }
-
-        public async Task<Book> Update(Book book)
-        {
-            //_context.Books.Update(book);
-            //await _context.SaveChangesAsync();
-            return book;
-        }
-
-        public async Task<BookResponse?> Shelve(UserBook userBook)
-        {
-            _context.UserBooks.Add(userBook);
-            await _context.SaveChangesAsync();
-
-            return await GetOne(userBook.UserId, userBook.BookId);
-        }
-
-        public async Task<UserBook> UpdateUserBook(UserBook userBook)
-        {
-            //_context.UserBooks.Update(userBook).Property(ub => ub.UpdatedAt).IsModified = true;
-
-            //await _context.SaveChangesAsync();
-
-            return await GetOneUserBook(userBook.UserId, userBook.BookId);
-        }
-
-        public async Task<UserBook> GetOneUserBook(int userId, int bookId)
-        {
-            //return await _context.UserBooks
-            //                .Include(ub => ub.ReadingStatus)
-            //                .FirstAsync(ub => ub.UserId == userId && ub.BookId == bookId);
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> RemoveFromShelf(UserBook userBook)
-        {
-            //_context.UserBooks.Remove(userBook);
-            //await _context.SaveChangesAsync();
-
-            return true;
         }
 
 

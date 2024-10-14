@@ -67,9 +67,6 @@ namespace Bookbase.Controllers
             return Ok(books);
         }
 
-
-
-
         [Authorize(Policy = "AdminOnly")]
         [HttpPut("{bookId}")]
         public async Task<IActionResult> Update(int bookId, [FromBody] UpdateBookDto bookDto)
@@ -78,76 +75,5 @@ namespace Bookbase.Controllers
             return Ok(user);
         }
 
-
-
-        [Authorize(Policy = "AuthenticatedUser")]
-        [HttpGet("review/list")]
-        public async Task<IActionResult> GetUserShelf([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var userId = UserHelper.GetRequiredUserId(User);
-            var books = await _bookService.GetUserShelf(userId, page, pageSize);
-
-            return Ok(books);
-        }
-
-
-        [HttpPost("shelve")]
-        public async Task<IActionResult> ShelveBook([FromBody] ShelveBookDto shelveBookDto)
-        {
-
-            var userId = UserHelper.GetRequiredUserId(User);
-
-
-            var shelveBookResponse = await _bookService.ShelveBook(userId, shelveBookDto.BookId);
-
-            //Returns 201
-            if (shelveBookResponse != null)
-            {
-                return CreatedAtAction(
-                    actionName: nameof(GetOne),
-                    routeValues: new { bookId = shelveBookResponse.Book.Id },
-                    value: shelveBookResponse
-                );
-            }
-
-            //Returns 409
-            return Conflict();
-        }
-
-        [Authorize(Policy = "AuthenticatedUser")]
-        [HttpPut("{bookId}/update-status")]
-        public async Task<IActionResult> UpdateStatus(int bookId, [FromBody] UpdateReadingStatusDto updateReadingStatusDto)
-        {
-            var userId = UserHelper.GetRequiredUserId(User);
-
-            var userBook = await _bookService.UpdateReadingStatus(userId, bookId, updateReadingStatusDto);
-
-
-            return Ok(userBook);
-        }
-
-        [Authorize(Policy = "AuthenticatedUser")]
-        [HttpPut("{bookId}/rate")]
-        public async Task<IActionResult> RateBook(int bookId, [FromBody] RateBookDto rateBookDto)
-        {
-            var userId = UserHelper.GetRequiredUserId(User);
-
-            var userBook = await _bookService.RateBook(userId, bookId, rateBookDto);
-
-
-            return Ok(userBook);
-        }
-
-
-        [Authorize(Policy = "AuthenticatedUser")]
-        [HttpDelete("{bookId}/remove")]
-        public async Task<IActionResult> RemoveFromShelf(int bookId)
-        {
-            var userId = UserHelper.GetRequiredUserId(User);
-
-            var userBookDeleted = await _bookService.RemoveFromShelf(userId, bookId);
-
-            return Ok(userBookDeleted);
-        }
     }
 }

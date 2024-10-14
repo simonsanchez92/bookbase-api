@@ -74,10 +74,11 @@ namespace Bookbase.Infrastructure.Repositories
         }
 
 
-
-        public Task<TEntity> Update(TEntity body)
+        public async Task<TEntity> Update(TEntity body)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(body);
+            await _context.SaveChangesAsync();
+            return body;
         }
 
 
