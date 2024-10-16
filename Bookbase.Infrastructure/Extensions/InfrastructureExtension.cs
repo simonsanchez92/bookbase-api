@@ -20,10 +20,6 @@ namespace Bookbase.Infrastructure.Extensions
             services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
-            services.AddTransient<IUserCreateValidatorService, UserCreateValidatorService>();
-
-
-
             return services;
         }
     }

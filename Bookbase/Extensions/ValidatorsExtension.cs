@@ -8,6 +8,7 @@ namespace Bookbase.Extensions
         public static IServiceCollection AddCustomValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
 
             return services;
         }

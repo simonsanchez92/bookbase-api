@@ -1,16 +1,16 @@
-﻿using Bookbase.Domain.Models;
+﻿using Bookbase.Application.Dtos.Requests;
 using FluentValidation;
 
-namespace Bookbase.Infrastructure.Validators
+namespace Bookbase.Validators
 {
-    public class UserCreateValidator: AbstractValidator<User>
+    public class CreateUserValidator : AbstractValidator<CreateUserDto>
     {
-        public UserCreateValidator()
+        public CreateUserValidator()
         {
             RuleFor(u => u.Username)
-               .NotEmpty().WithMessage("Username is required")
-               .MinimumLength(6).WithMessage("Username must be at least 6 characters long")
-               .MaximumLength(25).WithMessage("Username cannot be more than 25 characters long");
+            .NotEmpty().WithMessage("Username is required")
+        .MinimumLength(6).WithMessage("Username must be at least 6 characters long")
+            .MaximumLength(25).WithMessage("Username cannot be more than 25 characters long");
 
 
             RuleFor(u => u.Email)
@@ -26,6 +26,5 @@ namespace Bookbase.Infrastructure.Validators
             .Matches(@"[0-9]").WithMessage("Password must contain at least one digit.")
             .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
         }
-
     }
 }

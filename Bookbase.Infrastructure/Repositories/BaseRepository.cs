@@ -81,6 +81,9 @@ namespace Bookbase.Infrastructure.Repositories
             return body;
         }
 
-
+        public Task Delete(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

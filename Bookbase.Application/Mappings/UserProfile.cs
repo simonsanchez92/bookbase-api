@@ -12,6 +12,10 @@ namespace Bookbase.Application.Mappings
         public UserProfile()
         {
             CreateMap<User, UserResponseDto>();
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
+
+
             CreateMap<CreateBookDto, Book>();
             CreateMap<Book, UserBookResponseDto>();
             CreateMap<BookResponse, BookListResponseDto>();

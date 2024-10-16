@@ -1,5 +1,7 @@
 ﻿using Bookbase.Application.Dtos.Requests;
+using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +9,7 @@ namespace Bookbase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController: ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
 
@@ -24,8 +26,8 @@ namespace Bookbase.Controllers
 
             return Ok(res);
         }
-        
-        
+
+
         [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -37,23 +39,34 @@ namespace Bookbase.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserDto userDto)
+        public async Task<IActionResult> Create([FromBody] CreateUserDto userDto, IValidator<CreateUserDto> validator)
         {
-            var userResponse = await _userService.Create(userDto);
 
-            //Returns 201
-            // Assuming the userResponse contains the ID of the newly created user.
-            if (userResponse.Success)
+            var validationResults = await validator.ValidateAsync(userDto);
+
+            if (!validationResults.IsValid)
             {
-                return CreatedAtAction(
-                    actionName: nameof(GetOne), // The action that retrieves the created resource
-                    routeValues: new { userId = userResponse.Data.Id }, // Route values to populate the URL for the location header
-                    value: userResponse.Data
-                );
+                throw new BadRequestException(validationResults.ToString())
+                {
+                    ErrorCode = "004"
+                };
             }
 
-            //Returns 409
-            return Conflict(userResponse.Messages);
+            var user = await _userService.Create(userDto);
+            return Ok(user);
+            ////Returns 201
+            //// Assuming the userResponse contains the ID of the newly created user.
+            //if (userResponse.Success)
+            //{
+            //    return CreatedAtAction(
+            //        actionName: nameof(GetOne), // The action that retrieves the created resource
+            //        routeValues: new { userId = userResponse.Data.Id }, // Route values to populate the URL for the location header
+            //        value: userResponse.Data
+            //    );
+            //}
+
+            ////Returns 409
+            //return Conflict(userResponse.Messages);
 
         }
 
