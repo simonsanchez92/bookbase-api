@@ -18,7 +18,6 @@ namespace Bookbase.Controllers
             _userService = userService;
         }
 
-
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetOne(int userId)
         {
@@ -27,16 +26,13 @@ namespace Bookbase.Controllers
             return Ok(res);
         }
 
-
         [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var res = await _userService.GetAll();
-
             return Ok(res);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserDto userDto, IValidator<CreateUserDto> validator)
@@ -53,20 +49,19 @@ namespace Bookbase.Controllers
             }
 
             var user = await _userService.Create(userDto);
-            return Ok(user);
-            ////Returns 201
-            //// Assuming the userResponse contains the ID of the newly created user.
-            //if (userResponse.Success)
-            //{
-            //    return CreatedAtAction(
-            //        actionName: nameof(GetOne), // The action that retrieves the created resource
-            //        routeValues: new { userId = userResponse.Data.Id }, // Route values to populate the URL for the location header
-            //        value: userResponse.Data
-            //    );
-            //}
+            //return Ok(user);
 
+            ////Returns 201
+            if (user != null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetOne), // The action that retrieves the created resource
+                    routeValues: new { userId = user.Id }, // Route values to populate the URL for the location header
+                    value: user
+                );
+            }
             ////Returns 409
-            //return Conflict(userResponse.Messages);
+            return Conflict();
 
         }
 

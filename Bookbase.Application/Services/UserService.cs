@@ -27,10 +27,8 @@ namespace Bookbase.Application.Services
             return await _userRepository.GetOne(predicate);
         }
 
-
         public override async Task<UserResponseDto> Create(CreateUserDto body)
         {
-
             var emailExists = await _userRepository.GetOne(u => u.Email == body.Email);
 
             if (emailExists != null)
@@ -43,7 +41,6 @@ namespace Bookbase.Application.Services
 
             var usernameExists = await _userRepository.GetOne(u => u.Username == body.Username);
 
-
             if (usernameExists != null)
             {
                 throw new BadRequestException($"Username is already taken: {body.Email}")
@@ -52,6 +49,7 @@ namespace Bookbase.Application.Services
                 };
             }
 
+
             body.Password = _passwordEncryptionService.HashPassword(body.Password);
 
             return await base.Create(body);
@@ -59,29 +57,9 @@ namespace Bookbase.Application.Services
 
         public override async Task<UserResponseDto> Update(int userId, UpdateUserDto body)
         {
-
             body.Password = _passwordEncryptionService.HashPassword(body.Password);
             return await base.Update(userId, body);
         }
 
-        //public async Task<bool> Delete(int userId)
-        //{
-        //    var user = await _userRepository.GetOne(userId);
-
-        //    if (user == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    user.Deleted = true;
-        //    await _userRepository.Update(user);
-
-        //    return true;
-        //}
-
-        //Task<GenericResponseDto> IBaseService<User, UserResponseDto, UserResponseDto, CreateUserDto, UpdateUserDto>.Delete(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

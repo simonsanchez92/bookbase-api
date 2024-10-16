@@ -70,6 +70,7 @@ namespace Bookbase.Application.Services
             {
                 await _repository.Delete(entity);
             }
+
             else
             {
 
@@ -91,11 +92,14 @@ namespace Bookbase.Application.Services
                 {
                     ErrorCode = "005"
                 };
-
-
             }
 
             var entity = _mapper.Map(body, item);
+
+            if (entity is ITimestampedModel timestampedEntity)
+            {
+                timestampedEntity.UpdatedAt = DateTime.UtcNow;
+            }
 
             var response = await _repository.Update(entity);
 
