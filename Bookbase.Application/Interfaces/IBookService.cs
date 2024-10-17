@@ -1,22 +1,16 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Dtos.Responses;
 using Bookbase.Domain.Common;
+using Bookbase.Domain.Models;
 
 namespace Bookbase.Application.Interfaces
 {
-    public interface IBookService
+    public interface IBookService : IBaseService<Book, BookResponseDto, BookDetailedResponseDto, CreateBookDto, UpdateBookDto>
     {
-        public Task<BookListResponseDto?> GetOne(int? userId, int bookId);
+        public Task<BookDetailedResponseDto?> GetOne(int? userId, int bookId);
 
-        public Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize, string? query);
+        public Task<GenericListResponse<BookDetailedResponseDto>> GetList(int? userId, int page, int pageSize, string? query);
 
-        Task<GenericResult<BookResponseDto>> Create(CreateBookDto bookDto);
-
-        Task<BookResponseDto> Update(int bookId, UpdateBookDto userDto);
-
-
-        public Task<bool> Delete(int bookId);
-
-        public Task<IEnumerable<BookListResponseDto>> GetAll(int? userId);
+        public Task<IEnumerable<BookDetailedResponseDto>> GetAll(int? userId);
     }
 }

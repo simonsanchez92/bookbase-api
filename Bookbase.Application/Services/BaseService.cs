@@ -19,7 +19,7 @@ namespace Bookbase.Application.Services
         }
 
 
-        public async Task<TResponseDto> GetOne(int Id)
+        public async Task<TResponseDetail> GetOne(int Id)
         {
             var result = await _repository.GetOne(Id);
 
@@ -31,7 +31,7 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            return _mapper.Map<TResponseDto>(result);
+            return _mapper.Map<TResponseDetail>(result);
         }
 
         public async Task<IEnumerable<TResponseDto>> GetAll()

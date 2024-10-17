@@ -7,9 +7,9 @@ namespace Bookbase.Application.Interfaces
 {
     public interface IUserBookService
     {
-        public Task<GenericListResponse<BookListResponseDto>> GetUserShelf(int userId, int page, int pageSize);
+        public Task<GenericListResponse<BookDetailedResponseDto>> GetUserShelf(int userId, int page, int pageSize);
 
-        public Task<BookListResponseDto> ShelveBook(int? userId, int bookId);
+        public Task<BookDetailedResponseDto> ShelveBook(int? userId, int bookId);
 
 
 

@@ -57,7 +57,7 @@ namespace Bookbase.Infrastructure.Repositories
             return null;
 
         }
-        public async Task<Book> Create(Book book, List<int> genreIds)
+        public async Task<Book> Create(Book book, List<int>? genreIds)
         {
 
             // Retrieve the genres that match the genreIds
@@ -71,7 +71,6 @@ namespace Bookbase.Infrastructure.Repositories
 
             return book;
         }
-
 
         public async Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize, string? queryStr = null)
         {

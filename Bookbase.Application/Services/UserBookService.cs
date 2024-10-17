@@ -23,7 +23,7 @@ namespace Bookbase.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<BookListResponseDto> ShelveBook(int? userId, int bookId)
+        public async Task<BookDetailedResponseDto> ShelveBook(int? userId, int bookId)
         {
             var isShelved = await _bookService.GetOne(userId, bookId);
 
@@ -54,7 +54,7 @@ namespace Bookbase.Application.Services
             var shelvedBook = await _userBookRepository.Shelve(userBook);
 
 
-            return _mapper.Map<BookListResponseDto>(shelvedBook);
+            return _mapper.Map<BookDetailedResponseDto>(shelvedBook);
         }
 
         public async Task<bool> RemoveFromShelf(int userId, int bookId)
@@ -83,7 +83,7 @@ namespace Bookbase.Application.Services
         }
 
 
-        public Task<GenericListResponse<BookListResponseDto>> GetUserShelf(int userId, int page, int pageSize)
+        public Task<GenericListResponse<BookDetailedResponseDto>> GetUserShelf(int userId, int page, int pageSize)
         {
             //    var books = await _bookRepository.GetUserShelf(userId, page, pageSize);
 

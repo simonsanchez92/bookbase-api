@@ -25,16 +25,16 @@ namespace Bookbase.Controllers
 
             //Returns 201
             // Assuming the userResponse contains the ID of the newly created user.
-            if (bookResponse.Success)
+            if (bookResponse != null)
             {
                 return CreatedAtAction(
                     actionName: nameof(GetOne), // The action that retrieves the created resource
-                    routeValues: new { bookId = bookResponse.Data.Id }, // Route values to populate the URL for the location header
-                    value: bookResponse.Data
+                    routeValues: new { bookId = bookResponse.Id }, // Route values to populate the URL for the location header
+                    value: bookResponse
                 );
             }
             //Returns 409
-            return Conflict(bookResponse.Messages);
+            return Conflict();
         }
 
 
@@ -75,5 +75,14 @@ namespace Bookbase.Controllers
             return Ok(user);
         }
 
+
+
+        [Authorize(Policy = "AdminOnly")]
+        [HttpDelete("{id}/delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deletedBook = await _bookService.Delete(id);
+            return Ok(deletedBook);
+        }
     }
 }

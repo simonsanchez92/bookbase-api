@@ -11,25 +11,25 @@ namespace Bookbase.Application.Services
 {
     public class UserService : BaseService<User, UserResponseDto, UserResponseDto, CreateUserDto, UpdateUserDto>, IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private new readonly IUserRepository _repository;
         private readonly IPasswordEncryptionService _passwordEncryptionService;
 
 
-        public UserService(IUserRepository userRepository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper) : base(userRepository, mapper)
+        public UserService(IUserRepository repository, IPasswordEncryptionService passwordEncryptionService, IMapper mapper) : base(repository, mapper)
         {
-            _userRepository = userRepository;
+            _repository = repository;
             _passwordEncryptionService = passwordEncryptionService;
         }
 
 
         public async Task<User?> GetOne(Expression<Func<User, bool>> predicate)
         {
-            return await _userRepository.GetOne(predicate);
+            return await _repository.GetOne(predicate);
         }
 
         public override async Task<UserResponseDto> Create(CreateUserDto body)
         {
-            var emailExists = await _userRepository.GetOne(u => u.Email == body.Email);
+            var emailExists = await _repository.GetOne(u => u.Email == body.Email);
 
             if (emailExists != null)
             {
@@ -39,7 +39,7 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            var usernameExists = await _userRepository.GetOne(u => u.Username == body.Username);
+            var usernameExists = await _repository.GetOne(u => u.Username == body.Username);
 
             if (usernameExists != null)
             {

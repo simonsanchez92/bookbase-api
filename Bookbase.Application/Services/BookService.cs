@@ -9,33 +9,29 @@ using Bookbase.Domain.Models;
 
 namespace Bookbase.Application.Services
 {
-    public class BookService : IBookService
+    public class BookService : BaseService<Book, BookResponseDto, BookDetailedResponseDto, CreateBookDto, UpdateBookDto>, IBookService
     {
-        private readonly IBookRepository _bookRepository;
         private readonly IUserBookRepository _userBookRepository;
-        private readonly IMapper _mapper;
+        private new readonly IBookRepository _repository;
 
-
-        public BookService(IBookRepository bookRepository, IUserBookRepository userBookRepository, IMapper mapper)
+        public BookService(IBookRepository repository, IUserBookRepository userBookRepository, IMapper mapper) : base(repository, mapper)
         {
-            _bookRepository = bookRepository;
+            _repository = repository;
             _userBookRepository = userBookRepository;
-            _mapper = mapper;
         }
 
 
-        public async Task<GenericListResponse<BookListResponseDto>> GetList(int? userId, int page, int pageSize, string? query)
+        public async Task<GenericListResponse<BookDetailedResponseDto>> GetList(int? userId, int page, int pageSize, string? query)
         {
-            var books = await _bookRepository.GetList(userId, page, pageSize, query);
+            var books = await _repository.GetList(userId, page, pageSize, query);
 
 
-            return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
+            return _mapper.Map<GenericListResponse<BookDetailedResponseDto>>(books);
         }
 
-
-        public async Task<BookListResponseDto?> GetOne(int? userId, int bookId)
+        public async Task<BookDetailedResponseDto?> GetOne(int? userId, int bookId)
         {
-            var book = await _bookRepository.GetOne(userId, bookId);
+            var book = await _repository.GetOne(userId, bookId);
 
             if (book == null)
             {
@@ -45,55 +41,25 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            return _mapper.Map<BookListResponseDto>(book);
+            return _mapper.Map<BookDetailedResponseDto>(book);
         }
 
-
-        public async Task<GenericResult<BookResponseDto>> Create(CreateBookDto bookDto)
+        public override async Task<BookResponseDto> Create(CreateBookDto bookDto)
         {
             //Converting DTO into Book entity
             var newBook = _mapper.Map<Book>(bookDto);
+            var createdBook = await _repository.Create(newBook, bookDto.GenreIds);
 
-            var createdBook = await _bookRepository.Create(newBook, bookDto.GenreIds);
-
-            var data = _mapper.Map<BookResponseDto>(createdBook);
-
-            return GenericResult<BookResponseDto>.SuccessResult(data);
+            return _mapper.Map<BookResponseDto>(createdBook);
         }
 
-        public async Task<BookResponseDto> Update(int bookId, UpdateBookDto bookDto)
+        public async Task<IEnumerable<BookDetailedResponseDto>> GetAll(int? userId)
         {
-            var currentBook = await _bookRepository.GetOne(null, bookId);
+            var results = await _repository.GetAllWithIncludes(userId);
 
-            if (currentBook == null)
-            {
-                throw new BadRequestException($"No book found with id {bookId}")
-                {
-                    ErrorCode = "005"
-                };
-
-            }
-
-            currentBook.Book.Description = bookDto.Description;
-            currentBook.Book.CoverUrl = bookDto.CoverUrl;
-
-            var updatedBook = await _bookRepository.Update(currentBook.Book);
-
-            return _mapper.Map<BookResponseDto>(updatedBook);
-        }
-
-        public Task<bool> Delete(int bookId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public async Task<IEnumerable<BookListResponseDto>> GetAll(int? userId)
-        {
-            var results = await _bookRepository.GetAllWithIncludes(userId);
-
-            return _mapper.Map<IEnumerable<BookListResponseDto>>(results);
+            return _mapper.Map<IEnumerable<BookDetailedResponseDto>>(results);
 
         }
+
     }
 }

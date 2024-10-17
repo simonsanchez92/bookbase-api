@@ -18,11 +18,17 @@ namespace Bookbase.Application.Mappings
 
             CreateMap<CreateBookDto, Book>();
             CreateMap<Book, UserBookResponseDto>();
-            CreateMap<BookResponse, BookListResponseDto>();
+
+            CreateMap<UpdateBookDto, Book>();
+
+
+            CreateMap<Book, UserBookResponseDto>();
+
+            CreateMap<BookResponse, BookDetailedResponseDto>();
             CreateMap<ReadingStatus, ReadingStatusResponseDto>();
             CreateMap<Genre, GenreResponseDto>();
             CreateMap<ShelveBookDto, UserBook>();
-            CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookListResponseDto>>();
+            CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookDetailedResponseDto>>();
             CreateMap<Like, LikeResponseDto>();
             CreateMap<Comment, CommentDto>(); //What is this?
 
