@@ -9,6 +9,6 @@ namespace Bookbase.Domain.Interfaces
         Task<GenericListResponse<TEntity>> GetList(int? userId, int page, int pageSize, string? query, IncludeDelegate<TEntity>? include = null);
         Task<TEntity> Create(TEntity body);
         Task<TEntity> Update(TEntity body);
-        Task Delete(TEntity entity); // method for hard deletes only
+        Task<bool> Delete(TEntity entity); // method for hard deletes only
     }
 }

@@ -26,7 +26,6 @@ namespace Bookbase.Infrastructure.Repositories
         {
             return await _context.Reviews.FirstOrDefaultAsync(predicate);
         }
-
         public async Task<IEnumerable<Review>> GetBookReviews(int bookId)
         {
             var bookReviews = await base.GetAll(query =>
@@ -37,14 +36,6 @@ namespace Bookbase.Infrastructure.Repositories
             );
 
             return bookReviews;
-        }
-
-        public async Task<bool> Delete(Review review)
-        {
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
 

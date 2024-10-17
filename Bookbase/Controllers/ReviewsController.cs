@@ -20,11 +20,13 @@ namespace Bookbase.Controllers
 
         [Authorize(Policy = "AuthenticatedUser")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateReviewDto reviewDto)
+        public async Task<IActionResult> Create([FromBody] CreateReviewDto body)
         {
             var userId = UserHelper.GetRequiredUserId(User);
 
-            var reviewResponse = await _reviewService.Create(reviewDto, userId);
+            body.UserId = userId;
+
+            var reviewResponse = await _reviewService.Create(body);
 
             //Returns 201
             // Assuming the userResponse contains the ID of the newly created user.
@@ -53,6 +55,16 @@ namespace Bookbase.Controllers
         public async Task<IActionResult> GetBookReviews(int bookId)
         {
             var res = await _reviewService.GetBookReviews(bookId);
+
+            return Ok(res);
+        }
+
+        [HttpPut("{reviewId}")]
+        public async Task<IActionResult> UpdateReview([FromBody] UpdateReviewDto body, int reviewId)
+        {
+            var userId = UserHelper.GetRequiredUserId(User);
+
+            var res = await _reviewService.Update(userId, reviewId, body);
 
             return Ok(res);
         }

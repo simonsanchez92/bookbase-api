@@ -8,7 +8,6 @@ namespace Bookbase.Domain.Interfaces
         public Task<Review?> GetOne(int reviewId); //Call Base getOne
         public Task<Review?> GetOne(Expression<Func<Review, bool>> predicate);
         public Task<IEnumerable<Review>> GetBookReviews(int bookId); //calls GetAll
-        public Task<bool> Delete(Review review);
 
     }
 }

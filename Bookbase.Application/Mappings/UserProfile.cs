@@ -18,7 +18,6 @@ namespace Bookbase.Application.Mappings
 
             CreateMap<CreateBookDto, Book>();
             CreateMap<Book, UserBookResponseDto>();
-
             CreateMap<UpdateBookDto, Book>();
 
 
@@ -37,6 +36,8 @@ namespace Bookbase.Application.Mappings
             CreateMap<GenericListResponse<Book>, GenericListResponse<BookResponseDto>>();
             CreateMap<GenericListResponse<Comment>, GenericListResponse<CommentResponseDto>>();
 
+            CreateMap<CreateReviewDto, Review>();
+            CreateMap<UpdateReviewDto, Review>();
             CreateMap<Review, CreateReviewResponseDto>();
             CreateMap<Review, ReviewResponseDto>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));

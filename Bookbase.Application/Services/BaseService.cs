@@ -19,7 +19,7 @@ namespace Bookbase.Application.Services
         }
 
 
-        public async Task<TResponseDetail> GetOne(int Id)
+        public virtual async Task<TResponseDetail?> GetOne(int Id)
         {
             var result = await _repository.GetOne(Id);
 

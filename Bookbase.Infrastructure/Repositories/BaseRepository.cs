@@ -81,9 +81,12 @@ namespace Bookbase.Infrastructure.Repositories
             return body;
         }
 
-        public Task Delete(TEntity entity)
+        public async Task<bool> Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
