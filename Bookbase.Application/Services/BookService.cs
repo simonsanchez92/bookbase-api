@@ -11,13 +11,11 @@ namespace Bookbase.Application.Services
 {
     public class BookService : BaseService<Book, BookResponseDto, BookDetailedResponseDto, CreateBookDto, UpdateBookDto>, IBookService
     {
-        private readonly IUserBookRepository _userBookRepository;
         private new readonly IBookRepository _repository;
 
-        public BookService(IBookRepository repository, IUserBookRepository userBookRepository, IMapper mapper) : base(repository, mapper)
+        public BookService(IBookRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
-            _userBookRepository = userBookRepository;
         }
 
 

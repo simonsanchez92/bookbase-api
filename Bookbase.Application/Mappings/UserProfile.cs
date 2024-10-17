@@ -24,9 +24,11 @@ namespace Bookbase.Application.Mappings
 
             CreateMap<Book, UserBookResponseDto>();
 
+            CreateMap<Genre, GenreResponseDto>();
+            CreateMap<CreateGenreDto, Genre>();
+
             CreateMap<BookResponse, BookDetailedResponseDto>();
             CreateMap<ReadingStatus, ReadingStatusResponseDto>();
-            CreateMap<Genre, GenreResponseDto>();
             CreateMap<ShelveBookDto, UserBook>();
             CreateMap<GenericListResponse<BookResponse>, GenericListResponse<BookDetailedResponseDto>>();
             CreateMap<Like, LikeResponseDto>();
