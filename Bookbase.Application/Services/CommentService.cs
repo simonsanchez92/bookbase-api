@@ -9,17 +9,15 @@ using Bookbase.Domain.Models;
 
 namespace Bookbase.Application.Services
 {
-    public class CommentService : ICommentService
+    public class CommentService : BaseService<Comment, CommentDto, CommentResponseDto, CreateCommentDto, UpdateCommentDto>, ICommentService
     {
-        private readonly ICommentRepository _commentRepository;
+        private new readonly ICommentRepository _repository;
         private readonly IReviewService _reviewService;
-        private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepository, IReviewRepository reviewRepository, IReviewService reviewService, IMapper mapper)
+        public CommentService(ICommentRepository repository, IReviewRepository reviewRepository, IReviewService reviewService, IMapper mapper) : base(repository, mapper)
         {
-            _commentRepository = commentRepository;
+            _repository = repository;
             _reviewService = reviewService;
-            _mapper = mapper;
         }
 
         public async Task<CommentResponseDto> Create(int reviewId, int userId, CreateCommentDto commentDto)
@@ -43,14 +41,14 @@ namespace Bookbase.Application.Services
                 Content = commentDto.Content
             };
 
-            var createdComment = await _commentRepository.CreateComment(newComment);
+            var createdComment = await _repository.CreateComment(newComment);
 
             return _mapper.Map<CommentResponseDto>(createdComment);
         }
 
         public async Task<CommentResponseDto?> GetOne(int reviewId, int commentId)
         {
-            var comment = await _commentRepository.GetOne(reviewId, commentId);
+            var comment = await _repository.GetOne(reviewId, commentId);
 
 
             return _mapper.Map<CommentResponseDto>(comment);
@@ -59,15 +57,15 @@ namespace Bookbase.Application.Services
 
         public async Task<GenericListResponse<CommentResponseDto>> GetList(int reviewId, int page, int pageSize)
         {
-            var comments = await _commentRepository.GetList(reviewId, page, pageSize);
+            var comments = await _repository.GetList(reviewId, page, pageSize);
 
 
             return _mapper.Map<GenericListResponse<CommentResponseDto>>(comments);
         }
 
-        public async Task<bool> Delete(int reviewId, int commentId, int userId)
+        public async Task<GenericResponseDto> Delete(int reviewId, int commentId, int userId)
         {
-            var comment = await _commentRepository.GetOne(reviewId, commentId);
+            var comment = await _repository.GetOne(reviewId, commentId);
 
             if (comment == null)
             {
@@ -85,9 +83,7 @@ namespace Bookbase.Application.Services
             }
 
             //Delete comment
-            await _commentRepository.Delete(comment);
-
-            return true;
+            return await base.Delete(comment.Id);
         }
     }
 }
