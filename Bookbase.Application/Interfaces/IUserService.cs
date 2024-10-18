@@ -9,5 +9,6 @@ namespace Bookbase.Application.Interfaces
     {
         public Task<User?> GetOne(Expression<Func<User, bool>> predicate);
         public Task<UserResponseDto> SignIn(SignInDto signInDto);
+        public Task<bool> UpdatePassword(int userId, UpdatePasswordDto updatePasswordDto);
     }
 }

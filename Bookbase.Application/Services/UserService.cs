@@ -101,5 +101,26 @@ namespace Bookbase.Application.Services
 
             return await base.Create(newUser);
         }
+
+        public async Task<bool> UpdatePassword(int userId, UpdatePasswordDto updatePasswordDto)
+        {
+            var user = await _repository.GetOne(u => u.Id == userId) ?? throw new NotFoundException($"User of id {userId} does not exist")
+            {
+                ErrorCode = "005"
+            };
+
+            if (!_passwordEncryptionService.VerifyPassword(user.Password, updatePasswordDto.CurrentPassword))
+            {
+                throw new BadRequestException($"Current password does not match")
+                {
+                    ErrorCode = "005"
+                };
+            }
+
+            user.Password = _passwordEncryptionService.HashPassword(updatePasswordDto.NewPassword);
+            user.UpdatedAt = DateTime.UtcNow;
+
+            return await _repository.Update(user) != null;
+        }
     }
 }

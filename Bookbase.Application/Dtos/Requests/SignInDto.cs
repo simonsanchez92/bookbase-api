@@ -2,9 +2,9 @@
 {
     public class SignInDto
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password1 { get; set; }
-        public string Password2 { get; set; }
+        public required string Username { get; set; }
+        public required string Email { get; set; }
+        public required string Password1 { get; set; }
+        public required string Password2 { get; set; }
     }
 }

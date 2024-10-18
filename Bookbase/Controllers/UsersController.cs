@@ -1,6 +1,7 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Exceptions;
 using Bookbase.Application.Interfaces;
+using Bookbase.Helpers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,19 +66,19 @@ namespace Bookbase.Controllers
             return Conflict();
         }
 
+
         [HttpPost("signIn")]
-        public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto)
+        public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto, IValidator<SignInDto> validator)
         {
+            var validationResults = await validator.ValidateAsync(signInDto);
 
-            //var validationResults = await validator.ValidateAsync(userDto);
-
-            //if (!validationResults.IsValid)
-            //{
-            //    throw new BadRequestException(validationResults.ToString())
-            //    {
-            //        ErrorCode = "004"
-            //    };
-            //}
+            if (!validationResults.IsValid)
+            {
+                throw new BadRequestException(validationResults.ToString())
+                {
+                    ErrorCode = "004"
+                };
+            }
 
             var user = await _userService.SignIn(signInDto);
 
@@ -95,11 +96,39 @@ namespace Bookbase.Controllers
         }
 
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{userId}")]
         public async Task<IActionResult> Update(int userId, [FromBody] UpdateUserDto userDto)
         {
             var user = await _userService.Update(userId, userDto);
             return Ok(user);
+        }
+
+        [HttpPut("updatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto updatePasswordDto, IValidator<UpdatePasswordDto> validator)
+        {
+
+            int userId = UserHelper.GetRequiredUserId(User);
+
+            var validationResults = await validator.ValidateAsync(updatePasswordDto);
+
+            if (!validationResults.IsValid)
+            {
+                throw new BadRequestException(validationResults.ToString())
+                {
+                    ErrorCode = "004"
+                };
+            }
+
+            var isPasswordUpdated = await _userService.UpdatePassword(userId, updatePasswordDto);
+
+            if (isPasswordUpdated)
+            {
+                return Ok("Password updated successfully");
+            }
+
+            return Conflict("Failed to update password");
+
         }
 
 
