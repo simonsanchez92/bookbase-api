@@ -64,7 +64,7 @@ namespace Bookbase.Infrastructure.Repositories
 
         public async Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
         {
-            var query = _context.Books
+            IQueryable<BookResponse> query = _context.Books
         .Include(b => b.BookGenres)
             .ThenInclude(bg => bg.Genre)
         .Include(b => b.UserBooks)
@@ -77,19 +77,9 @@ namespace Bookbase.Infrastructure.Repositories
         })
         .Where(b => !b.Book.Deleted);
 
-            // TODO: aplicaría filtros
-
             //Pagination
-            int total = await query.CountAsync();
+            query = QueryHelpers.ApplyPagination(query, page, pageSize, out var total);
 
-            //
-            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
-            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
-
-            //
-            int skip = (currentPage - 1) * currentLength;
-
-            query = query.Skip(skip).Take(currentLength);
             var data = await query.ToListAsync();
 
             return new GenericListResponse<BookResponse>

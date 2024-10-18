@@ -34,6 +34,7 @@ namespace Bookbase.Controllers
             return Ok(res);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserDto userDto, IValidator<CreateUserDto> validator)
         {
@@ -62,7 +63,35 @@ namespace Bookbase.Controllers
             }
             ////Returns 409
             return Conflict();
+        }
 
+        [HttpPost("signIn")]
+        public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto)
+        {
+
+            //var validationResults = await validator.ValidateAsync(userDto);
+
+            //if (!validationResults.IsValid)
+            //{
+            //    throw new BadRequestException(validationResults.ToString())
+            //    {
+            //        ErrorCode = "004"
+            //    };
+            //}
+
+            var user = await _userService.SignIn(signInDto);
+
+            ////Returns 201
+            if (user != null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetOne), // The action that retrieves the created resource
+                    routeValues: new { userId = user.Id }, // Route values to populate the URL for the location header
+                    value: user
+                );
+            }
+            ////Returns 409
+            return Conflict();
         }
 
 

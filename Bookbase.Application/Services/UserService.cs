@@ -61,5 +61,45 @@ namespace Bookbase.Application.Services
             return await base.Update(userId, body);
         }
 
+        public async Task<UserResponseDto> SignIn(SignInDto signInDto)
+        {
+            var emailExists = await _repository.GetOne(u => u.Email == signInDto.Email);
+
+            if (emailExists != null)
+            {
+                throw new BadRequestException($"Email is already taken: {signInDto.Email}")
+                {
+                    ErrorCode = "006"
+                };
+            }
+
+            var usernameExists = await _repository.GetOne(u => u.Username == signInDto.Username);
+
+            if (usernameExists != null)
+            {
+                throw new BadRequestException($"Username is already taken: {signInDto.Username}")
+                {
+                    ErrorCode = "006"
+                };
+            }
+
+            if (signInDto.Password1 != signInDto.Password2)
+            {
+                throw new BadRequestException($"Passwords do not match")
+                {
+                    ErrorCode = "006"
+                };
+            }
+
+            CreateUserDto newUser = new()
+            {
+                Username = signInDto.Username,
+                Email = signInDto.Email,
+                Password = _passwordEncryptionService.HashPassword(signInDto.Password1),
+                RoleId = 2
+            };
+
+            return await base.Create(newUser);
+        }
     }
 }

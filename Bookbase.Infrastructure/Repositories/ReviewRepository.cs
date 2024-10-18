@@ -38,6 +38,5 @@ namespace Bookbase.Infrastructure.Repositories
             return bookReviews;
         }
 
-
     }
 }
