@@ -2,7 +2,11 @@
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Bookbase.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Text;
+using System.Text.Json;
 
 namespace Bookbase.Infrastructure.Repositories
 {
@@ -75,184 +79,140 @@ namespace Bookbase.Infrastructure.Repositories
         public async Task<GenericListResponse<BookResponse>> GetList(int? userId, int page, int pageSize, string? queryStr = null)
         {
             // Params
-            throw new NotImplementedException();
+            IQueryable<BookResponse> query = _context.Books
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(b => b.UserBooks)
+                    .ThenInclude(ub => ub.ReadingStatus)
+                .Select(b => new BookResponse
+                {
+                    Book = b,
+                    UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+                })
+                .Where(b => !b.Book.Deleted);
 
-            //IQueryable<BookResponse> query = _context.Books
-            //    .Include(b => b.BookGenres)
-            //        .ThenInclude(bg => bg.Genre)
-            //    .Include(b => b.UserBooks)
-            //        .ThenInclude(ub => ub.ReadingStatus)
-            //    .Select(b => new BookResponse
-            //    {
-            //        Book = b,
-            //        UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
-            //    })
-            //    .Where(b => !b.Book.Deleted);
+            if (!string.IsNullOrEmpty(queryStr))
+            {
+                string decodedQuery = Encoding.UTF8.GetString(Convert.FromBase64String(queryStr));
+                QueryObject? queryObject = JsonSerializer.Deserialize<QueryObject>(decodedQuery);
 
-            //if (!string.IsNullOrEmpty(queryStr))
-            //{
-            //    string decodedQuery = Encoding.UTF8.GetString(Convert.FromBase64String(queryStr));
-            //    QueryObject? queryObject = JsonSerializer.Deserialize<QueryObject>(decodedQuery);
+                if (!string.IsNullOrEmpty(queryObject!.Search))
+                {
+                    var containsValue = queryObject.Search.ToLower();
 
-            //    if (!string.IsNullOrEmpty(queryObject!.Search))
-            //    {
-            //        var containsValue = queryObject.Search.ToLower();
+                    query = query.Where(b => b.Book.Title.ToLower().Contains(containsValue) ||
+                                    b.Book.Author.ToLower().Contains(containsValue) ||
+                         (b.Book.Description != null && b.Book.Description.ToLower().Contains(containsValue)));
+                }
 
-            //        query = query.Where(b => b.Book.Title.ToLower().Contains(containsValue) ||
-            //                        b.Book.Author.ToLower().Contains(containsValue) ||
-            //             (b.Book.Description != null && b.Book.Description.ToLower().Contains(containsValue)));
-            //    }
+                foreach (var filter in queryObject.Filters)
+                {
+                    var parameter = Expression.Parameter(typeof(BookResponse), "b");
+                    var property = Expression.Property(Expression.Property(parameter, "Book"), filter.propertyName);
 
-            //    foreach (var filter in queryObject.Filters)
-            //    {
-            //        var parameter = Expression.Parameter(typeof(BookResponse), "b");
-            //        var property = Expression.Property(Expression.Property(parameter, "Book"), filter.propertyName);
+                    Expression? expression;
 
-            //        Expression? expression;
+                    var propertyType = property.Type;
 
-            //        var propertyType = property.Type;
+                    var value = (propertyType == typeof(string)) ? filter.value : Convert.ChangeType(filter.value, propertyType);
 
-            //        var value = (propertyType == typeof(string)) ? filter.value : Convert.ChangeType(filter.value, propertyType);
+                    switch (filter.type)
+                    {
+                        case FilterTypes.Equals:
+                            expression = Expression.Equal(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.NotEquals:
+                            expression = Expression.NotEqual(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.GreaterThan:
+                            expression = Expression.GreaterThan(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.LowerThan:
+                            expression = Expression.LessThan(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.GreaterThanEquals:
+                            expression = Expression.GreaterThanOrEqual(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.LowerThanEquals:
+                            expression = Expression.LessThanOrEqual(property, Expression.Constant(value));
+                            break;
+                        case FilterTypes.Like:
+                            var likeValue = $"%{value}%";
+                            var methodInfo = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
+                            expression = Expression.Call(property, methodInfo, Expression.Constant(likeValue));
+                            break;
 
-            //        switch (filter.type)
-            //        {
-            //            case FilterTypes.Equals:
-            //                expression = Expression.Equal(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.NotEquals:
-            //                expression = Expression.NotEqual(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.GreaterThan:
-            //                expression = Expression.GreaterThan(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.LowerThan:
-            //                expression = Expression.LessThan(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.GreaterThanEquals:
-            //                expression = Expression.GreaterThanOrEqual(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.LowerThanEquals:
-            //                expression = Expression.LessThanOrEqual(property, Expression.Constant(value));
-            //                break;
-            //            case FilterTypes.Like:
-            //                var likeValue = $"%{value}%";
-            //                var methodInfo = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
-            //                expression = Expression.Call(property, methodInfo, Expression.Constant(likeValue));
-            //                break;
+                        case FilterTypes.Between:
 
-            //            case FilterTypes.Between:
-
-            //                var fromValue = (propertyType == typeof(string)) ? filter.from : Convert.ChangeType(filter.from, propertyType);
-            //                var toValue = (propertyType == typeof(string)) ? filter.to : Convert.ChangeType(filter.to, propertyType);
+                            var fromValue = (propertyType == typeof(string)) ? filter.from : Convert.ChangeType(filter.from, propertyType);
+                            var toValue = (propertyType == typeof(string)) ? filter.to : Convert.ChangeType(filter.to, propertyType);
 
 
-            //                var greaterThanOrEqual = Expression.GreaterThanOrEqual(property, Expression.Constant(fromValue));
-            //                var lessThanOrEqual = Expression.LessThanOrEqual(property, Expression.Constant(toValue));
+                            var greaterThanOrEqual = Expression.GreaterThanOrEqual(property, Expression.Constant(fromValue));
+                            var lessThanOrEqual = Expression.LessThanOrEqual(property, Expression.Constant(toValue));
 
-            //                expression = Expression.AndAlso(greaterThanOrEqual, lessThanOrEqual);
-            //                break;
+                            expression = Expression.AndAlso(greaterThanOrEqual, lessThanOrEqual);
+                            break;
 
-            //            case FilterTypes.Contains:
+                        case FilterTypes.Contains:
 
-            //                var methodInfoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
+                            var methodInfoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
 
-            //                expression = Expression.Call(property, methodInfoContains, Expression.Constant(value?.ToString() ?? ""));
-            //                break;
-            //            default:
-            //                throw new InvalidOperationException($"Unsopported filter type: {filter.type}");
-            //        }
-
-
-            //        var expressionFn = Expression.Lambda<Func<BookResponse, bool>>(expression, parameter);
-
-            //        query = query.Where(expressionFn);
-
-            //    }
-
-            //    //Sorting
-            //    foreach (var item in queryObject.Sorts)
-            //    {
-            //        var parameter = Expression.Parameter(typeof(BookResponse), "b");
-            //        var property = Expression.Property(Expression.Property(parameter, "Book"), item.propertyName);
-
-            //        var expression = Expression.Lambda<Func<BookResponse, object>>(Expression.Convert(property, typeof(object)), parameter);
+                            expression = Expression.Call(property, methodInfoContains, Expression.Constant(value?.ToString() ?? ""));
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Unsopported filter type: {filter.type}");
+                    }
 
 
-            //        if (item.descending)
-            //        {
-            //            query = query.OrderByDescending(expression);
-            //        }
-            //        else
-            //        {
-            //            query = query.OrderBy(expression);
-            //        }
-            //    }
+                    var expressionFn = Expression.Lambda<Func<BookResponse, bool>>(expression, parameter);
 
-            //}
-            ////Pagination
-            //int total = await query.CountAsync();
+                    query = query.Where(expressionFn);
 
-            ////
-            //int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
-            //int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+                }
 
-            ////
-            //int skip = (currentPage - 1) * currentLength;
+                //Sorting
+                foreach (var item in queryObject.Sorts)
+                {
+                    var parameter = Expression.Parameter(typeof(BookResponse), "b");
+                    var property = Expression.Property(Expression.Property(parameter, "Book"), item.propertyName);
 
-            //query = query.Skip(skip).Take(currentLength);
-            //var data = await query.ToListAsync();
+                    var expression = Expression.Lambda<Func<BookResponse, object>>(Expression.Convert(property, typeof(object)), parameter);
 
-            //return new GenericListResponse<BookResponse>
-            //{
-            //    Total = total,
-            //    Page = page,
-            //    Length = pageSize,
-            //    Data = data
-            //};
+
+                    if (item.descending)
+                    {
+                        query = query.OrderByDescending(expression);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(expression);
+                    }
+                }
+
+            }
+            //Pagination
+            int total = await query.CountAsync();
+
+            //
+            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
+            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+
+            //
+            int skip = (currentPage - 1) * currentLength;
+
+            query = query.Skip(skip).Take(currentLength);
+            var data = await query.ToListAsync();
+
+            return new GenericListResponse<BookResponse>
+            {
+                Total = total,
+                Page = page,
+                Length = pageSize,
+                Data = data
+            };
 
         }
-        public async Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
-        {
-            throw new NotImplementedException();
-            // Params
-            // TODO: cambiar
-            //var query = _context.Books
-            //    .Include(b => b.BookGenres)
-            //        .ThenInclude(bg => bg.Genre)
-            //    .Include(b => b.UserBooks)
-            //        .ThenInclude(ub => ub.ReadingStatus)
-            //    .Where(b => b.UserBooks.Any(ub => ub.UserId == userId))
-            //    .Select(b => new BookResponse
-            //    {
-            //        Book = b,
-            //        UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
-            //    })
-            //    .Where(b => !b.Book.Deleted);
-
-            //// TODO: aplicaría filtros
-
-            ////Pagination
-            //int total = await query.CountAsync();
-
-            ////
-            //int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
-            //int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
-
-            ////
-            //int skip = (currentPage - 1) * currentLength;
-
-            //query = query.Skip(skip).Take(currentLength);
-            //var data = await query.ToListAsync();
-
-            //return new GenericListResponse<BookResponse>
-            //{
-            //    Total = total,
-            //    Page = page,
-            //    Length = pageSize,
-            //    Data = data
-            //};
-        }
-
 
     }
 }

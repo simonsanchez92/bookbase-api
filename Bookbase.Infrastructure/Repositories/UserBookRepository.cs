@@ -2,6 +2,7 @@
 using Bookbase.Domain.Interfaces;
 using Bookbase.Domain.Models;
 using Bookbase.Infrastructure.Contexts;
+using Bookbase.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookbase.Infrastructure.Repositories
@@ -61,9 +62,43 @@ namespace Bookbase.Infrastructure.Repositories
             return true;
         }
 
-        public Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<BookResponse>> GetUserShelf(int userId, int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var query = _context.Books
+        .Include(b => b.BookGenres)
+            .ThenInclude(bg => bg.Genre)
+        .Include(b => b.UserBooks)
+            .ThenInclude(ub => ub.ReadingStatus)
+        .Where(b => b.UserBooks.Any(ub => ub.UserId == userId))
+        .Select(b => new BookResponse
+        {
+            Book = b,
+            UserBook = b.UserBooks.FirstOrDefault(ub => ub.UserId == userId)
+        })
+        .Where(b => !b.Book.Deleted);
+
+            // TODO: aplicaría filtros
+
+            //Pagination
+            int total = await query.CountAsync();
+
+            //
+            int currentPage = page < 1 ? PaginationConstants.DefaultPage : page;
+            int currentLength = pageSize < 1 ? PaginationConstants.DefaultPageSize : pageSize;
+
+            //
+            int skip = (currentPage - 1) * currentLength;
+
+            query = query.Skip(skip).Take(currentLength);
+            var data = await query.ToListAsync();
+
+            return new GenericListResponse<BookResponse>
+            {
+                Total = total,
+                Page = page,
+                Length = pageSize,
+                Data = data
+            };
         }
     }
 }

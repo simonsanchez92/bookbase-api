@@ -19,15 +19,15 @@ namespace Bookbase.Controllers
             _bookService = bookService;
         }
 
-        //[Authorize(Policy = "AuthenticatedUser")]
-        //[HttpGet("review/list")]
-        //public async Task<IActionResult> GetUserShelf([FromQuery] int page, [FromQuery] int pageSize)
-        //{
-        //    var userId = UserHelper.GetRequiredUserId(User);
-        //    var books = await _bookService.GetUserShelf(userId, page, pageSize);
+        [Authorize(Policy = "AuthenticatedUser")]
+        [HttpGet("review/list")]
+        public async Task<IActionResult> GetUserShelf([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var userId = UserHelper.GetRequiredUserId(User);
+            var books = await _userBookService.GetUserShelf(userId, page, pageSize);
 
-        //    return Ok(books);
-        //}
+            return Ok(books);
+        }
 
         [HttpGet("get")]
 

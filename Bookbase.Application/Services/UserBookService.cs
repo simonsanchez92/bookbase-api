@@ -83,13 +83,13 @@ namespace Bookbase.Application.Services
         }
 
 
-        public Task<GenericListResponse<BookDetailedResponseDto>> GetUserShelf(int userId, int page, int pageSize)
+        public async Task<GenericListResponse<BookDetailedResponseDto>> GetUserShelf(int userId, int page, int pageSize)
         {
-            //    var books = await _bookRepository.GetUserShelf(userId, page, pageSize);
+            var books = await _userBookRepository.GetUserShelf(userId, page, pageSize);
 
 
-            //    return _mapper.Map<GenericListResponse<BookListResponseDto>>(books);
-            throw new NotImplementedException();
+            return _mapper.Map<GenericListResponse<BookDetailedResponseDto>>(books);
+
         }
 
 

@@ -19,13 +19,6 @@ namespace Bookbase.Infrastructure.Repositories
 
             return like;
         }
-        public async Task<bool> Delete(Like like)
-        {
-            _context.Likes.Remove(like);
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
 
         public async Task<GenericListResponse<Like>> GetList(int reviewId, int page, int pageSize)
         {

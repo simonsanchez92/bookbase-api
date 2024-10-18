@@ -68,11 +68,6 @@ namespace Bookbase.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public Task<GenericListResponse<TEntity>> GetList(int? userId, int page, int pageSize, string? query, IncludeDelegate<TEntity>? include = null)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public async Task<TEntity> Update(TEntity body)
         {
