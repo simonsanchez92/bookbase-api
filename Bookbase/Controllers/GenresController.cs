@@ -1,5 +1,6 @@
 ﻿using Bookbase.Application.Dtos.Requests;
 using Bookbase.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookbase.Controllers
@@ -31,6 +32,7 @@ namespace Bookbase.Controllers
             return Ok(res);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGenreDto genreDto)
         {
@@ -41,7 +43,6 @@ namespace Bookbase.Controllers
                      routeValues: new { genreId = genre.Id },
                      value: genre
                  );
-
         }
 
     }

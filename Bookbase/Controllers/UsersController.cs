@@ -66,7 +66,6 @@ namespace Bookbase.Controllers
             return Conflict();
         }
 
-
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto, IValidator<SignInDto> validator)
         {
@@ -94,7 +93,6 @@ namespace Bookbase.Controllers
             ////Returns 409
             return Conflict();
         }
-
 
         [Authorize(Policy = "AdminOnly")]
         [HttpPut("{userId}")]
