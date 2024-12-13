@@ -83,19 +83,11 @@ namespace Bookbase.Application.Services
                 };
             }
 
-            if (signInDto.Password1 != signInDto.Password2)
-            {
-                throw new BadRequestException($"Passwords do not match")
-                {
-                    ErrorCode = "006"
-                };
-            }
-
             CreateUserDto newUser = new()
             {
                 Username = signInDto.Username,
                 Email = signInDto.Email,
-                Password = _passwordEncryptionService.HashPassword(signInDto.Password1),
+                Password = _passwordEncryptionService.HashPassword(signInDto.Password),
                 RoleId = 2
             };
 
