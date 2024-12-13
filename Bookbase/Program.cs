@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -35,7 +38,22 @@ builder.Services.AddCustomAuth(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
+
+
+// Add CORS services to the container
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin() //Allow any origin
+         .AllowAnyHeader() //Allow any headers (?
+         .AllowAnyMethod(); //Allow any HTTP methods 
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAllOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
